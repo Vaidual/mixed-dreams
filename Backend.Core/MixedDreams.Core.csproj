@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Backend.Infrastructure\Backend.Infrastructure.csproj" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\Backend.Infrastructure\MixedDreams.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

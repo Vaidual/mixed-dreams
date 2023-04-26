@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{46ACAC0E-3E72-4361-8AD0-593E78D5C59C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.WebAPI", "Backend\MixedDreams.WebAPI.csproj", "{46ACAC0E-3E72-4361-8AD0-593E78D5C59C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Infrastructure", "Backend.Infrastructure\Backend.Infrastructure.csproj", "{09ABEB01-F645-42F1-840A-BE6172CE825A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.Infrastructure", "Backend.Infrastructure\MixedDreams.Infrastructure.csproj", "{09ABEB01-F645-42F1-840A-BE6172CE825A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Core", "Backend.Core\Backend.Core.csproj", "{7DB0FC9B-7F4D-4BF4-9039-F204AAA84C86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.Core", "Backend.Core\MixedDreams.Core.csproj", "{7DB0FC9B-7F4D-4BF4-9039-F204AAA84C86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
