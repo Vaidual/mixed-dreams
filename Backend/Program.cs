@@ -13,10 +13,22 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Http;
+using Serilog;
+using MixedDreams.WebAPI.Extensions;
 
 const string PolicyName = "MixedDreamsPolicy";
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        
+    };
+});
 
 builder.Services.AddCors(options =>
 {
@@ -49,8 +61,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
     opt.Password.RequireNonAlphanumeric = true;
     opt.Password.RequireLowercase = true;
 })
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(auth =>
 {
@@ -102,10 +114,10 @@ builder.Services.AddAuthentication(auth =>
 //        };
 //    });
 
-builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, MixedDreamsClaimsFactory>();
-
-builder.Services.AddScoped<UserManager<ApplicationUser>>();
-builder.Services.AddScoped<SignInManager<ApplicationUser>>();
+//Custom services
+builder.Services.AddDataAccessServices();
+builder.Services.AddIdentityServices();
+builder.Services.AddMiddlewareServices();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -132,6 +144,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionMiddleware();
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

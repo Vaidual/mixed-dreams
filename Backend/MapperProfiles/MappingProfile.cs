@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using MixedDreams.Core.ViewModels;
 using MixedDreams.Infrastructure.Models;
-using MixedDreams.WebAPI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

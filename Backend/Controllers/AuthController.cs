@@ -1,5 +1,4 @@
-﻿using MixedDreams.WebAPI.ViewModels;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +11,9 @@ using Newtonsoft.Json.Serialization;
 using MixedDreams.Infrastructure.StaticTypes;
 using MixedDreams.Core.Helpers;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using MixedDreams.Infrastructure.Data;
+using MixedDreams.Core.ViewModels;
 
 namespace Backend.Controllers
 {
@@ -23,23 +25,28 @@ namespace Backend.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
+        private readonly ILogger<AuthController> _logger;
 
         public AuthController(
             UserManager<ApplicationUser> userManager, 
             SignInManager<ApplicationUser> signInManager, 
             IMapper mapper,
-            IConfiguration config) 
+            IConfiguration config,
+            ILogger<AuthController> logger) 
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._mapper = mapper;
             this._config = config;
+            this._logger = logger;
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterVM model)
         {
+            throw new ArgumentNullException();
+            _logger.LogInformation("Executing {Action} with parameters: {Parameters}", nameof(Register), JsonSerializer.Serialize(model));
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
@@ -66,10 +73,11 @@ namespace Backend.Controllers
             return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("test")]
         public async Task<IActionResult> Test()
         {
+            throw new ArgumentNullException();
             return Ok(12);
         }
 
