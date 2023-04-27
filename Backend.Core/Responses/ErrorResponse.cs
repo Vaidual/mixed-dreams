@@ -6,10 +6,18 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Core.ViewModels
+namespace MixedDreams.Core.Responses
 {
     public class ErrorResponse
     {
+        public ErrorResponse() { }
+
+        public ErrorResponse(int statusCode, string title)
+        {
+            StatusCode = statusCode;
+            Title = title;
+        }
+
         [JsonPropertyName("statusCode")]
         public int StatusCode { get; set; }
 

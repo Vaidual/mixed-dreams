@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MixedDreams.Core.ViewModels;
 using System.Net;
 using Serilog;
 using Microsoft.AspNetCore.Http.HttpResults;
+using MixedDreams.Core.Responses;
 
 namespace MixedDreams.WebAPI.Middleware
 {

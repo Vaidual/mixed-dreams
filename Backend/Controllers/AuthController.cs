@@ -14,6 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using MixedDreams.Infrastructure.Data;
 using MixedDreams.Core.ViewModels;
+using MixedDreams.Core.Responses;
 
 namespace Backend.Controllers
 {
@@ -45,12 +46,11 @@ namespace Backend.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterVM model)
         {
-            throw new ArgumentNullException();
             _logger.LogInformation("Executing {Action} with parameters: {Parameters}", nameof(Register), JsonSerializer.Serialize(model));
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
-                return BadRequest("Email is already taken");
+                return BadRequest(new ErrorResponse(400, "Email is already taken"));
             }
 
             var user = _mapper.Map<ApplicationUser>(model);
@@ -58,7 +58,7 @@ namespace Backend.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(result.Errors.Select(e => new ErrorResponse(400, e.Description)));
             }
 
             await _userManager.AddToRoleAsync(user, Roles.USER);
@@ -70,7 +70,7 @@ namespace Backend.Controllers
                 _config["JwtToken:Audience"],
                 TimeSpan.FromHours(2));
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            return Ok(new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token)));
         }
 
         //[Authorize]
@@ -95,7 +95,7 @@ namespace Backend.Controllers
             //var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                return BadRequest("Invalid credentials");
+                return BadRequest(new ErrorResponse(400, "Invalid credentials"));
             }
 
             //var user = await _userManager.FindByEmailAsync(model.Email);
@@ -123,7 +123,7 @@ namespace Backend.Controllers
                 _config["JwtToken:Audience"],
                 model.RememberMe ? TimeSpan.FromDays(14) : TimeSpan.FromHours(2));
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            return Ok(new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token)));
 
             //return RedirectToLocal(returnUrl);
         }
