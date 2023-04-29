@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MixedDreams.Core.ViewModels
+namespace MixedDreams.Core.Dto
 {
-    public class RegisterVM
+    public record RegisterDto
     {
         public string Username { get; set; }
 

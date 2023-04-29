@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MixedDreams.Core.ViewModels;
-using MixedDreams.Infrastructure.Models;
+using MixedDreams.Core.Dto;
+using MixedDreams.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace MixedDreams.WebAPI.MapperProfiles
     {
         public MappingProfile()
         {
-            CreateMap<RegisterVM, ApplicationUser>()
+            CreateMap<RegisterDto, ApplicationUser>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
         }
     }

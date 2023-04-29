@@ -1,6 +1,6 @@
 using Backend;
 using MixedDreams.Infrastructure.Data;
-using MixedDreams.Infrastructure.Models;
+using MixedDreams.Infrastructure.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,147 +15,89 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using MixedDreams.WebAPI.Extensions;
+using Serilog.Formatting.Json;
+using MixedDreams.WebAPI.Filters;
+using Microsoft.AspNetCore.Mvc;
 
-const string PolicyName = "MixedDreamsPolicy";
+var configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+        .Build();
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
 
-builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
-
-builder.Services.AddProblemDetails(options =>
+try
 {
-    options.CustomizeProblemDetails = context =>
+    Log.Information("Starting web application");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Logging.ClearProviders();
+    builder.Logging.AddSerilog(Log.Logger);
+
+    builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
+    builder.Services.AddAndConfigureCors(builder.Configuration);
+
+    builder.Services.Configure<ApiBehaviorOptions>(options
+    => options.SuppressModelStateInvalidFilter = true);
+    builder.Services.AddControllers(opt =>
     {
-        
-    };
-});
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: PolicyName,
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
-
-// Add services to the container.
-builder.Services.AddControllers();
+        opt.Filters.Add(typeof(ModelValidationFilterAttribute));
+    });
     //.AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling =
     //    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+    //builder.Services.AddTransient<LoggingInterceptor>();
+    builder.Services.AddAndConfigureDbContext(builder.Configuration);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-        dbContextOptions => dbContextOptions.MigrationsAssembly("MixedDreams.Infrastructure"));
-});
+    builder.Services.AddAndConfigureIdentity();
+    builder.Services.AddAndConfigureAuthentification(builder.Configuration);
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
-{
-    opt.Password.RequiredLength = 8;
-    opt.Password.RequireDigit = true;
-    opt.Password.RequireUppercase = true;
-    opt.Password.RequiredUniqueChars = 4;
-    opt.Password.RequireNonAlphanumeric = true;
-    opt.Password.RequireLowercase = true;
-})
-.AddEntityFrameworkStores<AppDbContext>()
-.AddDefaultTokenProviders();
+    //Custom services
+    builder.Services.AddDataAccessServices();
+    builder.Services.AddMiddlewareServices();
 
-builder.Services.AddAuthentication(auth =>
-{
-    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
+    builder.Services.AddAutoMapper(typeof(Program));
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddAndConfigureSwagger();
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
     {
-        ValidateIssuer = true,
-        ValidIssuer = builder.Configuration["JwtToken:Issuer"],
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["JwtToken:Audience"],
-        ValidateIssuerSigningKey = true,
-        ValidateLifetime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtToken:SigningKey"]))
-    };
-});
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
-// Cookies scheme
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(options =>
-//    {
-//        options.LoginPath = "auth/login";
-//        options.LogoutPath = "auth/logout";
-//        options.ExpireTimeSpan = TimeSpan.FromSeconds(20);
-//        options.SlidingExpiration = true;
-//        options.Cookie.Name = "Session";
-//        options.Cookie.SameSite = SameSiteMode.Lax;
-//        options.Cookie.HttpOnly = true;
-//        options.Cookie.MaxAge = TimeSpan.FromDays(180);
+    app.MigrateDatabase();
 
-//        options.Events.OnValidatePrincipal = context =>
-//        {
-//            if (context.Properties.Items.TryGetValue("LastLoginTime", out string lastLoginTimeString)
-//                && DateTime.TryParse(lastLoginTimeString, out DateTime lastLoginTime))
-//            {
-//                var currentTime = DateTimeOffset.UtcNow;
-//                var elapsedDays = (int)(currentTime - lastLoginTime).TotalSeconds;
+    app.UseExceptionMiddleware();
 
-//                if (elapsedDays >= 180)
-//                {
-//                    context.RejectPrincipal();
-//                }
-//            }
-//            return Task.CompletedTask;
-//        };
-//    });
+    app.UseSerilogRequestLogging();
 
-//Custom services
-builder.Services.AddDataAccessServices();
-builder.Services.AddIdentityServices();
-builder.Services.AddMiddlewareServices();
+    app.UseHttpsRedirection();
 
-builder.Services.AddAutoMapper(typeof(Program));
+    app.UseCors(builder.Configuration["Cors:Policy:Name"]);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition(name: "oauth2", securityScheme: new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
-});
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-var app = builder.Build();
+    app.MapControllers();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.Run();
+
 }
-
-app.UseExceptionMiddleware();
-
-app.UseSerilogRequestLogging();
-
-app.UseHttpsRedirection();
-
-app.UseCors(PolicyName);
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Core.Responses
 {
-    public class TokenResponse
+    public record TokenResponse
     {
         public TokenResponse(string token)
         {

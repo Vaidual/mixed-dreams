@@ -1,8 +1,8 @@
-﻿using MixedDreams.Infrastructure.Models;
+﻿using MixedDreams.Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MixedDreams.Infrastructure.Configurations;
-using MixedDreams.Infrastructure.Models;
+using MixedDreams.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace MixedDreams.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }

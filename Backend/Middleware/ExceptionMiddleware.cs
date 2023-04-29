@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Net;
-using Serilog;
 using Microsoft.AspNetCore.Http.HttpResults;
 using MixedDreams.Core.Responses;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using MixedDreams.Core.Responses.Errors;
+using System.Net.Http;
+using MixedDreams.Core.Exceptions;
 
 namespace MixedDreams.WebAPI.Middleware
 {
     public class ExceptionMiddleware : IMiddleware
     {
-        private readonly Serilog.ILogger _logger;
+        private readonly ILogger<ExceptionMiddleware> _logger;
 
-        public ExceptionMiddleware(Serilog.ILogger logger)
+        public ExceptionMiddleware(ILogger<ExceptionMiddleware> logger)
         {
             _logger = logger;
         }
@@ -23,23 +27,33 @@ namespace MixedDreams.WebAPI.Middleware
             }
             catch (Exception ex)
             {
-                _logger.Error($"Something went wrong: {ex}");
                 await HandleExceptionAsync(context, ex);
             }
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
+            //var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>()!;
             context.Response.ContentType = "application/json";
-            var response = new ErrorResponse();
-            switch (exception)
+            var responseBody = new ErrorResponse();
+            context.Response.StatusCode = exception switch
             {
-                default:
-                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    response.Title = "An internal server error occured.";
-                    break;
+                BadRequestException => StatusCodes.Status400BadRequest,
+                NotFoundException => StatusCodes.Status404NotFound,
+                _ => StatusCodes.Status500InternalServerError
             };
-            await context.Response.WriteAsync(response.ToString());
+            responseBody.StatusCode = context.Response.StatusCode;
+            if (responseBody.StatusCode == 500)
+            {
+                _logger.LogError($"Something went wrong: {exception}");
+                responseBody.Title = "An internal server error occured.";
+            }
+            else
+            {
+                _logger.LogWarning($"Something went wrong: {exception}");
+                responseBody.Title = exception.Message;
+            }
+            await context.Response.WriteAsync(responseBody.ToString());
         }
     }
 }

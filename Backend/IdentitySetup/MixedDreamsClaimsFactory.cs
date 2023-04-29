@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using MixedDreams.Infrastructure.Models;
+using MixedDreams.Infrastructure.Entities;
 using System.Security.Claims;
 
 namespace MixedDreams.WebAPI.IdentitySetup

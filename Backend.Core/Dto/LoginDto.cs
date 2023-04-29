@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MixedDreams.Core.ViewModels
+namespace MixedDreams.Core.Dto
 {
-    public class LoginVM
+    public record LoginDto
     {
         [Required]
         [EmailAddress]
