@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Infrastructure.Helpers
 {
-    public class JwtHelper
+    internal class JwtHelper
     {
         public static JwtSecurityToken GetJwtToken(
             string userId,

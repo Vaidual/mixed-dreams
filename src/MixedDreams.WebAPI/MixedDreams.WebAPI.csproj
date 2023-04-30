@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MixedDreams.Core\MixedDreams.Application.csproj" />
+    <ProjectReference Include="..\MixedDreams.Application\MixedDreams.Application.csproj" />
     <ProjectReference Include="..\MixedDreams.Infrastructure\MixedDreams.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Infrastructure.MapperProfiles
 {
-    public class MappingProfile : Profile
+    internal class MappingProfile : Profile
     {
         public MappingProfile()
         {

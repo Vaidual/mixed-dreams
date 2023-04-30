@@ -20,10 +20,10 @@ namespace MixedDreams.Infrastructure.Repositories
             Context = context;
         }
 
-        public void Create(T entity)
+        public async Task Create(T entity)
         {
             entity.DateCreated = DateTimeOffset.UtcNow;
-            Context.AddAsync(entity);
+            await Context.AddAsync(entity);
         }
 
         public void Update(T entity)

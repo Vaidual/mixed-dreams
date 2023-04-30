@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace MixedDreams.Infrastructure.IdentitySetup
 {
-    public class MixedDreamsClaimsFactory : UserClaimsPrincipalFactory<ApplicationUser>
+    internal class MixedDreamsClaimsFactory : UserClaimsPrincipalFactory<ApplicationUser>
     {
         public MixedDreamsClaimsFactory(UserManager<ApplicationUser> userManager, IOptions<IdentityOptions> optionsAccessor)
             : base(userManager, optionsAccessor)

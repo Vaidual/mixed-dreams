@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Infrastructure.Configurations
 {
-    public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+    internal class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
         {
