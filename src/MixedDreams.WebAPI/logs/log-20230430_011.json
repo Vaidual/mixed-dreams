@@ -1,0 +1,2 @@
+{"@t":"2023-04-30T17:47:06.0083526Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["82.2975"],"RequestMethod":"GET","RequestPath":"/api/auth/test","StatusCode":401,"Elapsed":82.2975,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQ9KBJOTQU0:00000009","ConnectionId":"0HMQ9KBJOTQU0"}
+{"@t":"2023-04-30T17:49:07.5186408Z","@mt":"Starting web application"}

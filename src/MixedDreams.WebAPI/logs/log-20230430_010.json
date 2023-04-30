@@ -1,0 +1,4 @@
+{"@t":"2023-04-30T12:00:33.0747713Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["26.8732"],"RequestMethod":"GET","RequestPath":"/api/auth/test","StatusCode":401,"Elapsed":26.8732,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQ9E9U0BFLT:00000009","ConnectionId":"0HMQ9E9U0BFLT"}
+{"@t":"2023-04-30T12:00:46.1451601Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["152.6180"],"RequestMethod":"GET","RequestPath":"/api/auth/test","StatusCode":200,"Elapsed":152.618,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQ9E9U0BFLT:0000000B","ConnectionId":"0HMQ9E9U0BFLT"}
+{"@t":"2023-04-30T12:44:36.6959706Z","@mt":"Starting web application"}
+{"@t":"2023-04-30T17:46:59.8566963Z","@mt":"Starting web application"}

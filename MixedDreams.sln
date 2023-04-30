@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.WebAPI", "Backend\MixedDreams.WebAPI.csproj", "{46ACAC0E-3E72-4361-8AD0-593E78D5C59C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.WebAPI", "src\MixedDreams.WebAPI\MixedDreams.WebAPI.csproj", "{B1A6A61B-E810-4E55-B711-51F8A15FAB58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.Infrastructure", "Backend.Infrastructure\MixedDreams.Infrastructure.csproj", "{09ABEB01-F645-42F1-840A-BE6172CE825A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.Infrastructure", "src\MixedDreams.Infrastructure\MixedDreams.Infrastructure.csproj", "{DB658864-1938-4924-AC33-8B45BD6F91B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.Core", "Backend.Core\MixedDreams.Core.csproj", "{7DB0FC9B-7F4D-4BF4-9039-F204AAA84C86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.Application", "src\MixedDreams.Application\MixedDreams.Application.csproj", "{F0B203AC-C1DA-495C-9476-A8D6668ED399}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixedDreams.Domain", "src\MixedDreams.Domain\MixedDreams.Domain.csproj", "{6B9D9941-DD73-4F67-A1B9-3D0DFA147893}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{46ACAC0E-3E72-4361-8AD0-593E78D5C59C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46ACAC0E-3E72-4361-8AD0-593E78D5C59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46ACAC0E-3E72-4361-8AD0-593E78D5C59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46ACAC0E-3E72-4361-8AD0-593E78D5C59C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09ABEB01-F645-42F1-840A-BE6172CE825A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09ABEB01-F645-42F1-840A-BE6172CE825A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09ABEB01-F645-42F1-840A-BE6172CE825A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09ABEB01-F645-42F1-840A-BE6172CE825A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DB0FC9B-7F4D-4BF4-9039-F204AAA84C86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DB0FC9B-7F4D-4BF4-9039-F204AAA84C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DB0FC9B-7F4D-4BF4-9039-F204AAA84C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DB0FC9B-7F4D-4BF4-9039-F204AAA84C86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1A6A61B-E810-4E55-B711-51F8A15FAB58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1A6A61B-E810-4E55-B711-51F8A15FAB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1A6A61B-E810-4E55-B711-51F8A15FAB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A6A61B-E810-4E55-B711-51F8A15FAB58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB658864-1938-4924-AC33-8B45BD6F91B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB658864-1938-4924-AC33-8B45BD6F91B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB658864-1938-4924-AC33-8B45BD6F91B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB658864-1938-4924-AC33-8B45BD6F91B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0B203AC-C1DA-495C-9476-A8D6668ED399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0B203AC-C1DA-495C-9476-A8D6668ED399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0B203AC-C1DA-495C-9476-A8D6668ED399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0B203AC-C1DA-495C-9476-A8D6668ED399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B9D9941-DD73-4F67-A1B9-3D0DFA147893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B9D9941-DD73-4F67-A1B9-3D0DFA147893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B9D9941-DD73-4F67-A1B9-3D0DFA147893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B9D9941-DD73-4F67-A1B9-3D0DFA147893}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

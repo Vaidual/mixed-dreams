@@ -1,0 +1,97 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using MixedDreams.WebAPI.Middlewares;
+
+namespace MixedDreams.WebAPI.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddMiddlewareServices(
+            this IServiceCollection services)
+        {
+            services.AddTransient<ExceptionMiddleware>();
+            return services;
+        }
+
+        public static IServiceCollection AddAndConfigureCors(
+            this IServiceCollection services,
+            IConfiguration config)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: config["Cors:Policy:Name"],
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddAndConfigureAuthentification(
+            this IServiceCollection services,
+            IConfiguration config)
+        {
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = config["JwtToken:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = config["JwtToken:Audience"],
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtToken:SigningKey"]))
+                };
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddAndConfigureSwagger(
+            this IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Enter the Bearer Authorization string as following: `Generated-JWT-Token`",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+                //options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
+
+            return services;
+        }
+    }
+}
