@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MixedDreams.Domain.Common;
 using MixedDreams.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Domain.Entities
 {
-    public class Company : IdentityUser
+    public class Company : SoftDeletableTrackableEntity
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public string CompanyName { get; set; }
         public DateTime Birthday { get; set; }
         public Address Address { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
+        public string ApplicationUserId { get; set; }
+
+        public List<Product> Products { get; set; }
+        public List<BusinessLocation> BusinessLocations { get; set; }
     }
 }

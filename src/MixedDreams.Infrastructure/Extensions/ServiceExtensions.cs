@@ -2,11 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Data;
 using MixedDreams.Infrastructure.IdentitySetup;
+using MixedDreams.Infrastructure.Repositories;
 using MixedDreams.Infrastructure.Services;
+using MixedDreams.Infrastructure.Tenants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,16 +21,22 @@ namespace MixedDreams.Infrastructure.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void AddInternalServices(this IServiceCollection services)
+        public static void AddInternalServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ITenantService, TenantService>();
 
-            services.AddScoped<IRepositoryManager, RepositoryManager>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddAndConfigureIdentity();
+            services.AddAndConfigureDbContext(config);
+            services.AddAndConfigureBackblaze(config);
+
         }
 
-        public static IServiceCollection AddAndConfigureIdentity(
+        private static IServiceCollection AddAndConfigureIdentity(
             this IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
@@ -42,13 +51,14 @@ namespace MixedDreams.Infrastructure.Extensions
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, MixedDreamsClaimsFactory>();
+            // MixedDreamsClaimsFactory is used with SignInManager
+            //services.AddScoped<IUserClaimsPrincipalFactory<Customer>, MixedDreamsClaimsFactory>();
             services.AddScoped<UserManager<ApplicationUser>>();
             services.AddScoped<SignInManager<ApplicationUser>>();
             return services;
         }
 
-        public static IServiceCollection AddAndConfigureDbContext(
+        private static IServiceCollection AddAndConfigureDbContext(
             this IServiceCollection services,
             IConfiguration config)
         {
@@ -56,6 +66,18 @@ namespace MixedDreams.Infrastructure.Extensions
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"),
                     dbContextOptions => dbContextOptions.MigrationsAssembly("MixedDreams.Infrastructure"));
+            });
+            return services;
+        }
+
+        private static IServiceCollection AddAndConfigureBackblaze(
+            this IServiceCollection services,
+            IConfiguration config)
+        {
+            services.AddBackblazeAgent(options =>
+            {
+                options.KeyId = config["Backblaze:WriteKey:KeyId"];
+                options.ApplicationKey = config["Backblaze:WriteKey:ApplicationKey"];
             });
             return services;
         }

@@ -1,6 +1,7 @@
 ﻿using MixedDreams.Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,13 @@ namespace MixedDreams.Domain.ValueObjects
 {
     public class Address : ValueObject
     {
+
         public String Street { get; private set; }
         public String City { get; private set; }
         public String State { get; private set; }
         public String Country { get; private set; }
+
+        [DataType(DataType.PostalCode)]
         public String ZipCode { get; private set; }
         public String? Apartament { get; private set; }
 
@@ -36,7 +40,10 @@ namespace MixedDreams.Domain.ValueObjects
             yield return State;
             yield return Country;
             yield return ZipCode;
-            yield return Apartament;
+            if (Apartament != null) 
+            { 
+                yield return Apartament;
+            }
         }
     }
 }

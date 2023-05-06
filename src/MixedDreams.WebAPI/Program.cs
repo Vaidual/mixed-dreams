@@ -39,8 +39,7 @@ try
 
     builder.Services.AddAndConfigureCors(builder.Configuration);
 
-    builder.Services.Configure<ApiBehaviorOptions>(options
-    => options.SuppressModelStateInvalidFilter = true);
+    builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
     builder.Services.AddControllers(opt =>
     {
         opt.Filters.Add(typeof(ModelValidationFilterAttribute));
@@ -48,16 +47,11 @@ try
     //.AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling =
     //    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
     //builder.Services.AddTransient<LoggingInterceptor>();
-    builder.Services.AddAndConfigureDbContext(builder.Configuration);
-
-    builder.Services.AddAndConfigureIdentity();
     builder.Services.AddAndConfigureAuthentification(builder.Configuration);
 
     //Custom services
-    builder.Services.AddInternalServices();
+    builder.Services.AddInternalServices(builder.Configuration);
     builder.Services.AddMiddlewareServices();
-
-    builder.Services.AddAutoMapper(typeof(Program));
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

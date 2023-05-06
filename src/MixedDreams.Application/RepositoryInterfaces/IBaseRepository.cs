@@ -10,13 +10,13 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IBaseRepository<T> where T : BaseEntity
     {
-        Task Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        Task<T?> Get(Guid id, CancellationToken cancellationToken);
-        Task<T?> GetByCondition(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
-        Task<List<T>> GetAll(CancellationToken cancellationToken);
-        public Task<List<T>> GetAllByCondition(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
+        public Task<T> CreateAsync(T entity);
+        public void Update(T entity);
+        public void Delete(T entity);
+        public Task<T?> Get(Guid id, CancellationToken cancellationToken);
+        public Task<T?> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
+        public Task<List<T>> GetAll(CancellationToken cancellationToken);
+        public Task<List<T>> GetAll(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null);
         public Task<List<T>> GetPagedData(int page, int size, CancellationToken cancellationToken);
     }
 }

@@ -14,27 +14,35 @@ namespace MixedDreams.Infrastructure.Repositories
     internal abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         protected readonly AppDbContext Context;
+        protected readonly DbSet<T> Table;
 
         public BaseRepository(AppDbContext context)
         {
             Context = context;
+            Table = context.Set<T>();
         }
 
-        public async Task Create(T entity)
+        public async Task<T> CreateAsync(T entity)
         {
-            entity.DateCreated = DateTimeOffset.UtcNow;
-            await Context.AddAsync(entity);
+            if (entity is ITrackableEntity trackableEntity)
+            {
+                trackableEntity.DateCreated = DateTimeOffset.UtcNow;
+            }
+            return (await Context.AddAsync(entity)).Entity;
         }
 
         public void Update(T entity)
         {
-            entity.DateUpdated = DateTimeOffset.UtcNow;
+            if (entity is ITrackableEntity trackableEntity)
+            {
+                trackableEntity.DateUpdated = DateTimeOffset.UtcNow;
+            }
             Context.Update(entity);
         }
 
         public void Delete(T entity)
         {
-            if (entity is SoftDeletableEntity softDeletableEntity)
+            if (entity is IHaveSoftDelete softDeletableEntity)
             {
                 softDeletableEntity.IsDeleted = true;
                 softDeletableEntity.DateDeleted = DateTimeOffset.UtcNow;
@@ -48,27 +56,47 @@ namespace MixedDreams.Infrastructure.Repositories
 
         public Task<T?> Get(Guid id, CancellationToken cancellationToken)
         {
-            return Context.Set<T>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return Table.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public Task<List<T>> GetAll(CancellationToken cancellationToken)
         {
-            return Context.Set<T>().ToListAsync(cancellationToken);
+            return Table.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public Task<T?> GetByCondition(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
+        public async Task<List<T>> GetAll(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null)
         {
-            return Context.Set<T>().FirstOrDefaultAsync(expression, cancellationToken);
+            IQueryable<T> query = Table;
+
+            if (expression != null)
+            {
+                query.Where(expression);
+            }
+
+            if (includes  != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return await query.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public Task<List<T>> GetAllByCondition(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
+        public async Task<T?> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
         {
-            return Context.Set<T>().Where(expression).ToListAsync(cancellationToken);
+            return await Table.Where(expression).AsNoTracking().FirstAsync(cancellationToken);
         }
 
         public Task<List<T>> GetPagedData(int page, int size, CancellationToken cancellationToken)
         {
-            return Context.Set<T>().Skip((page - 1) * size).Take(size).AsNoTracking().ToListAsync(cancellationToken);
+            return Table.Skip((page - 1) * size).Take(size).AsNoTracking().ToListAsync(cancellationToken);
         }
     }
 }

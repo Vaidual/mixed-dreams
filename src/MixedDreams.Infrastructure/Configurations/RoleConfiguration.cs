@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MixedDreams.Infrastructure.StaticTypes;
+using MixedDreams.Infrastructure.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,18 +17,21 @@ namespace MixedDreams.Infrastructure.Configurations
             builder.HasData(
             new IdentityRole
             {
-                Name = Roles.USER,
-                NormalizedName = nameof(Roles.USER),
+                Id = "1",
+                Name = Roles.Customer,
+                NormalizedName = Roles.Customer.ToUpper(),
             },
             new IdentityRole
             {
-                Name = Roles.ADMINISTATOR,
-                NormalizedName = nameof(Roles.ADMINISTATOR),
+                Id = "2",
+                Name = Roles.Administrator,
+                NormalizedName = Roles.Administrator.ToUpper()
             },
             new IdentityRole
             {
-                Name = Roles.COMPANY,
-                NormalizedName = nameof(Roles.COMPANY),
+                Id = "3",
+                Name = Roles.Company,
+                NormalizedName = Roles.Company.ToUpper(),
             });
         }
     }

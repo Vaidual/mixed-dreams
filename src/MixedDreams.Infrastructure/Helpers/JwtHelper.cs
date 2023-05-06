@@ -17,7 +17,7 @@ namespace MixedDreams.Infrastructure.Helpers
             string issuer,
             string audience,
             TimeSpan expiration,
-            List<Claim> additionalClaims = null)
+            List<Claim>? additionalClaims = null)
         {
             var claims = new List<Claim>
             {

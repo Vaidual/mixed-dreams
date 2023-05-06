@@ -13,7 +13,7 @@ namespace MixedDreams.Infrastructure.MapperProfiles
     {
         public MappingProfile()
         {
-            CreateMap<RegisterDto, ApplicationUser>()
+            CreateMap<CustomerRegisterDto, ApplicationUser>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
         }
     }

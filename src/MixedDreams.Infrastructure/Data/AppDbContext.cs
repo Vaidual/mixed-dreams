@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MixedDreams.Domain.Common;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Configurations;
+using MixedDreams.Infrastructure.Tenants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +17,59 @@ namespace MixedDreams.Infrastructure.Data
 {
     internal class AppDbContext : IdentityDbContext<ApplicationUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        private readonly Guid? _tenantId;
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, ITenantService tenantGetter) : base(options) 
+        {
+            _tenantId = tenantGetter.TenantId;
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+            if (_tenantId is not null)
+            {
+                builder.Entity<IMustHaveTenant>().HasQueryFilter(a => a.TenantId == _tenantId);
+
+                //builder.Entity<Product>().HasQueryFilter(a => a.TenantId == _tetantId);
+                //builder.Entity<Ingredient>().HasQueryFilter(a => a.TenantId == _tetantId);
+                //builder.Entity<Order>().HasQueryFilter(a => a.TenantId == _tetantId);
+                //builder.Entity<BusinessLocation>().HasQueryFilter(a => a.TenantId == _tetantId);
+            }
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<BusinessLocation> BusinessLocations { get; set; }
+        public DbSet<ProductIngredient> ProductIngredient { get; set; }
+        public DbSet<ProductHistory> ProductHistory { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            if (_tenantId is not null)
+            {
+                foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>().ToList())
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                        case EntityState.Modified:
+                            entry.Entity.TenantId = (Guid)_tenantId!;
+                            break;
+                    }
+                }
+            }
+            var result = await base.SaveChangesAsync(cancellationToken);
+            return result;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MixedDreams.Domain.Common;
 
 namespace MixedDreams.Domain.Entities
 {
@@ -6,5 +7,7 @@ namespace MixedDreams.Domain.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public BaseEntity? ConnectedEntity { get; set; }
     }
 }

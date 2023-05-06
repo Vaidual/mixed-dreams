@@ -8,40 +8,47 @@ namespace MixedDreams.Domain.Common
 {
     public abstract class ValueObject
     {
-        protected static bool EqualOperator(ValueObject left, ValueObject right)
-        {
-            if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
-            {
-                return false;
-            }
-            return ReferenceEquals(left, right) || left.Equals(right);
-        }
-
-        protected static bool NotEqualOperator(ValueObject left, ValueObject right)
-        {
-            return !(EqualOperator(left, right));
-        }
-
         protected abstract IEnumerable<object> GetEqualityComponents();
 
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != GetType())
-            {
+            if (obj == null)
                 return false;
-            }
 
-            var other = (ValueObject)obj;
+            if (GetType() != obj.GetType())
+                return false;
 
-            return this.GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+            var valueObject = (ValueObject)obj;
+
+            return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
         }
 
         public override int GetHashCode()
         {
             return GetEqualityComponents()
-                .Select(x => x != null ? x.GetHashCode() : 0)
-                .Aggregate((x, y) => x ^ y);
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
         }
-        // Other utility methods
+
+        public static bool operator ==(ValueObject a, ValueObject b)
+        {
+            if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
+                return true;
+
+            if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(ValueObject a, ValueObject b)
+        {
+            return !(a == b);
+        }
     }
 }

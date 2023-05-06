@@ -10,7 +10,8 @@ namespace MixedDreams.Application.ServicesInterfaces
 {
     public interface IAuthService
     {
-        public Task<TokenResponse> RegisterUserAsync(RegisterDto model);
+        public Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterDto model);
+        public Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterDto model);
         public Task<TokenResponse> LoginUserAsync(LoginDto model);
         public Task LogoutUserAsync();
     }
