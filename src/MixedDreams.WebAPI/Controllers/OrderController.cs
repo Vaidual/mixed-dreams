@@ -4,7 +4,7 @@ namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/orders")]
     [ApiController]
-    public class OrderController
+    public class OrderController : ControllerBase
     {
     }
 }

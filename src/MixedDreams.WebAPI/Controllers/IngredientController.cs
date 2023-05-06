@@ -4,7 +4,7 @@ namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/ingredients")]
     [ApiController]
-    public class IngredientController
+    public class IngredientController : ControllerBase
     {
     }
 }

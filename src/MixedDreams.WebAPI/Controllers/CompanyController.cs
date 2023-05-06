@@ -4,7 +4,7 @@ namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/companies")]
     [ApiController]
-    public class CompanyController
+    public class CompanyController : ControllerBase
     {
     }
 }

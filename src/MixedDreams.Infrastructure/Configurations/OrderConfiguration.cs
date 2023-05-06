@@ -4,6 +4,8 @@ using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +15,7 @@ namespace MixedDreams.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.HasQueryFilter(c => !c.IsDeleted);
+            builder.HasQueryFilter(o => !o.IsDeleted);
         }
     }
 }

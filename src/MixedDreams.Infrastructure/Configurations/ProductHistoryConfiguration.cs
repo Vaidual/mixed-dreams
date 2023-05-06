@@ -14,6 +14,7 @@ namespace MixedDreams.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<ProductHistory> builder)
         {
             builder.Property(p => p.Price).HasPrecision(18, 2);
+            builder.HasQueryFilter(p => !p.Product.Company.IsDeleted);
         }
     }
 }

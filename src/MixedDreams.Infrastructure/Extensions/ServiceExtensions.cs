@@ -24,6 +24,7 @@ namespace MixedDreams.Infrastructure.Extensions
         public static void AddInternalServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IBackupService, BackupService>();
             services.AddScoped<ITenantService, TenantService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

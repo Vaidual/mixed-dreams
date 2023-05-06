@@ -19,6 +19,8 @@ namespace MixedDreams.Infrastructure.Configurations
             builder.HasOne(pi => pi.Ingredient)
                 .WithMany(i => i.ProductIngredients)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasQueryFilter(pi => !pi.Product.Company.IsDeleted);
         }
     }
 }

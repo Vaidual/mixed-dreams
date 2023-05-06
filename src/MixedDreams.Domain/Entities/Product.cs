@@ -26,7 +26,7 @@ namespace MixedDreams.Domain.Entities
         public Guid CompanyId { get; set; }
         public Company Company { get; set; }
 
-        public List<OrderProduct> OrderProduct { get; set; }
+        public List<OrderProduct> OrderProducts { get; set; }
         public List<ProductIngredient> ProductIngredients { get; set; }
         public List<ProductHistory> ProductHistory { get; set; }
 
