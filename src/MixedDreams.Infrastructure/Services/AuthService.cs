@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using MixedDreams.Application.Dto;
 using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.RepositoryInterfaces;
-using MixedDreams.Application.Responses;
-using MixedDreams.Application.Responses.Errors;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Helpers;
@@ -18,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using MixedDreams.Application.Common;
+using MixedDreams.Application.Dto.Auth;
 
 namespace MixedDreams.Infrastructure.Services
 {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Dto
+namespace MixedDreams.Application.Dto.Auth
 {
     public record CompanyRegisterDto : RegisterDto
     {

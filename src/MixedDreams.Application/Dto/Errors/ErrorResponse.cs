@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Responses.Errors
+namespace MixedDreams.Application.Dto.Errors
 {
     public class ErrorResponse
     {

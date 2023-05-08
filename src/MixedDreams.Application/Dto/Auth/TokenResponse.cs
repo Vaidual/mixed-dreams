@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Responses
+namespace MixedDreams.Application.Dto.Auth
 {
     public record TokenResponse
     {

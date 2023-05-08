@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MixedDreams.Application.Dto;
+using MixedDreams.Application.Dto.Auth;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;

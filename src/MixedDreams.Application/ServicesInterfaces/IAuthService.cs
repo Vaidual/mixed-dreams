@@ -1,5 +1,4 @@
-﻿using MixedDreams.Application.Dto;
-using MixedDreams.Application.Responses;
+﻿using MixedDreams.Application.Dto.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;

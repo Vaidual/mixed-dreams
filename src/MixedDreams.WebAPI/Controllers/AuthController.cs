@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MixedDreams.Application.ServicesInterfaces;
-using MixedDreams.Application.Dto;
 using System.Threading;
+using MixedDreams.Application.Dto.Auth;
 
 namespace MixedDreams.WebAPI.Controllers
 {

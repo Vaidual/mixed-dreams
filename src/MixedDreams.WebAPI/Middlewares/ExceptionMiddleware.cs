@@ -1,7 +1,5 @@
-﻿
-
+﻿using MixedDreams.Application.Common;
 using MixedDreams.Application.Exceptions;
-using MixedDreams.Application.Responses.Errors;
 
 namespace MixedDreams.WebAPI.Middlewares
 {
@@ -30,25 +28,19 @@ namespace MixedDreams.WebAPI.Middlewares
         {
             //var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>()!;
             context.Response.ContentType = "application/json";
-            var responseBody = new ErrorResponse();
-            context.Response.StatusCode = exception switch
+            BaseException responseException;
+            if (exception is BaseException baseException)
             {
-                BadRequestException => StatusCodes.Status400BadRequest,
-                NotFoundException => StatusCodes.Status404NotFound,
-                _ => StatusCodes.Status500InternalServerError
-            };
-            responseBody.StatusCode = context.Response.StatusCode;
-            if (responseBody.StatusCode == 500)
-            {
-                _logger.LogError("Something went wrong: {@exception}", exception);
-                responseBody.Title = "An internal server error occured.";
+                responseException = baseException;
+                _logger.LogWarning("Something went wrong: {@exception}", baseException.Title);
             }
             else
             {
-                _logger.LogWarning("Something went wrong: {@exception}", exception);
-                responseBody.Title = exception.Message;
+                responseException = new InternalServerErrorException();
+                _logger.LogError("Internal error happened: {@exception}", exception);
             }
-            await context.Response.WriteAsync(responseBody.ToString());
+            context.Response.StatusCode = responseException.StatusCode;
+            await context.Response.WriteAsync(responseException.GetErrorResponse().ToString());
         }
     }
 }

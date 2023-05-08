@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Application.Responses.Errors;
+using MixedDreams.Application.Dto.Errors;
+using MixedDreams.Application.Exceptions;
 
 namespace MixedDreams.WebAPI.Filters
 {
@@ -10,16 +11,13 @@ namespace MixedDreams.WebAPI.Filters
         {
             if (!context.ModelState.IsValid)
             {
-                context.Result = new UnprocessableEntityObjectResult(
-                    new InvalidModelErrorResponse(
-                        422,
-                        "Invalid request model",
-                        context.ModelState.Select(x => new InvalidModelError(
-                            x.Key,
-                            x.Value.Errors.Select(e => e.ErrorMessage))
-                        )
-                    )
-                );
+                var errors = context.ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                throw new ModelValidationException(errors);
             }
         }
         public void OnActionExecuted(ActionExecutedContext context) { }
