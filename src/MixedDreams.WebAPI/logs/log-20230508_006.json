@@ -1,0 +1,3 @@
+{"@t":"2023-05-08T12:12:45.6506445Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["234.8127"],"RequestMethod":"POST","RequestPath":"/api/backup/create","StatusCode":200,"Elapsed":234.8127,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQFNM1L9RH2:00000009","ConnectionId":"0HMQFNM1L9RH2"}
+{"@t":"2023-05-08T12:22:07.8179066Z","@mt":"Starting web application"}
+{"@t":"2023-05-08T12:23:00.3134499Z","@mt":"Starting web application"}

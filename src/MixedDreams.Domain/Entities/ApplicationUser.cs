@@ -8,6 +8,7 @@ namespace MixedDreams.Domain.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public BaseEntity? ConnectedEntity { get; set; }
+        public Company? Company { get; set; }
+        public Customer? Customer { get; set; }
     }
 }

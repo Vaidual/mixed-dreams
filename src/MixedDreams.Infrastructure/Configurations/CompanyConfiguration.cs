@@ -16,7 +16,7 @@ namespace MixedDreams.Infrastructure.Configurations
         {
             builder.OwnsOne(c => c.Address);
             builder.HasOne(c => c.ApplicationUser)
-                .WithOne(a => (Company)a.ConnectedEntity)
+                .WithOne(a => a.Company)
                 .HasForeignKey<Company>(c => c.ApplicationUserId)
                 .IsRequired();
             builder.HasQueryFilter(c => !c.IsDeleted);

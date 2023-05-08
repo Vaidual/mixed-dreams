@@ -14,7 +14,7 @@ namespace MixedDreams.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.HasOne(c => c.ApplicationUser)
-                .WithOne(a => (Customer)a.ConnectedEntity)
+                .WithOne(a => a.Customer)
                 .HasForeignKey<Customer>(c => c.ApplicationUserId)
                 .IsRequired();
             builder.HasQueryFilter(c => !c.IsDeleted);

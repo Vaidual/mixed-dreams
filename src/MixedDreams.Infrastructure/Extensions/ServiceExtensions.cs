@@ -45,7 +45,6 @@ namespace MixedDreams.Infrastructure.Extensions
                 opt.Password.RequiredLength = 8;
                 opt.Password.RequireDigit = true;
                 opt.Password.RequireUppercase = true;
-                opt.Password.RequiredUniqueChars = 4;
                 opt.Password.RequireNonAlphanumeric = true;
                 opt.Password.RequireLowercase = true;
             })
