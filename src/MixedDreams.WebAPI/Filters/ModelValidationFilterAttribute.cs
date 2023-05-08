@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Application.Dto.Errors;
+using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Exceptions;
 
 namespace MixedDreams.WebAPI.Filters

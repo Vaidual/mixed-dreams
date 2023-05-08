@@ -55,6 +55,7 @@ namespace MixedDreams.Infrastructure.Extensions
             //services.AddScoped<IUserClaimsPrincipalFactory<Customer>, MixedDreamsClaimsFactory>();
             services.AddScoped<UserManager<ApplicationUser>>();
             services.AddScoped<SignInManager<ApplicationUser>>();
+            services.AddScoped<IUserStore<ApplicationUser>, AppUserStore>();
             return services;
         }
 

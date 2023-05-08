@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MixedDreams.Application.ServicesInterfaces;
 using System.Threading;
-using MixedDreams.Application.Dto.Auth;
+using MixedDreams.Application.Features.Auth;
+using MixedDreams.Application.Features.Auth.Login;
+using MixedDreams.Application.Features.Auth.RegisterCompany;
+using MixedDreams.Application.Features.Auth.RegisterCustomer;
 
 namespace MixedDreams.WebAPI.Controllers
 {
@@ -23,7 +26,7 @@ namespace MixedDreams.WebAPI.Controllers
 
         [HttpPost]
         [Route("register/customer")]
-        public async Task<IActionResult> RegisterCustomer(CustomerRegisterDto model)
+        public async Task<IActionResult> RegisterCustomer(CustomerRegisterRequest model)
         {
             var response = await _authService.RegisterCustomerAsync(model);
 
@@ -32,7 +35,7 @@ namespace MixedDreams.WebAPI.Controllers
 
         [HttpPost]
         [Route("register/company")]
-        public async Task<IActionResult> RegisterCompany(CompanyRegisterDto model)
+        public async Task<IActionResult> RegisterCompany([FromBody] CompanyRegisterRequest model)
         {
             var response = await _authService.RegisterCompanyAsync(model);
 
@@ -54,7 +57,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto model)
+        public async Task<IActionResult> Login(LoginRequest model)
         {
             var response = await _authService.LoginUserAsync(model);
 

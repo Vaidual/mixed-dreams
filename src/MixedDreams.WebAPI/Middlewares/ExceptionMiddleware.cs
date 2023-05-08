@@ -37,7 +37,7 @@ namespace MixedDreams.WebAPI.Middlewares
             else
             {
                 responseException = new InternalServerErrorException();
-                _logger.LogError("Internal error happened: {@exception}", exception);
+                _logger.LogError("Internal error happened: {@exception}", exception.Message);
             }
             context.Response.StatusCode = responseException.StatusCode;
             await context.Response.WriteAsync(responseException.GetErrorResponse().ToString());

@@ -15,6 +15,11 @@ using Microsoft.AspNetCore.Mvc;
 using MixedDreams.WebAPI.Filters;
 using MixedDreams.WebAPI.Extensions;
 using MixedDreams.Infrastructure.Extensions;
+using FluentValidation;
+using MixedDreams.Application.Features.Auth.Login;
+using FluentValidation.AspNetCore;
+using System.Reflection;
+using Microsoft.Extensions.Options;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -53,6 +58,8 @@ try
     builder.Services.AddInternalServices(builder.Configuration);
     builder.Services.AddMiddlewareServices();
 
+    builder.Services.AddFluentValidationAutoValidation();
+    builder.Services.AddValidatorsFromAssembly(typeof(LoginValidator).Assembly);
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddAndConfigureSwagger();

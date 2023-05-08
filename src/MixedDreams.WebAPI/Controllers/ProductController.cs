@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Application.Dto;
+using MixedDreams.Application.Features;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 

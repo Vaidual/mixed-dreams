@@ -1,4 +1,4 @@
-﻿using MixedDreams.Application.Dto.Errors;
+﻿using MixedDreams.Application.Features.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

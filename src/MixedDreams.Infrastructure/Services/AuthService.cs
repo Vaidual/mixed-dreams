@@ -14,8 +14,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using MixedDreams.Application.Common;
-using MixedDreams.Application.Dto.Auth;
+using MixedDreams.Application.Features.Auth;
+using UnitsNet;
+using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Features.Auth.Login;
+using MixedDreams.Application.Features.Auth.RegisterCustomer;
+using MixedDreams.Application.Features.Auth.RegisterCompany;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -26,22 +30,25 @@ namespace MixedDreams.Infrastructure.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly AppDbContext _context;
 
         public AuthService(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            AppDbContext context)
         {
             _configuration = configuration;
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             this._unitOfWork = unitOfWork;
+            _context = context;
         }
 
-        public async Task<TokenResponse> LoginUserAsync(LoginDto model)
+        public async Task<TokenResponse> LoginUserAsync(LoginRequest model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             //var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
@@ -62,22 +69,58 @@ namespace MixedDreams.Infrastructure.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterDto model)
+        public async Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterRequest model)
         {
             var user = await CreateUserAsync(model);
-            await RegisterUserAsync(model, user, Roles.Customer);
-            await _unitOfWork.Save(CancellationToken.None);
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    await RegisterUserAsync(model, user, Roles.Customer);
+
+                    Customer customer = _mapper.Map<Customer>(model);
+                    customer.ApplicationUser = user;
+                    await _unitOfWork.CustomerRepository.CreateAsync(customer);
+                    await _unitOfWork.Save(CancellationToken.None);
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
             var token = await CreateTokenAsync(user, false);
 
             return new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public async Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterDto model)
+        public async Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterRequest model)
         {
             var user = await CreateUserAsync(model);
-            await RegisterUserAsync(model, user, Roles.Company);
+            Company company;
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    await RegisterUserAsync(model, user, Roles.Company);
 
-            var company = await CreateCompanyAsync(model);
+                    company = _mapper.Map<Company>(model);
+                    company.ApplicationUser = user;
+                    company = await _unitOfWork.CompanyRepository.CreateAsync(company);
+                    await _unitOfWork.Save(CancellationToken.None);
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
             var claims = new List<Claim>()
             {
                 new Claim("TenantId", company.Id.ToString())
@@ -100,13 +143,6 @@ namespace MixedDreams.Infrastructure.Services
             return user;
         }
 
-        private async Task<Company> CreateCompanyAsync(CompanyRegisterDto model)
-        {
-            var company = _mapper.Map<Company>(model);
-
-            return await _unitOfWork.CompanyRepository.CreateAsync(company);
-        }
-
         private async Task RegisterUserAsync(RegisterDto registerModel, ApplicationUser user, string role)
         {
             var result = await _userManager.CreateAsync(user, registerModel.Password);
@@ -114,6 +150,7 @@ namespace MixedDreams.Infrastructure.Services
             {
                 throw new BadRequestException(result.Errors.First().Description);
             }
+            await _unitOfWork.Save(CancellationToken.None);
             await _userManager.AddToRoleAsync(user, role);
         }
 

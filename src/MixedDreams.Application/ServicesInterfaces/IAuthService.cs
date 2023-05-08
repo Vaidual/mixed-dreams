@@ -1,4 +1,7 @@
-﻿using MixedDreams.Application.Dto.Auth;
+﻿using MixedDreams.Application.Features.Auth;
+using MixedDreams.Application.Features.Auth.Login;
+using MixedDreams.Application.Features.Auth.RegisterCompany;
+using MixedDreams.Application.Features.Auth.RegisterCustomer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +12,9 @@ namespace MixedDreams.Application.ServicesInterfaces
 {
     public interface IAuthService
     {
-        public Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterDto model);
-        public Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterDto model);
-        public Task<TokenResponse> LoginUserAsync(LoginDto model);
+        public Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterRequest model);
+        public Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterRequest model);
+        public Task<TokenResponse> LoginUserAsync(LoginRequest model);
         public Task LogoutUserAsync();
     }
 }
