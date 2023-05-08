@@ -268,7 +268,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("BusinessLocations");
+                    b.ToTable("BusinessLocations", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Company", b =>
@@ -304,7 +304,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Customer", b =>
@@ -334,7 +334,7 @@ namespace MixedDreams.Infrastructure.Migrations
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Ingredient", b =>
@@ -352,7 +352,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Order", b =>
@@ -386,7 +386,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.OrderProduct", b =>
@@ -415,7 +415,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProducts");
+                    b.ToTable("OrderProducts", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Product", b =>
@@ -466,7 +466,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductCategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductCategory", b =>
@@ -493,7 +493,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductHistory", b =>
@@ -520,7 +520,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductHistory");
+                    b.ToTable("ProductHistory", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductIngredient", b =>
@@ -550,7 +550,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductIngredient");
+                    b.ToTable("ProductIngredient", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -612,7 +612,7 @@ namespace MixedDreams.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("MixedDreams.Domain.Entities.BusinessLocation.Address#MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("BusinessLocationId")
                                 .HasColumnType("uniqueidentifier");
@@ -642,7 +642,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                             b1.HasKey("BusinessLocationId");
 
-                            b1.ToTable("BusinessLocations");
+                            b1.ToTable("BusinessLocations", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("BusinessLocationId");
@@ -662,7 +662,7 @@ namespace MixedDreams.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("MixedDreams.Domain.Entities.Company.Address#MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("CompanyId")
                                 .HasColumnType("uniqueidentifier");
@@ -692,7 +692,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                             b1.HasKey("CompanyId");
 
-                            b1.ToTable("Companies");
+                            b1.ToTable("Companies", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("CompanyId");
