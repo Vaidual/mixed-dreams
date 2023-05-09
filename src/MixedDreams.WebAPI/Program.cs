@@ -76,11 +76,12 @@ try
         app.UseSwaggerUI();
     }
 
+    app.UseSerilogRequestLogging();
+
     app.MigrateDatabase();
 
     app.UseExceptionMiddleware();
 
-    app.UseSerilogRequestLogging();
 
     app.UseHttpsRedirection();
 

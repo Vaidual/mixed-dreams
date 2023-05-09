@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using MixedDreams.Domain.Common;
+using MixedDreams.Infrastructure.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MixedDreams.WebAPI.Filters
 {
@@ -17,7 +21,9 @@ namespace MixedDreams.WebAPI.Filters
                         kvp => kvp.Key,
                         kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
                     );
-                throw new ModelValidationException(errors);
+                var exception = new ModelValidationException(errors);
+                //context.HttpContext.Response.StatusCode = exception.StatusCode;
+                throw exception;
             }
         }
         public void OnActionExecuted(ActionExecutedContext context) { }

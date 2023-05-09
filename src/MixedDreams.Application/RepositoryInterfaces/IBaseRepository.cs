@@ -10,7 +10,7 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IBaseRepository<T> where T : BaseEntity
     {
-        public Task<bool> EntityExists(Guid id);
+        public bool EntityExists(Guid id);
         public Task<T> CreateAsync(T entity);
         public void Update(T entity);
         public void Delete(T entity);
