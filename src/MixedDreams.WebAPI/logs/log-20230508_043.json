@@ -1,2 +1,0 @@
-{"@t":"2023-05-08T16:48:51.5729791Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["1077.7330"],"RequestMethod":"POST","RequestPath":"/api/auth/register/company","StatusCode":200,"Elapsed":1077.733,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQFSGBB2E2U:00000001","ConnectionId":"0HMQFSGBB2E2U"}
-{"@t":"2023-05-08T20:43:27.4355071Z","@mt":"Starting web application"}

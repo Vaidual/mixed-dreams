@@ -14,12 +14,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using MixedDreams.Application.Features.Auth;
 using UnitsNet;
 using MixedDreams.Infrastructure.Data;
-using MixedDreams.Application.Features.Auth.Login;
-using MixedDreams.Application.Features.Auth.RegisterCustomer;
-using MixedDreams.Application.Features.Auth.RegisterCompany;
+using MixedDreams.Application.Features.AuthFeatures;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
+using MixedDreams.Application.Features.AuthFeatures.Login;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
 
 namespace MixedDreams.Infrastructure.Services
 {

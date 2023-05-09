@@ -1,7 +1,9 @@
-﻿using MixedDreams.Domain.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MixedDreams.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +12,22 @@ namespace MixedDreams.Domain.ValueObjects
 {
     public class Address : ValueObject
     {
-
+        [Column(TypeName = "nvarchar(100)")]
         public String Street { get; private set; }
+
+        [Column(TypeName = "nvarchar(100)")]
         public String City { get; private set; }
+
+        [Column(TypeName = "nvarchar(100)")]
         public String State { get; private set; }
+
+        [Column(TypeName = "nvarchar(100)")]
         public String Country { get; private set; }
 
-        [DataType(DataType.PostalCode)]
+        [Column(TypeName = "char(12)")]
         public String ZipCode { get; private set; }
+
+        [Column(TypeName = "nvarchar(100)")]
         public String? Apartament { get; private set; }
 
         public Address() { }

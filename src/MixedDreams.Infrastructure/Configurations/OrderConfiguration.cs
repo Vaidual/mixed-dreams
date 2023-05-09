@@ -16,6 +16,7 @@ namespace MixedDreams.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.HasQueryFilter(o => !o.IsDeleted);
+
         }
     }
 }

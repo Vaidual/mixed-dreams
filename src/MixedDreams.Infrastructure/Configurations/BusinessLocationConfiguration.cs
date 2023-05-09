@@ -15,6 +15,9 @@ namespace MixedDreams.Infrastructure.Configurations
         {
             builder.OwnsOne(bl => bl.Address);
             builder.HasQueryFilter(bl => !bl.Company.IsDeleted);
+
+            builder.Property(x => x.Name)
+                .HasColumnType("nvarchar(50)");
         }
     }
 }

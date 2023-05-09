@@ -22,6 +22,11 @@ namespace MixedDreams.Infrastructure.Repositories
             Table = context.Set<T>();
         }
 
+        public Task<bool> EntityExists(Guid id)
+        {
+            return Table.AnyAsync(x => x.Id == id);
+        }
+
         public async Task<T> CreateAsync(T entity)
         {
             if (entity is ITrackableEntity trackableEntity)

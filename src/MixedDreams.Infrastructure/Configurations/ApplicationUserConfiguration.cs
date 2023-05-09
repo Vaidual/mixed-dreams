@@ -14,6 +14,10 @@ namespace MixedDreams.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
+            builder.Property(x => x.FirstName)
+                .HasColumnType("nvarchar(50)");
+            builder.Property(x => x.LastName)
+                .HasColumnType("nvarchar(50)");
         }
     }
 }

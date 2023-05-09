@@ -15,6 +15,17 @@ namespace MixedDreams.Infrastructure.Configurations
         {
             builder.Property(p => p.Price).HasPrecision(18, 2);
             builder.HasQueryFilter(p => !p.Company.IsDeleted);
+
+            builder.Property(x => x.Name)
+                .HasColumnType("nvarchar(50)");
+            builder.Property(x => x.Description)
+                .HasColumnType("nvarchar(4000)");
+            builder.Property(x => x.PrimaryImage)
+                .HasColumnType("varchar(2100)");
+
+            //builder.HasOne(x => x.ProductCategory)
+            //    .WithMany(x => x.Products)
+            //    .HasForeignKey(x => x.ProductCategoryId);
         }
     }
 }

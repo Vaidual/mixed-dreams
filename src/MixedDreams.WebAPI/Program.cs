@@ -16,10 +16,11 @@ using MixedDreams.WebAPI.Filters;
 using MixedDreams.WebAPI.Extensions;
 using MixedDreams.Infrastructure.Extensions;
 using FluentValidation;
-using MixedDreams.Application.Features.Auth.Login;
 using FluentValidation.AspNetCore;
 using System.Reflection;
 using Microsoft.Extensions.Options;
+using MixedDreams.Application.Features.AuthFeatures.Login;
+using MixedDreams.Application.Extensions;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -52,11 +53,13 @@ try
     //.AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling =
     //    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
     //builder.Services.AddTransient<LoggingInterceptor>();
-    builder.Services.AddAndConfigureAuthentification(builder.Configuration);
 
     //Custom services
     builder.Services.AddInternalServices(builder.Configuration);
+    builder.Services.AddAndConfigureAutoMapper();
     builder.Services.AddMiddlewareServices();
+
+    builder.Services.AddAndConfigureAuthentification(builder.Configuration);
 
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddValidatorsFromAssembly(typeof(LoginValidator).Assembly);

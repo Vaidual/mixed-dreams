@@ -20,6 +20,11 @@ namespace MixedDreams.Infrastructure.Configurations
                 .HasForeignKey<Company>(c => c.ApplicationUserId)
                 .IsRequired();
             builder.HasQueryFilter(c => !c.IsDeleted);
+
+            builder.Property(x => x.Birthday)
+                .HasColumnType("date");
+            builder.Property(x => x.CompanyName)
+                .HasColumnType("nvarchar(50)");
         }
     }
 }

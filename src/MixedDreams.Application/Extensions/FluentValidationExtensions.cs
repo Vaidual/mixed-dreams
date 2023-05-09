@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

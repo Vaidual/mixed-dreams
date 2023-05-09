@@ -10,7 +10,6 @@ namespace MixedDreams.Application.Features.Errors
 {
     public class ErrorResponse
     {
-        public ErrorResponse() { }
 
         public ErrorResponse(int statusCode, string title)
         {

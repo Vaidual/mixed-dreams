@@ -196,11 +196,11 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -259,7 +259,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
@@ -268,7 +268,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("BusinessLocations");
+                    b.ToTable("BusinessLocations", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Company", b =>
@@ -282,11 +282,11 @@ namespace MixedDreams.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("datetimeoffset");
@@ -305,7 +305,7 @@ namespace MixedDreams.Infrastructure.Migrations
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Customer", b =>
@@ -335,7 +335,7 @@ namespace MixedDreams.Infrastructure.Migrations
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Ingredient", b =>
@@ -346,14 +346,14 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Order", b =>
@@ -387,7 +387,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.OrderProduct", b =>
@@ -416,7 +416,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProducts");
+                    b.ToTable("OrderProducts", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Product", b =>
@@ -433,18 +433,18 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PrimaryImage")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(2100)");
 
                     b.Property<Guid>("ProductCategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -467,7 +467,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductCategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductCategory", b =>
@@ -490,11 +490,11 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductHistory", b =>
@@ -508,7 +508,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
@@ -521,7 +521,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductHistory");
+                    b.ToTable("ProductHistory", (string)null);
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductIngredient", b =>
@@ -551,7 +551,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductIngredient");
+                    b.ToTable("ProductIngredient", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -613,37 +613,37 @@ namespace MixedDreams.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("MixedDreams.Domain.Entities.BusinessLocation.Address#MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("BusinessLocationId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Apartament")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("State")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("char(12)");
 
                             b1.HasKey("BusinessLocationId");
 
-                            b1.ToTable("BusinessLocations");
+                            b1.ToTable("BusinessLocations", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("BusinessLocationId");
@@ -663,37 +663,37 @@ namespace MixedDreams.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("MixedDreams.Domain.Entities.Company.Address#MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("CompanyId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Apartament")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("State")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("char(12)");
 
                             b1.HasKey("CompanyId");
 
-                            b1.ToTable("Companies");
+                            b1.ToTable("Companies", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("CompanyId");

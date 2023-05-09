@@ -14,6 +14,10 @@ namespace MixedDreams.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<ProductCategory> builder)
         {
             builder.HasQueryFilter(c => !c.IsDeleted);
+
+            builder.Property(x => x.Name)
+                .HasColumnType("nvarchar(50)");
+
         }
     }
 }

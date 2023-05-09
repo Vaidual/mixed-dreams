@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MixedDreams.Application.ServicesInterfaces;
 using System.Threading;
-using MixedDreams.Application.Features.Auth;
-using MixedDreams.Application.Features.Auth.Login;
-using MixedDreams.Application.Features.Auth.RegisterCompany;
-using MixedDreams.Application.Features.Auth.RegisterCustomer;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
+using MixedDreams.Application.Features.AuthFeatures.Login;
 
 namespace MixedDreams.WebAPI.Controllers
 {

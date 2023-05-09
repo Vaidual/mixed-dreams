@@ -21,7 +21,7 @@ namespace MixedDreams.Infrastructure.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void AddInternalServices(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddInternalServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBackupService, BackupService>();
@@ -29,12 +29,11 @@ namespace MixedDreams.Infrastructure.Extensions
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
             services.AddAndConfigureIdentity();
             services.AddAndConfigureDbContext(config);
             services.AddAndConfigureBackblaze(config);
 
+            return services;
         }
 
         private static IServiceCollection AddAndConfigureIdentity(
