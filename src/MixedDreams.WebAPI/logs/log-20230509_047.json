@@ -1,6 +1,0 @@
-{"@t":"2023-05-09T19:11:10.8742457Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["26.6723"],"RequestMethod":"GET","RequestPath":"/api/products","StatusCode":401,"Elapsed":26.6723,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQGO4DTKB5T:00000009","ConnectionId":"0HMQGO4DTKB5T"}
-{"@t":"2023-05-09T19:11:16.4091928Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["537.8234"],"RequestMethod":"GET","RequestPath":"/api/products","StatusCode":200,"Elapsed":537.8234,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQGO4DTKB5T:0000000B","ConnectionId":"0HMQGO4DTKB5T"}
-{"@t":"2023-05-09T19:11:31.4060890Z","@mt":"Starting web application"}
-{"@t":"2023-05-09T19:11:31.7059939Z","@mt":"Starting web application"}
-{"@t":"2023-05-09T19:12:01.6851404Z","@mt":"Starting web application"}
-{"@t":"2023-05-09T19:12:02.0940002Z","@mt":"Starting web application"}

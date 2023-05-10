@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Domain.Entities
 {
-    public class ProductCategory : SoftDeletableTrackableEntity
+    public class ProductCategory : BaseEntity, IHaveSoftDelete
     {
         public string Name { get; set; }
 
         public List<Product> Products { get; set; }
+        public DateTimeOffset? DateDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

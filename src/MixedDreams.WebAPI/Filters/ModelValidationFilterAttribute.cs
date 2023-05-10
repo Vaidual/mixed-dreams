@@ -21,9 +21,8 @@ namespace MixedDreams.WebAPI.Filters
                         kvp => kvp.Key,
                         kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
                     );
-                var exception = new ModelValidationException(errors);
-                //context.HttpContext.Response.StatusCode = exception.StatusCode;
-                throw exception;
+                if (errors.Count == 0) return;
+                throw new ModelValidationException(errors);
             }
         }
         public void OnActionExecuted(ActionExecutedContext context) { }

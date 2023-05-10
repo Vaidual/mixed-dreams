@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Infrastructure.Data;
+using MixedDreams.Infrastructure.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,17 +16,17 @@ namespace MixedDreams.Infrastructure.Services
     internal class BackupService : IBackupService
     {
         private readonly AppDbContext _context;
-        private readonly IConfiguration _configuration;
+        private readonly BackupOptions _backupOptions;
 
-        public BackupService(AppDbContext context, IConfiguration configuration)
+        public BackupService(AppDbContext context, IOptions<BackupOptions> backupOptions)
         {
             _context = context;
-            this._configuration = configuration;
+            _backupOptions = backupOptions.Value;
         }
 
         public async Task CreateBackupAsync()
         {
-            string backupFolderPath = _configuration["Backup:path"];
+            string backupFolderPath = _backupOptions.Path;
 
             if (!Directory.Exists(backupFolderPath))
             {

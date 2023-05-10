@@ -7,6 +7,7 @@ using System.Text;
 using MixedDreams.WebAPI.Middlewares;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
+using MixedDreams.Application.Exceptions;
 
 namespace MixedDreams.WebAPI.Extensions
 {
@@ -25,7 +26,7 @@ namespace MixedDreams.WebAPI.Extensions
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(name: config["Cors:Policy:Name"],
+                options.AddPolicy(name: config["Cors:Policy:Name"] ?? throw new InternalServerErrorException("Cors policy name isn't specified or options path is incorrect"),
                     policy =>
                     {
                         policy.WithOrigins("http://localhost:3000")
@@ -53,12 +54,15 @@ namespace MixedDreams.WebAPI.Extensions
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = config["JwtToken:Issuer"],
+                    ValidIssuer = config["Jwt:Issuer"] ?? throw new InternalServerErrorException("Jwt Issuer key isn't specified or options path is incorrect"),
                     ValidateAudience = true,
-                    ValidAudience = config["JwtToken:Audience"],
+                    ValidAudience = config["Jwt:Audience"] ?? throw new InternalServerErrorException("Jwt Audience isn't specified or options path is incorrect"),
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtToken:SigningKey"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(
+                            config["Jwt:SigningKey"] ?? 
+                            throw new InternalServerErrorException("Jwt signing key isn't specified or options path is incorrect")))
                 };
             });
             return services;

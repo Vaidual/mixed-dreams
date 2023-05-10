@@ -32,7 +32,7 @@ namespace MixedDreams.Infrastructure.Repositories
         public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_context);
         public IBusinessLocationRepository BusinessLocationRepository => _businessLocationRepository ??= new BusinessLocationRepository(_context);
 
-        public Task Save(CancellationToken cancellationToken = default)
+        public Task SaveAsync(CancellationToken cancellationToken = default)
         {
             return _context.SaveChangesAsync(cancellationToken);
         }

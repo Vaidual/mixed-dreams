@@ -22,9 +22,9 @@ namespace MixedDreams.Infrastructure.Repositories
             Table = context.Set<T>();
         }
 
-        public bool EntityExists(Guid id)
+        public Task<bool> EntityExists(Guid id, CancellationToken cancellationToken = default)
         {
-            return Table.Any(x => x.Id == id);
+            return Table.AnyAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<T> CreateAsync(T entity)
@@ -59,7 +59,7 @@ namespace MixedDreams.Infrastructure.Repositories
             }
         }
 
-        public Task<T?> Get(Guid id, CancellationToken cancellationToken)
+        public Task<T?> Get(Guid id, CancellationToken cancellationToken = default)
         {
             return Table.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
@@ -101,7 +101,7 @@ namespace MixedDreams.Infrastructure.Repositories
 
         public Task<List<T>> GetPagedData(int page, int size, CancellationToken cancellationToken)
         {
-            return Table.Skip((page - 1) * size).Take(size).AsNoTracking().ToListAsync(cancellationToken);
+            return Table.Skip(page * size).Take(size).AsNoTracking().ToListAsync(cancellationToken);
         }
     }
 }

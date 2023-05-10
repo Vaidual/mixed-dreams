@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MixedDreams.Application.Features.ProductFeatures.GetProduct;
 using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
-using MixedDreams.Application.Features.ProductFeatures.PostProduct;
+using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,9 +17,7 @@ namespace MixedDreams.Application.Features.ProductFeatures
         {
             CreateMap<Product, GetProductResponse>();
             CreateMap<Product, GetProductWithDetailsResponse>();
-            CreateMap<List<Product>, IEnumerable<GetProductResponse>>();
-            CreateMap<PostProductRequest, Product>();
-            CreateMap<PostProductRequest, Product>();
+            CreateMap<PostPutProductRequest, Product>();
         }
     }
 }

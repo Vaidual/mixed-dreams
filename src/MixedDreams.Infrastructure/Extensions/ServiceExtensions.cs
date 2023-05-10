@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Data;
 using MixedDreams.Infrastructure.IdentitySetup;
+using MixedDreams.Infrastructure.Options;
 using MixedDreams.Infrastructure.Repositories;
 using MixedDreams.Infrastructure.Services;
 using MixedDreams.Infrastructure.Tenants;
@@ -23,6 +25,8 @@ namespace MixedDreams.Infrastructure.Extensions
     {
         public static IServiceCollection AddInternalServices(this IServiceCollection services, IConfiguration config)
         {
+            services.AddInternalOptions(config);
+
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBackupService, BackupService>();
             services.AddScoped<ITenantService, TenantService>();
@@ -55,6 +59,7 @@ namespace MixedDreams.Infrastructure.Extensions
             services.AddScoped<UserManager<ApplicationUser>>();
             services.AddScoped<SignInManager<ApplicationUser>>();
             services.AddScoped<IUserStore<ApplicationUser>, AppUserStore>();
+
             return services;
         }
 
@@ -64,9 +69,32 @@ namespace MixedDreams.Infrastructure.Extensions
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(config.GetConnectionString("DefaultConnection" ?? throw new InternalServerErrorException("Default connection string isn't specified or options path is incorrect")),
                     dbContextOptions => dbContextOptions.MigrationsAssembly("MixedDreams.Infrastructure"));
             });
+
+            return services;
+        }
+
+        private static IServiceCollection AddInternalOptions(
+            this IServiceCollection services,
+            IConfiguration config)
+        {
+            services.AddOptions<JwtOptions>()
+                .Bind(config.GetSection(JwtOptions.Jwt))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddOptions<BackblazeOptions>()
+                .Bind(config.GetSection(BackblazeOptions.Backblaze))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddOptions<BackupOptions>()
+                .Bind(config.GetSection(BackupOptions.Backup))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
             return services;
         }
 
@@ -76,9 +104,10 @@ namespace MixedDreams.Infrastructure.Extensions
         {
             services.AddBackblazeAgent(options =>
             {
-                options.KeyId = config["Backblaze:WriteKey:KeyId"];
-                options.ApplicationKey = config["Backblaze:WriteKey:ApplicationKey"];
+                options.KeyId = config["Backblaze:WriteKey:KeyId"] ?? throw new InternalServerErrorException("Backblaze-WriteKey KeyId isn't specified or options path is incorrect");
+                options.ApplicationKey = config["Backblaze:WriteKey:ApplicationKey"] ?? throw new InternalServerErrorException("Backblaze-WriteKey ApplicationKey isn't specified or options path is incorrect");
             });
+
             return services;
         }
     }

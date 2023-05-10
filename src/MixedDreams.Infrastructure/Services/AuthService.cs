@@ -20,12 +20,14 @@ using MixedDreams.Application.Features.AuthFeatures;
 using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
 using MixedDreams.Application.Features.AuthFeatures.Login;
 using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
+using MixedDreams.Infrastructure.Options;
+using Microsoft.Extensions.Options;
 
 namespace MixedDreams.Infrastructure.Services
 {
     internal class AuthService : IAuthService
     {
-        private readonly IConfiguration _configuration;
+        private readonly JwtOptions _jwtOptions;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
@@ -33,19 +35,19 @@ namespace MixedDreams.Infrastructure.Services
         private readonly AppDbContext _context;
 
         public AuthService(
-            IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            AppDbContext context)
+            AppDbContext context,
+            IOptions<JwtOptions> jwtOptions)
         {
-            _configuration = configuration;
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             this._unitOfWork = unitOfWork;
             _context = context;
+            _jwtOptions = jwtOptions.Value;
         }
 
         public async Task<TokenResponse> LoginUserAsync(LoginRequest model)
@@ -81,7 +83,7 @@ namespace MixedDreams.Infrastructure.Services
                     Customer customer = _mapper.Map<Customer>(model);
                     customer.ApplicationUser = user;
                     await _unitOfWork.CustomerRepository.CreateAsync(customer);
-                    await _unitOfWork.Save(CancellationToken.None);
+                    await _unitOfWork.SaveAsync(CancellationToken.None);
 
                     await transaction.CommitAsync();
                 }
@@ -110,7 +112,7 @@ namespace MixedDreams.Infrastructure.Services
                     company = _mapper.Map<Company>(model);
                     company.ApplicationUser = user;
                     company = await _unitOfWork.CompanyRepository.CreateAsync(company);
-                    await _unitOfWork.Save(CancellationToken.None);
+                    await _unitOfWork.SaveAsync(CancellationToken.None);
 
                     await transaction.CommitAsync();
                 }
@@ -150,7 +152,7 @@ namespace MixedDreams.Infrastructure.Services
             {
                 throw new BadRequestException(result.Errors.First().Description);
             }
-            await _unitOfWork.Save(CancellationToken.None);
+            await _unitOfWork.SaveAsync(CancellationToken.None);
             await _userManager.AddToRoleAsync(user, role);
         }
 
@@ -164,9 +166,9 @@ namespace MixedDreams.Infrastructure.Services
             }
             var token = JwtHelper.GetJwtToken(
                 user.Id,
-                _configuration["JwtToken:SigningKey"],
-                _configuration["JwtToken:Issuer"],
-                _configuration["JwtToken:Audience"],
+                _jwtOptions.SigningKey,
+                _jwtOptions.Issuer,
+                _jwtOptions.Audience,
                 rememberMe ? TimeSpan.FromDays(14) : TimeSpan.FromHours(2),
                 claims);
 

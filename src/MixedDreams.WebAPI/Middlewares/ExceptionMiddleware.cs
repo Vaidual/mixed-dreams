@@ -1,5 +1,7 @@
-﻿using MixedDreams.Application.Common;
+﻿using Microsoft.AspNetCore.Http;
+using MixedDreams.Application.Common;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Features.Errors;
 
 namespace MixedDreams.WebAPI.Middlewares
 {
@@ -28,19 +30,20 @@ namespace MixedDreams.WebAPI.Middlewares
         {
             //var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>()!;
             context.Response.ContentType = "application/json";
-            BaseException responseException;
+            ErrorResponse response;
             if (exception is BaseException baseException)
             {
-                responseException = baseException;
+                response = baseException.GetErrorResponse();
                 _logger.LogWarning("Something went wrong: {@exception}", baseException.Title);
             }
             else
             {
-                responseException = new InternalServerErrorException();
+                response = new InternalServerErrorException().GetErrorResponse();
+                response.Title = InternalServerErrorException.GeneralTitle;
                 _logger.LogError("Internal error happened: {@exception}", exception.Message);
             }
-            context.Response.StatusCode = responseException.StatusCode;
-            await context.Response.WriteAsync(responseException.GetErrorResponse().ToString());
+            context.Response.StatusCode = response.StatusCode;
+            await context.Response.WriteAsync(response.ToString());
         }
     }
 }
