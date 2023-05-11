@@ -6,6 +6,7 @@ using MixedDreams.Infrastructure.Constants;
 namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/backup")]
+    [Authorize(Roles = Roles.Administrator)]
     [ApiController]
     public class BackupController : ControllerBase
     {

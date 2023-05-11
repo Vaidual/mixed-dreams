@@ -1,4 +1,0 @@
-{"@t":"2023-05-11T18:50:18.9373822Z","@mt":"Client successfully authenticated to Backblaze B2 Cloud Storage.","SourceContext":"Bytewizer.Backblaze.Client.ApiRest"}
-{"@t":"2023-05-11T18:50:21.9891984Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["482.2099"],"RequestMethod":"GET","RequestPath":"/api/products","StatusCode":200,"Elapsed":482.2099,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQIA28KL75E:00000001","ConnectionId":"0HMQIA28KL75E"}
-{"@t":"2023-05-11T18:50:24.9284639Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["51.2228"],"RequestMethod":"GET","RequestPath":"/api/products","StatusCode":200,"Elapsed":51.2228,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQIA28KL75E:00000002","ConnectionId":"0HMQIA28KL75E"}
-{"@t":"2023-05-11T18:50:34.3746611Z","@mt":"Starting web application"}

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Application.Features.ProductFeatures.PutProduct;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace MixedDreams.Application.ServicesInterfaces
 {
     public interface IProductService
     {
-        public Task<Product> CreateProductAsync(PostPutProductRequest model);
+        public Task<Product> CreateProductAsync(PostProductRequest model);
+        public Task UpdateProductAsync(Product productToUpdate, PutProductRequest updateModel);
+        public Task DeleteProductAsync(Product product);
     }
 }

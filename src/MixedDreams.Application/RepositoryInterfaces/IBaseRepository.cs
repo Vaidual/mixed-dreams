@@ -14,6 +14,7 @@ namespace MixedDreams.Application.RepositoryInterfaces
         public Task<T> CreateAsync(T entity);
         public void Update(T entity);
         public void Delete(T entity);
+        public Task ExecuteDeleteAsync(Expression<Func<T, bool>> predicate);
         public Task<T?> Get(Guid id, CancellationToken cancellationToken = default);
         public Task<T?> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
         public Task<List<T>> GetAll(CancellationToken cancellationToken);

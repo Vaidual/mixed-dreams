@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
 {
-    public class PostPutProductRequest
+    public class PostProductRequest
     {
         public string? Name { get; set; }
         public string Description { get; set; } = string.Empty;

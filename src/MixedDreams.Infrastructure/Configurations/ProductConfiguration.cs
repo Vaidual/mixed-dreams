@@ -20,8 +20,6 @@ namespace MixedDreams.Infrastructure.Configurations
                 .HasColumnType("nvarchar(50)");
             builder.Property(x => x.Description)
                 .HasColumnType("nvarchar(4000)");
-            builder.Property(x => x.PrimaryImage)
-                .HasColumnType("varchar(2100)");
 
             //builder.HasOne(x => x.ProductCategory)
             //    .WithMany(x => x.Products)

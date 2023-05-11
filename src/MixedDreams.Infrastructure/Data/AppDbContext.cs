@@ -30,10 +30,10 @@ namespace MixedDreams.Infrastructure.Data
 
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-            //builder.Entity<Product>().HasQueryFilter(a => a.TenantId == _tenantId);
-            //builder.Entity<Ingredient>().HasQueryFilter(a => a.TenantId == _tenantId);
-            //builder.Entity<Order>().HasQueryFilter(a => a.TenantId == _tenantId);
-            //builder.Entity<BusinessLocation>().HasQueryFilter(a => a.TenantId == _tenantId);
+            builder.Entity<Product>().HasQueryFilter(a => a.TenantId == _tenantId);
+            builder.Entity<Ingredient>().HasQueryFilter(a => a.TenantId == _tenantId);
+            builder.Entity<Order>().HasQueryFilter(a => a.TenantId == _tenantId);
+            builder.Entity<BusinessLocation>().HasQueryFilter(a => a.TenantId == _tenantId);
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -47,6 +47,7 @@ namespace MixedDreams.Infrastructure.Data
         public DbSet<ProductIngredient> ProductIngredient { get; set; }
         public DbSet<ProductHistory> ProductHistory { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<BackblazeFile> BackblazeFiles { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

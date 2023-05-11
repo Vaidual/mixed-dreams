@@ -11,6 +11,7 @@ using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Features.ProductFeatures.GetProduct;
 using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Application.Features.ProductFeatures.PutProduct;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
@@ -31,18 +32,21 @@ namespace MixedDreams.WebAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
-        private readonly IValidator<PostPutProductRequest> _postPutProductValidator;
+        private readonly IValidator<PostProductRequest> _postProductValidator;
+        private readonly IValidator<PutProductRequest> _putProductValidator;
 
         public ProductController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            IValidator<PostPutProductRequest> postPutProductValidator,
-            IProductService productService)
+            IValidator<PostProductRequest> postProductValidator,
+            IProductService productService,
+            IValidator<PutProductRequest> putProductValidator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _postPutProductValidator = postPutProductValidator;
+            _postProductValidator = postProductValidator;
             _productService = productService;
+            _putProductValidator = putProductValidator;
         }
 
 
@@ -90,9 +94,9 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostProduct([FromForm] PostPutProductRequest model)
+        public async Task<IActionResult> PostProduct([FromForm] PostProductRequest model)
         {
-            ValidationResult validationResult = await _postPutProductValidator.ValidateAsync(model);
+            ValidationResult validationResult = await _postProductValidator.ValidateAsync(model);
             if (!validationResult.IsValid)
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
@@ -105,9 +109,9 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct([FromRoute] Guid id, [FromBody] PostPutProductRequest model)
+        public async Task<IActionResult> PutProduct([FromRoute] Guid id, [FromForm] PutProductRequest model)
         {
-            ValidationResult validationResult = await _postPutProductValidator.ValidateAsync(model);
+            ValidationResult validationResult = await _putProductValidator.ValidateAsync(model);
             if (!validationResult.IsValid)
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
@@ -118,24 +122,20 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 return BadRequest(new PutNotFoundResponse());
             }
-            Product productToUpdate = _mapper.Map<Product>(model);
-            productToUpdate.Id = id;
-            _unitOfWork.ProductRepository.Update(productToUpdate);
-            await _unitOfWork.SaveAsync();
+            await _productService.UpdateProductAsync(product, model);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
-            Product? product = await _unitOfWork.ProductRepository.Get(id, cancellationToken);
+            Product? product = await _unitOfWork.ProductRepository.Get(id);
             if (product is null)
             {
                 return BadRequest(new EntityNotFoundResponse(nameof(Product), id.ToString()));
             }
-            _unitOfWork.ProductRepository.Delete(product);
-            await _unitOfWork.SaveAsync();
+            await _productService.DeleteProductAsync(product);
 
             return NoContent();
         }

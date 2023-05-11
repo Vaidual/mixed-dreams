@@ -2,6 +2,7 @@
 using MixedDreams.Application.Features.ProductFeatures.GetProduct;
 using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Application.Features.ProductFeatures.PutProduct;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,14 @@ namespace MixedDreams.Application.Features.ProductFeatures
     {
         public ProductMapper()
         {
-            CreateMap<Product, GetProductResponse>();
-            CreateMap<Product, GetProductWithDetailsResponse>();
-            CreateMap<PostPutProductRequest, Product>();
+            CreateMap<Product, GetProductResponse>()
+                .ForMember(dest => dest.PrimaryImage, opt => opt
+                .MapFrom(src => src.Image != null ? src.Image.Path : null));
+            CreateMap<Product, GetProductWithDetailsResponse>()
+                .ForMember(dest => dest.PrimaryImage, opt => opt
+                .MapFrom(src => src.Image != null ? src.Image.Path : null));
+            CreateMap<PostProductRequest, Product>();
+            CreateMap<PutProductRequest, Product>();
         }
     }
 }

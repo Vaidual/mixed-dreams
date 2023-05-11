@@ -41,19 +41,12 @@ namespace MixedDreams.WebAPI.Controllers
             return Ok(response);
         }
 
-        [Authorize]
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            return Ok(12);
-        }
-
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await _authService.LogoutUserAsync();
-            return Ok();
-        }
+        //[HttpPost("logout")]
+        //public async Task<IActionResult> Logout()
+        //{
+        //    await _authService.LogoutUserAsync();
+        //    return Ok();
+        //}
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest model)

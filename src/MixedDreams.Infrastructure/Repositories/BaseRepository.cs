@@ -59,12 +59,12 @@ namespace MixedDreams.Infrastructure.Repositories
             }
         }
 
-        public Task<T?> Get(Guid id, CancellationToken cancellationToken = default)
+        public virtual Task<T?> Get(Guid id, CancellationToken cancellationToken = default)
         {
             return Table.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public Task<List<T>> GetAll(CancellationToken cancellationToken)
+        public virtual Task<List<T>> GetAll(CancellationToken cancellationToken)
         {
             return Table.AsNoTracking().ToListAsync(cancellationToken);
         }
@@ -102,6 +102,11 @@ namespace MixedDreams.Infrastructure.Repositories
         public Task<List<T>> GetPagedData(int page, int size, CancellationToken cancellationToken)
         {
             return Table.Skip(page * size).Take(size).AsNoTracking().ToListAsync(cancellationToken);
+        }
+
+        public Task ExecuteDeleteAsync(Expression<Func<T,bool>> predicate)
+        {
+            return Table.Where(predicate).ExecuteDeleteAsync();
         }
     }
 }

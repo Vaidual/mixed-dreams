@@ -16,7 +16,9 @@ namespace MixedDreams.Domain.Entities
         public decimal Price { get; set; }
         public int AmountInStock { get; set; }
         public Visibility Visibility { get; set; } = Visibility.Unavaiable;
-        public string? PrimaryImage { get; set; }
+
+
+        public BackblazeFile? Image { get; set; }
 
         public float RecommendedTemperature { get; set; }
         public float RecommendedHumidity { get; set; }

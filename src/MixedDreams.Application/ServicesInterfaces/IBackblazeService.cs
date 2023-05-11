@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace MixedDreams.Application.ServicesInterfaces
 {
     public interface IBackblazeService
     {
-        public Task<string> UploadImage(IFormFile image);
+        public Task<BackblazeFile> UploadImage(IFormFile image);
+        public Task DeleteImage(string field, string fileName);
     }
 }
