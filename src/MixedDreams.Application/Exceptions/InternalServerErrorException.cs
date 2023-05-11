@@ -10,8 +10,7 @@ namespace MixedDreams.Application.Exceptions
 {
     public class InternalServerErrorException : BaseException
     {
-        public const string GeneralTitle = "An internal server error occured.";
-        public InternalServerErrorException(string title = GeneralTitle) : base(title)
+        public InternalServerErrorException(string title) : base(title)
         {
             Title = title;
         }

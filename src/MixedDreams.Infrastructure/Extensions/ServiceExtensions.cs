@@ -11,7 +11,6 @@ using MixedDreams.Infrastructure.IdentitySetup;
 using MixedDreams.Infrastructure.Options;
 using MixedDreams.Infrastructure.Repositories;
 using MixedDreams.Infrastructure.Services;
-using MixedDreams.Infrastructure.Tenants;
 using System;
 using System.Collections.Generic;
 using System.Linq;

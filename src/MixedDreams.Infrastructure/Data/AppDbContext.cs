@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Common;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Configurations;
-using MixedDreams.Infrastructure.Tenants;
 using System;
 using System.Collections.Generic;
 using System.Linq;

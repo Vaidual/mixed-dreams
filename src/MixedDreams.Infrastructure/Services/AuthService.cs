@@ -59,9 +59,15 @@ namespace MixedDreams.Infrastructure.Services
                 throw new BadRequestException("Invalid credentials");
             }
 
-            await _userManager.UpdateAsync(user);
+            //await _userManager.UpdateAsync(user);
 
-            var token = await CreateTokenAsync(user, model.RememberMe);
+            List<Claim> claims = new List<Claim>();
+            if ((await _userManager.GetRolesAsync(user)).Any(r => r == Roles.Company))
+            {
+                claims.Add(new Claim("TenantId", user.Id.ToString()));
+            }
+
+            var token = await CreateTokenAsync(user, model.RememberMe, claims);
 
             return new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token));
         }
@@ -125,7 +131,7 @@ namespace MixedDreams.Infrastructure.Services
 
             var claims = new List<Claim>()
             {
-                new Claim("TenantId", company.Id.ToString())
+                new Claim("TenantId", user.Id.ToString())
             };
             var token = await CreateTokenAsync(user, false, claims);
 
@@ -158,7 +164,7 @@ namespace MixedDreams.Infrastructure.Services
 
         private async Task<JwtSecurityToken> CreateTokenAsync(ApplicationUser user, bool rememberMe, List<Claim>? additionalClaims = null)
         {
-            var claims = additionalClaims?? new List<Claim>();
+            List<Claim> claims = additionalClaims?? new List<Claim>();
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles)
             {
