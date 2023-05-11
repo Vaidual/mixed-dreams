@@ -34,13 +34,15 @@ namespace MixedDreams.WebAPI.Controllers
         private readonly IValidator<PostPutProductRequest> _postPutProductValidator;
 
         public ProductController(
-            IUnitOfWork unitOfWork, 
+            IUnitOfWork unitOfWork,
             IMapper mapper,
-            IValidator<PostPutProductRequest> postPutProductValidator)
+            IValidator<PostPutProductRequest> postPutProductValidator,
+            IProductService productService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _postPutProductValidator = postPutProductValidator;
+            _productService = productService;
         }
 
 
@@ -96,7 +98,7 @@ namespace MixedDreams.WebAPI.Controllers
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
 
-            Product product = await _productService.CreateProductAsync(model, model.PrimaryImage);
+            Product product = await _productService.CreateProductAsync(model);
             await _unitOfWork.SaveAsync();
 
             return CreatedAtAction(nameof(GetProductWithDetails), new { id = product.Id}, _mapper.Map<GetProductWithDetailsResponse>(product));

@@ -23,6 +23,8 @@ using MixedDreams.Application.Features.AuthFeatures.Login;
 using MixedDreams.Application.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using MixedDreams.WebAPI;
+using Bytewizer.Backblaze.Client;
+using MixedDreams.Application.Exceptions;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -70,6 +72,8 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddAndConfigureSwagger();
 
+    builder.Services.AddMemoryCache();
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -85,6 +89,9 @@ try
 
     app.UseExceptionMiddleware();
 
+    var storageClient = app.Services.GetService<IStorageClient>();
+    if (storageClient == null) throw new InternalServerErrorException("Unable to find storageClient service.");
+    await storageClient.ConnectAsync();
 
     app.UseHttpsRedirection();
 

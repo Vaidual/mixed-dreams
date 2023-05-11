@@ -12,9 +12,9 @@ namespace MixedDreams.Application.Exceptions
     {
         public override int StatusCode { get; } = 422;
         public override string Title { get; init; }
-        public IDictionary<string, string[]> Errors { get; set; }
+        public IDictionary<string, IEnumerable<string>> Errors { get; set; }
 
-        public ModelValidationException(IDictionary<string, string[]> errors) : base("One or more validation failures have occurred.")
+        public ModelValidationException(IDictionary<string, IEnumerable<string>> errors) : base("One or more validation failures have occurred.")
         {
             Title = "One or more validation failures have occurred.";
             Errors = errors;

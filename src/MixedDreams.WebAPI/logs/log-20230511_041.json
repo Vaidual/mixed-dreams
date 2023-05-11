@@ -1,0 +1,4 @@
+{"@t":"2023-05-11T18:31:20.5249057Z","@mt":"Internal error happened: {@exception}","@l":"Error","exception":"Object reference not set to an instance of an object.","SourceContext":"MixedDreams.WebAPI.Middlewares.ExceptionMiddleware","RequestId":"0HMQI9NJQ4MMU:00000001","RequestPath":"/api/products","ConnectionId":"0HMQI9NJQ4MMU"}
+{"@t":"2023-05-11T18:31:20.5404161Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["530.3732"],"@l":"Error","RequestMethod":"POST","RequestPath":"/api/products","StatusCode":500,"Elapsed":530.3732,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQI9NJQ4MMU:00000001","ConnectionId":"0HMQI9NJQ4MMU"}
+{"@t":"2023-05-11T18:31:27.0647802Z","@mt":"Starting web application"}
+{"@t":"2023-05-11T18:31:27.4010935Z","@mt":"Starting web application"}

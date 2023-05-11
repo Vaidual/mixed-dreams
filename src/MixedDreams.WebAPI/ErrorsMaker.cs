@@ -8,10 +8,11 @@ namespace MixedDreams.WebAPI
     {
         public static void ProcessValidationErrors(List<ValidationFailure> failures)
         {
-            Dictionary<string, string[]> errors = failures
+            var errors = failures
+                .GroupBy(x => x.PropertyName)
                 .ToDictionary(
-                    x => x.PropertyName,
-                    x => new string[] { x.ErrorMessage }
+                    g => g.Key,
+                    g => g.Select(x => x.ErrorMessage)
                 );
             throw new ModelValidationException(errors);
         }

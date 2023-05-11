@@ -30,15 +30,10 @@ namespace MixedDreams.Infrastructure.Data
 
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-            if (_tenantId is not null)
-            {
-                builder.Entity<IMustHaveTenant>().HasQueryFilter(a => a.TenantId == _tenantId);
-
-                //builder.Entity<Product>().HasQueryFilter(a => a.TenantId == _tetantId);
-                //builder.Entity<Ingredient>().HasQueryFilter(a => a.TenantId == _tetantId);
-                //builder.Entity<Order>().HasQueryFilter(a => a.TenantId == _tetantId);
-                //builder.Entity<BusinessLocation>().HasQueryFilter(a => a.TenantId == _tetantId);
-            }
+            //builder.Entity<Product>().HasQueryFilter(a => a.TenantId == _tenantId);
+            //builder.Entity<Ingredient>().HasQueryFilter(a => a.TenantId == _tenantId);
+            //builder.Entity<Order>().HasQueryFilter(a => a.TenantId == _tenantId);
+            //builder.Entity<BusinessLocation>().HasQueryFilter(a => a.TenantId == _tenantId);
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }

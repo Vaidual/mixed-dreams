@@ -19,18 +19,19 @@ namespace MixedDreams.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductService(IBackblazeService backblazeService, IUnitOfWork unitOfWork)
+        public ProductService(IBackblazeService backblazeService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _backblazeService = backblazeService;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<Product> CreateProductAsync(PostPutProductRequest model, IFormFile? image)
+        public async Task<Product> CreateProductAsync(PostPutProductRequest model)
         {
             Product productToCreate = _mapper.Map<Product>(model);
-            if (image is not null)
+            if (model.PrimaryImage is not null)
             {
-                string imageUrl = await _backblazeService.UploadImage(image);
+                string imageUrl = await _backblazeService.UploadImage(model.PrimaryImage);
                 productToCreate.PrimaryImage = imageUrl;
             }
             Product result = await _unitOfWork.ProductRepository.CreateAsync(productToCreate); ;

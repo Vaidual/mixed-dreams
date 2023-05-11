@@ -17,12 +17,10 @@ namespace MixedDreams.WebAPI.Filters
             {
                 var errors = context.ModelState
                     .Where(x => x.Value.Errors.Count > 0)
-                    .ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                    );
-                if (errors.Count == 0) return;
-                throw new ModelValidationException(errors);
+                    .SelectMany(x => x.Value.Errors)
+                    .Select(e => e.ErrorMessage);
+                if (errors.Count() == 0) return;
+                throw new BadRequestException("Json parsing is failed.", errors);
             }
         }
         public void OnActionExecuted(ActionExecutedContext context) { }

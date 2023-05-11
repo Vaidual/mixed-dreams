@@ -22,6 +22,7 @@ using MixedDreams.Application.Features.AuthFeatures.Login;
 using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
 using MixedDreams.Infrastructure.Options;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -56,7 +57,7 @@ namespace MixedDreams.Infrastructure.Services
             //var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                throw new BadRequestException("Invalid credentials");
+                throw new BadRequestException("Authentification failed.", new List<string> { "Invalid credentials" });
             }
 
             //await _userManager.UpdateAsync(user);
@@ -143,7 +144,7 @@ namespace MixedDreams.Infrastructure.Services
             var userExists = await _userManager.FindByEmailAsync(registerModel.Email);
             if (userExists != null)
             {
-                throw new BadRequestException("Email is already taken");
+                throw new BadRequestException("Authentification failed.", new List<string> { "Email is already taken" });
             }
 
             var user = _mapper.Map<ApplicationUser>(registerModel);
@@ -156,7 +157,7 @@ namespace MixedDreams.Infrastructure.Services
             var result = await _userManager.CreateAsync(user, registerModel.Password);
             if (!result.Succeeded)
             {
-                throw new BadRequestException(result.Errors.First().Description);
+                throw new BadRequestException("Authentification failed.", result.Errors.Select(e => e.Description));
             }
             await _unitOfWork.SaveAsync(CancellationToken.None);
             await _userManager.AddToRoleAsync(user, role);

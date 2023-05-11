@@ -10,16 +10,16 @@ namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
 {
     public class PostPutProductRequest
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string Description { get; set; } = string.Empty;
-        public decimal Price { get; set; }
-        public int AmountInStock { get; set; }
+        public decimal? Price { get; set; }
+        public int? AmountInStock { get; set; }
         public Visibility Visibility { get; set; } = Visibility.Unavaiable;
         public IFormFile? PrimaryImage { get; set; }
-        public float RecommendedTemperature { get; set; }
-        public float RecommendedHumidity { get; set; }
+        public float? RecommendedTemperature { get; set; }
+        public float? RecommendedHumidity { get; set; }
 
-        public Guid ProductCategoryId { get; set; }
-        public Guid CompanyId { get; set; }
+        public Guid? ProductCategoryId { get; set; }
+        public Guid? CompanyId { get; set; }
     }
 }

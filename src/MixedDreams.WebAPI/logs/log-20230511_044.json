@@ -1,0 +1,4 @@
+{"@t":"2023-05-11T18:35:45.9610779Z","@mt":"Client successfully authenticated to Backblaze B2 Cloud Storage.","SourceContext":"Bytewizer.Backblaze.Client.ApiRest"}
+{"@t":"2023-05-11T18:35:48.1938165Z","@mt":"Internal error happened: {@exception}","@l":"Error","exception":"Object reference not set to an instance of an object.","SourceContext":"MixedDreams.WebAPI.Middlewares.ExceptionMiddleware","RequestId":"0HMQI9Q4EUDNS:00000001","RequestPath":"/api/products","ConnectionId":"0HMQI9Q4EUDNS"}
+{"@t":"2023-05-11T18:35:48.2012886Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["504.2532"],"@l":"Error","RequestMethod":"POST","RequestPath":"/api/products","StatusCode":500,"Elapsed":504.2532,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQI9Q4EUDNS:00000001","ConnectionId":"0HMQI9Q4EUDNS"}
+{"@t":"2023-05-11T18:35:53.1857626Z","@mt":"Starting web application"}

@@ -29,6 +29,8 @@ namespace MixedDreams.Infrastructure.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBackupService, BackupService>();
             services.AddScoped<ITenantService, TenantService>();
+            services.AddScoped<IBackblazeService, BackblazeService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

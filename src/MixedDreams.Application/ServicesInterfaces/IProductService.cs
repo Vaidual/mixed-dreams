@@ -11,6 +11,6 @@ namespace MixedDreams.Application.ServicesInterfaces
 {
     public interface IProductService
     {
-        public Task<Product> CreateProductAsync(PostPutProductRequest model, IFormFile? image);
+        public Task<Product> CreateProductAsync(PostPutProductRequest model);
     }
 }

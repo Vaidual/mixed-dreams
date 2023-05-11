@@ -1,3 +1,0 @@
-{"@t":"2023-05-11T15:47:32.2397779Z","@mt":"Something went wrong: {@exception}","@l":"Warning","exception":"Invalid credentials","SourceContext":"MixedDreams.WebAPI.Middlewares.ExceptionMiddleware","RequestId":"0HMQI6RSQA79B:00000009","RequestPath":"/api/auth/login","ConnectionId":"0HMQI6RSQA79B"}
-{"@t":"2023-05-11T15:47:32.2552354Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["755.9568"],"RequestMethod":"POST","RequestPath":"/api/auth/login","StatusCode":400,"Elapsed":755.9568,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQI6RSQA79B:00000009","ConnectionId":"0HMQI6RSQA79B"}
-{"@t":"2023-05-11T15:53:58.7157925Z","@mt":"Starting web application"}
