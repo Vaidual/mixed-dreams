@@ -13,5 +13,7 @@ namespace MixedDreams.Application.RepositoryInterfaces
         public void CreateProductHistory(Product product);
         public Task<bool> IsNameTaken(string name);
         public void ClearProductIngredients(Guid productId);
+        public Task<List<Product>> GetProductNamesAsync(string key, int count, CancellationToken cancellationToken = default);
+        public Task<IReadOnlyList<Product>> GetPages(CancellationToken cancellationToken, int page = 0, int size = 20, string? key = "", string? category = null);
     }
 }

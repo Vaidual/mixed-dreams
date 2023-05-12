@@ -48,9 +48,9 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetBusinessLocations(CancellationToken cancellationToken)
         {
-            List<BusinessLocation> businessLocations = await _unitOfWork.BusinessLocationRepository.GetAll(cancellationToken);
+            IReadOnlyList<BusinessLocation> businessLocations = await _unitOfWork.BusinessLocationRepository.GetAll(cancellationToken);
 
-            return Ok(_mapper.Map<List<BusinessLocation>, IReadOnlyList<GetBusinessLocationResponse>>(businessLocations));
+            return Ok(_mapper.Map<IReadOnlyList<BusinessLocation>, IReadOnlyList<GetBusinessLocationResponse>>(businessLocations));
         }
 
         [HttpPost]

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MixedDreams.Application.Features.ProductFeatures.GetCategories;
 using MixedDreams.Application.Features.ProductFeatures.GetProduct;
+using MixedDreams.Application.Features.ProductFeatures.GetProductNames;
 using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
 using MixedDreams.Application.Features.ProductFeatures.PutProduct;
@@ -24,6 +26,8 @@ namespace MixedDreams.Application.Features.ProductFeatures
                 .MapFrom(src => src.Image != null ? src.Image.Path : null));
             CreateMap<PostProductRequest, Product>();
             CreateMap<PutProductRequest, Product>();
+            CreateMap<ProductCategory, GetCategoryResponse>();
+            CreateMap<Product, GetProductNamesResponse>();
         }
     }
 }

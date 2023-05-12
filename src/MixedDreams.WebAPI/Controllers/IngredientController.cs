@@ -48,9 +48,9 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetIngredients(CancellationToken cancellationToken)
         {
-            List<Ingredient> ingredients = await _unitOfWork.IngredientRepository.GetAll(cancellationToken);
+            IReadOnlyList<Ingredient> ingredients = await _unitOfWork.IngredientRepository.GetAll(cancellationToken);
 
-            return Ok(_mapper.Map<List<Ingredient>, IReadOnlyList<GetIngredientResponse>>(ingredients));
+            return Ok(_mapper.Map<IReadOnlyList<Ingredient>, IReadOnlyList<GetIngredientResponse>>(ingredients));
         }
 
         [HttpPost]

@@ -9,7 +9,9 @@ using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features;
 using MixedDreams.Application.Features.Common;
 using MixedDreams.Application.Features.Errors;
+using MixedDreams.Application.Features.ProductFeatures.GetCategories;
 using MixedDreams.Application.Features.ProductFeatures.GetProduct;
+using MixedDreams.Application.Features.ProductFeatures.GetProductNames;
 using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
 using MixedDreams.Application.Features.ProductFeatures.PutProduct;
@@ -65,21 +67,37 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("~/api/product-names")]
         [Authorize]
-        public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetProductNames([FromQuery] string key = "", [FromQuery][Range(1, 20)] int count = 10, CancellationToken cancellationToken = default)
         {
-            List<Product> products = await _unitOfWork.ProductRepository.GetAll(cancellationToken);
+            List<Product> products = await _unitOfWork.ProductRepository.GetProductNamesAsync(key.Trim(), count, cancellationToken);
 
-            return Ok(_mapper.Map<List<Product>, IReadOnlyList<GetProductResponse>>(products));
+            return Ok(_mapper.Map<List<Product>, IReadOnlyList<GetProductNamesResponse>>(products));
         }
 
-        [HttpGet("pages")]
+        [HttpGet("categories")]
         [Authorize]
-        public async Task<IActionResult> GetProductsPages(CancellationToken cancellationToken, [FromQuery][Range(1, 50)] int size = 50, [FromQuery][Range(0, 50)] int page = 0)
+        public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
         {
-            //List<Product> products = await _unitOfWork.ProductRepository.GetAll(cancellationToken);
-            List<Product> products = await _unitOfWork.ProductRepository.GetPagedData(page, size, cancellationToken);
-            return Ok(_mapper.Map<List<Product>, IReadOnlyList<GetProductResponse>>(products));
+            IReadOnlyList<ProductCategory> categories = await _unitOfWork.ProductCategoryRepository.GetAll(cancellationToken);
+
+            return Ok(_mapper.Map<IReadOnlyList<ProductCategory>, IReadOnlyList<GetCategoryResponse>>(categories));
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetProducts(CancellationToken cancellationToken, [FromQuery][Range(1, 50)] int size = 20, [FromQuery][Range(0, 50)] int page = 0, [FromQuery] string key = "", [FromQuery] string category = "")
+        {
+            IReadOnlyList<Product> products = 
+                await _unitOfWork.ProductRepository.GetPages(
+                    page: page, 
+                    size: size, 
+                    cancellationToken: cancellationToken, 
+                    key: key != string.Empty ? key : null, 
+                    category: category != string.Empty ? category : null);
+
+            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<GetProductResponse>>(products));
         }
 
         [HttpGet("{id}/details")]

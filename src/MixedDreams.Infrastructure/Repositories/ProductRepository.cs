@@ -23,9 +23,9 @@ namespace MixedDreams.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public override Task<List<Product>> GetAll(CancellationToken cancellationToken)
+        public override async Task<IReadOnlyList<Product>> GetAll(CancellationToken cancellationToken)
         {
-            return Table.AsNoTracking()
+            return await Table.AsNoTracking()
                 .Include(x => x.Image)
                 .ToListAsync(cancellationToken);
         }
@@ -56,6 +56,31 @@ namespace MixedDreams.Infrastructure.Repositories
         public void ClearProductIngredients(Guid productId)
         {
             Context.ProductIngredient.RemoveRange(Context.ProductIngredient.Where(x => x.ProductId == productId));
+        }
+
+        public Task<List<Product>> GetProductNamesAsync(string key, int count, CancellationToken cancellationToken = default)
+        {
+            return Table.Where(x => x.Name.Contains(key)).Take(count).ToListAsync(cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<Product>> GetPages(CancellationToken cancellationToken, int page = 0, int size = 20, string? key = "", string? category = null)
+        {
+            IQueryable<Product> query = Table;
+            if (key != null)
+            {
+                query = query.Where(x => x.Name.Contains(key));
+            }
+            if (category != null)
+            {
+                category = category.ToLower();
+                Guid? categoryId = (await Context.ProductCategories.FirstOrDefaultAsync(x => x.Name.ToLower() == category))?.Id;
+                if (categoryId != null)
+                {
+                    query = query.Where(x => x.ProductCategoryId ==  categoryId);
+                }
+            }
+            query = query.Skip(page * size).Take(size);
+            return await query.AsNoTracking().ToListAsync(cancellationToken);
         }
     }
 }

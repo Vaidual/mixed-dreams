@@ -20,8 +20,8 @@ namespace MixedDreams.Application.RepositoryInterfaces
         public Task ExecuteUpdateAsync(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> setPropertyCalls);
         public Task<T?> Get(Guid id, CancellationToken cancellationToken = default);
         public Task<T?> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
-        public Task<List<T>> GetAll(CancellationToken cancellationToken);
-        public Task<List<T>> GetAll(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null);
+        public Task<IReadOnlyList<T>> GetAll(CancellationToken cancellationToken);
+        public Task<IReadOnlyList<T>> GetAll(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null);
         public Task<List<T>> GetPagedData(int page, int size, CancellationToken cancellationToken);
     }
 }

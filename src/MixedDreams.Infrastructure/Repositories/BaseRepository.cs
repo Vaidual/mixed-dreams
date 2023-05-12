@@ -5,6 +5,7 @@ using MixedDreams.Domain.Common;
 using MixedDreams.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -65,12 +66,12 @@ namespace MixedDreams.Infrastructure.Repositories
             return Table.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public virtual Task<List<T>> GetAll(CancellationToken cancellationToken)
+        public virtual async Task<IReadOnlyList<T>> GetAll(CancellationToken cancellationToken)
         {
-            return Table.AsNoTracking().ToListAsync(cancellationToken);
+            return await Table.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<List<T>> GetAll(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null)
+        public async Task<IReadOnlyList<T>> GetAll(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null)
         {
             IQueryable<T> query = Table;
 
