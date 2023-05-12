@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MixedDreams.Application.Features.Errors;
+using MixedDreams.Application.Features.OrderFeatures.GetOrder;
+using MixedDreams.Application.Features.OrderFeatures.PostOrder;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
 
@@ -27,13 +30,13 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetOrder(Guid id, CancellationToken cancellationToken)
         {
-            Order? Order = await _unitOfWork.OrderRepository.Get(id);
-            if (Order == null)
+            Order? order = await _unitOfWork.OrderRepository.Get(id);
+            if (order == null)
             {
-                return NotFound(new EntityNotFoundResponse(nameof(Order), id.ToString()));
+                return NotFound(new EntityNotFoundResponse(nameof(order), id.ToString()));
             }
 
-            return Ok(_mapper.Map<GetOrderResponse>(Order));
+            return Ok(_mapper.Map<GetOrderResponse>(order));
         }
 
         [HttpGet]
@@ -53,15 +56,24 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-            if (await _unitOfWork.OrderRepository.IsNameTaken(model.Name))
+            if (model.Products.Count > 50)
             {
-                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name));
+                return BadRequest(new BadRequestResponse("Order is failed. Contact the seller for details", new List<string> { "You can't but more than 50 products. Contact the seller, If you wish to make a large order" }));
             }
-
-            Order Order = _unitOfWork.OrderRepository.Create(_mapper.Map<Order>(model));
+            Order orderToCreate = _mapper.Map<Order>(model);
+            orderToCreate.OrderStatus = Domain.Enums.OrderStatus.Accepted;
+            orderToCreate.CustomerId = 1;
+            orderToCreate.OrderProducts = model.Products.Select(x => new OrderProduct
+            {
+                Amount = x.Amount,
+                Order = orderToCreate,
+                ProductId = x.ProductId,
+                ProductHistoryId = _unitOfWork
+            }).ToList();
+            _unitOfWork.OrderRepository.Create(orderToCreate);
             await _unitOfWork.SaveAsync();
 
-            return CreatedAtAction(nameof(GetOrder), new { id = Order.Id }, _mapper.Map<GetOrderResponse>(Order));
+            return CreatedAtAction(nameof(GetOrder), new { id = orderToCreate.Id }, _mapper.Map<GetOrderResponse>(orderToCreate));
         }
     }
 }
