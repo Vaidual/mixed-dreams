@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features;
 using MixedDreams.Application.Features.Common;
 using MixedDreams.Application.Features.Errors;
@@ -101,8 +102,12 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
+            if (await _unitOfWork.ProductRepository.IsNameTaken(model.Name!))
+            {
+                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name!));
+            }
 
-            Product product = await _productService.CreateProductAsync(model);
+            Product product = await _productService.CreateProductAsync(model, User);
             await _unitOfWork.SaveAsync();
 
             return CreatedAtAction(nameof(GetProductWithDetails), new { id = product.Id}, _mapper.Map<GetProductWithDetailsResponse>(product));
@@ -116,11 +121,14 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-
             Product? product = await _unitOfWork.ProductRepository.Get(id);
             if (product is null)
             {
                 return BadRequest(new PutNotFoundResponse());
+            }
+            if (model.Name != product.Name && await _unitOfWork.ProductRepository.IsNameTaken(model.Name!))
+            {
+                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name!));
             }
             await _productService.UpdateProductAsync(product, model);
 

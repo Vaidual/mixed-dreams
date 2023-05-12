@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
 using MixedDreams.Application.Features.ProductFeatures.PutProduct;
 using MixedDreams.Application.RepositoryInterfaces;
@@ -8,7 +9,9 @@ using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,38 +30,69 @@ namespace MixedDreams.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<Product> CreateProductAsync(PostProductRequest model)
+        public async Task<Product> CreateProductAsync(PostProductRequest model, ClaimsPrincipal user)
         {
             Product productToCreate = _mapper.Map<Product>(model);
+            string userId = user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            productToCreate.CompanyId = await _unitOfWork.CompanyRepository.GetCompanyIdByUserIdAsync(userId) ?? throw new InternalServerErrorException($"User with id {userId} doesn't connected to company however has company role ");
             if (model.PrimaryImage is not null)
             {
                 var image = await _backblazeService.UploadImage(model.PrimaryImage);
                 productToCreate.Image = image;
             }
-            Product result = await _unitOfWork.ProductRepository.CreateAsync(productToCreate); ;
+            if (model.Ingredients is not null)
+            {
+                productToCreate.ProductIngredients = model.Ingredients
+                .Select(x => new ProductIngredient
+                {
+                    HasAmount = x.HasAmount,
+                    Amount = x.HasAmount ? x.Amount : null,
+                    Unit = x.HasAmount ? x.Unit : null,
+                    Product = productToCreate,
+                    IngredientId = x.Id
+                }).ToList();
+            }
+            
+            Product result = _unitOfWork.ProductRepository.Create(productToCreate);
             await _unitOfWork.SaveAsync();
             return result;
         }
         public async Task UpdateProductAsync(Product productToUpdate, PutProductRequest updateModel)
         {
-            Product productToCreate = _mapper.Map(updateModel, productToUpdate);
-            if (updateModel.ChangeImage)
+            bool shouldCreateProductHistory = ShouldCreateProductHistory(productToUpdate, updateModel);
+            if (updateModel.ChangeImage && productToUpdate.Image != null)
             {
-                if (productToUpdate.Image != null)
-                {
-                    await _backblazeService.DeleteImage(productToUpdate.Image.Id, productToUpdate.Image.FileName);
-                    productToUpdate.Image = null;
-                }
-                if (updateModel.PrimaryImage != null)
-                {
-                    var image = await _backblazeService.UploadImage(updateModel.PrimaryImage);
-                    productToCreate.Image = image;
-                }
+                await _backblazeService.DeleteImage(productToUpdate.Image.Id, productToUpdate.Image.FileName);
+                productToUpdate.Image = null;
             }
-            _unitOfWork.ProductRepository.Update(productToUpdate); ;
+
+            _mapper.Map(updateModel, productToUpdate);
+            if (updateModel.PrimaryImage != null && updateModel.ChangeImage)
+            {
+                productToUpdate.Image = await _backblazeService.UploadImage(updateModel.PrimaryImage);
+            }
+            _unitOfWork.ProductRepository.ClearProductIngredients(productToUpdate.Id);
+            if (updateModel.Ingredients is not null)
+            {
+                productToUpdate.ProductIngredients = updateModel.Ingredients
+                .Select(x => new ProductIngredient
+                {
+                    HasAmount = x.HasAmount,
+                    Amount = x.HasAmount ? x.Amount : null,
+                    Unit = x.HasAmount ? x.Unit : null,
+                    Product = productToUpdate,
+                    IngredientId = x.Id
+                }).ToList();
+            }
+            _unitOfWork.ProductRepository.Update(productToUpdate);
+
+            if (shouldCreateProductHistory)
+            {
+                _unitOfWork.ProductRepository.CreateProductHistory(productToUpdate);
+            }
+
             await _unitOfWork.SaveAsync();
         }
-
 
         public async Task DeleteProductAsync(Product product)
         {
@@ -68,6 +102,11 @@ namespace MixedDreams.Infrastructure.Services
             }
             _unitOfWork.ProductRepository.Delete(product); ;
             await _unitOfWork.SaveAsync();
+        }
+
+        private bool ShouldCreateProductHistory(Product oldProduct, PutProductRequest newProduct)
+        {
+            return oldProduct.Name != newProduct.Name || oldProduct.Price != newProduct.Price;
         }
     }
 }

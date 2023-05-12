@@ -15,6 +15,9 @@ namespace MixedDreams.Domain.Entities
         public Guid CustomerId { get; set; }
         public Customer Customer { get; set; }
 
+        public Guid BusinessLocationId { get; set; }
+        public BusinessLocation BusinessLocation { get; set; }
+
         public List<OrderProduct> OrderProducts { get; set; }
 
         public Guid TenantId { get; set; }

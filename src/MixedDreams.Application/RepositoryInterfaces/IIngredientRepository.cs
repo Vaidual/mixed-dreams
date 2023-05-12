@@ -9,5 +9,6 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IIngredientRepository : IBaseRepository<Ingredient>
     {
+        public Task<bool> IsNameTaken(string name);
     }
 }

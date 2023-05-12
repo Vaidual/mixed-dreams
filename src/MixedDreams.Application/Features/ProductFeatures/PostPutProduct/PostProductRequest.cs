@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using MixedDreams.Application.Features.IngredientFeatures.GetIngredient;
+using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
 using MixedDreams.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -8,18 +11,32 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
 {
-    public class PostProductRequest
+    public sealed record PostProductRequest
     {
-        public string? Name { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public decimal? Price { get; set; }
-        public int? AmountInStock { get; set; }
-        public Visibility Visibility { get; set; } = Visibility.Unavaiable;
-        public IFormFile? PrimaryImage { get; set; }
-        public float? RecommendedTemperature { get; set; }
-        public float? RecommendedHumidity { get; set; }
+        [BindRequired]
+        public string Name { get; init; }
 
-        public Guid? ProductCategoryId { get; set; }
-        public Guid? CompanyId { get; set; }
+        public string Description { get; init; } = string.Empty;
+
+        [BindRequired]
+        public decimal Price { get; init; }
+
+        [BindRequired]
+        public int AmountInStock { get; init; }
+
+        public Visibility Visibility { get; init; } = Visibility.Unavaiable;
+
+        public IFormFile PrimaryImage { get; init; }
+
+        [BindRequired]
+        public float RecommendedTemperature { get; init; }
+
+        [BindRequired]
+        public float RecommendedHumidity { get; init; }
+
+        public IEnumerable<ProductIngredientDto>? Ingredients { get; init; }
+
+        [BindRequired]
+        public Guid ProductCategoryId { get; init; }
     }
 }

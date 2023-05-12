@@ -20,7 +20,6 @@ namespace MixedDreams.Application.Features.AuthFeatures
             CreateMap<RegisterDto, ApplicationUser>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
             CreateMap<CustomerRegisterRequest, Customer>();
-            CreateMap<AddressDto, Address>();
             CreateMap<CompanyRegisterRequest, Company>();
         }
     }

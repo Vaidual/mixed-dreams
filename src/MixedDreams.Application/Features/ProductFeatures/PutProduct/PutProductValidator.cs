@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
 using MixedDreams.Application.RepositoryInterfaces;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,10 @@ namespace MixedDreams.Application.Features.ProductFeatures.PutProduct
                 .MaximumLength(50);
             RuleFor(x => x.Price).NotNull()
                 .GreaterThanOrEqualTo(0);
-
+            When(x => x.PrimaryImage != null, () =>
+            {
+                RuleFor(x => x.PrimaryImage).Image();
+            });
             RuleFor(x => x.RecommendedHumidity).NotNull()
                 .InclusiveBetween(0, 100);
             RuleFor(x => x.RecommendedTemperature).NotNull()
@@ -29,12 +34,15 @@ namespace MixedDreams.Application.Features.ProductFeatures.PutProduct
             RuleFor(x => x.Visibility).NotEmpty()
                 .IsInEnum();
 
+            RuleFor(x => x.Visibility).NotEmpty()
+                .IsInEnum();
+            When(x => x.Ingredients != null, () =>
+            {
+                RuleForEach(x => x.Ingredients).SetValidator(new ProductIngredientDtoValidator());
+            });
             RuleFor(x => x.ProductCategoryId).Cascade(CascadeMode.Stop)
                 .NotNull()
-                .MustAsync((x, token) => unitOfWork.ProductCategoryRepository.EntityExists((Guid)x!)).WithMessage("Product category with id '{PropertyValue}' doen't exist.");
-            RuleFor(x => x.CompanyId).Cascade(CascadeMode.Stop)
-                .NotNull()
-                .MustAsync((x, token) => unitOfWork.CompanyRepository.EntityExists((Guid)x!)).WithMessage("Company with id '{PropertyValue}' doen't exist.");
+                .MustAsync((x, token) => unitOfWork.ProductCategoryRepository.EntityExistsAsync((Guid)x!)).WithMessage("Product category with id '{PropertyValue}' doen't exist.");
         }
     }
 }

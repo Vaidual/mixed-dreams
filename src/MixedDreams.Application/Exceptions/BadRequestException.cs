@@ -22,7 +22,7 @@ namespace MixedDreams.Application.Exceptions
 
         public override ErrorResponse GetErrorResponse()
         {
-            return new BadRequestResponse(StatusCode, Title, Errors);
+            return new BadRequestResponse(Title, Errors);
         }
     }
 }

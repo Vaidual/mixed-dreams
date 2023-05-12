@@ -18,12 +18,11 @@ namespace MixedDreams.Infrastructure.Configurations
 
             builder.Property(x => x.Name)
                 .HasColumnType("nvarchar(50)");
+            builder.HasIndex(x => x.Name)
+                .IsUnique();
+
             builder.Property(x => x.Description)
                 .HasColumnType("nvarchar(4000)");
-
-            //builder.HasOne(x => x.ProductCategory)
-            //    .WithMany(x => x.Products)
-            //    .HasForeignKey(x => x.ProductCategoryId);
         }
     }
 }

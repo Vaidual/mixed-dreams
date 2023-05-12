@@ -1,4 +1,5 @@
-﻿using MixedDreams.Application.RepositoryInterfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Data;
 using System;
@@ -11,10 +12,11 @@ namespace MixedDreams.Infrastructure.Repositories
 {
     internal class IngredientRepository : BaseRepository<Ingredient>, IIngredientRepository
     {
-        private readonly AppDbContext _context;
-        public IngredientRepository(AppDbContext context) : base(context)
+        public IngredientRepository(AppDbContext context) : base(context) { }
+
+        public Task<bool> IsNameTaken(string name)
         {
-            _context = context;
+            return ExistAnyAsync(x => x.Name == name);
         }
     }
 }

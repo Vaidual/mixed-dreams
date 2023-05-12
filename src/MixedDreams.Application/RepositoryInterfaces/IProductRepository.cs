@@ -10,5 +10,8 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
+        public void CreateProductHistory(Product product);
+        public Task<bool> IsNameTaken(string name);
+        public void ClearProductIngredients(Guid productId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MixedDreams.Domain.Common;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using MixedDreams.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,13 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IBaseRepository<T> where T : class
     {
-        public Task<bool> EntityExists(Guid id, CancellationToken cancellationToken = default);
-        public Task<T> CreateAsync(T entity);
+        public Task<bool> EntityExistsAsync(Guid id, CancellationToken cancellationToken = default);
+        public Task<bool> ExistAnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+        public T Create(T entity);
         public void Update(T entity);
         public void Delete(T entity);
         public Task ExecuteDeleteAsync(Expression<Func<T, bool>> predicate);
+        public Task ExecuteUpdateAsync(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> setPropertyCalls);
         public Task<T?> Get(Guid id, CancellationToken cancellationToken = default);
         public Task<T?> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
         public Task<List<T>> GetAll(CancellationToken cancellationToken);

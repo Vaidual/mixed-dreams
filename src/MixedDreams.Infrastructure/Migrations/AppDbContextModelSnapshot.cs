@@ -292,6 +292,9 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("BusinessLocations");
                 });
 
@@ -376,6 +379,9 @@ namespace MixedDreams.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Ingredients");
                 });
@@ -485,6 +491,9 @@ namespace MixedDreams.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("ProductCategoryId");
 
@@ -700,7 +709,7 @@ namespace MixedDreams.Infrastructure.Migrations
                             b1.Property<Guid>("BusinessLocationId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Apartament")
+                            b1.Property<string>("Apartment")
                                 .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("City")
@@ -721,7 +730,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
-                                .HasColumnType("char(12)");
+                                .HasColumnType("varchar(12)");
 
                             b1.HasKey("BusinessLocationId");
 
@@ -750,7 +759,7 @@ namespace MixedDreams.Infrastructure.Migrations
                             b1.Property<Guid>("CompanyId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Apartament")
+                            b1.Property<string>("Apartment")
                                 .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("City")
@@ -771,7 +780,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
-                                .HasColumnType("char(12)");
+                                .HasColumnType("varchar(12)");
 
                             b1.HasKey("CompanyId");
 

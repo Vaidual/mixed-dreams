@@ -24,11 +24,11 @@ namespace MixedDreams.Domain.ValueObjects
         [Column(TypeName = "nvarchar(100)")]
         public String Country { get; private set; }
 
-        [Column(TypeName = "char(12)")]
+        [Column(TypeName = "varchar(12)")]
         public String ZipCode { get; private set; }
 
         [Column(TypeName = "nvarchar(100)")]
-        public String? Apartament { get; private set; }
+        public String? Apartment { get; private set; }
 
         public Address() { }
 
@@ -39,7 +39,7 @@ namespace MixedDreams.Domain.ValueObjects
             State = state;
             Country = country;
             ZipCode = zipcode;
-            Apartament = apartament;
+            Apartment = apartament;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
@@ -50,9 +50,9 @@ namespace MixedDreams.Domain.ValueObjects
             yield return State;
             yield return Country;
             yield return ZipCode;
-            if (Apartament != null) 
+            if (Apartment != null) 
             { 
-                yield return Apartament;
+                yield return Apartment;
             }
         }
     }

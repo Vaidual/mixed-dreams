@@ -11,10 +11,11 @@ namespace MixedDreams.Infrastructure.Repositories
 {
     internal class BusinessLocationRepository : BaseRepository<BusinessLocation>, IBusinessLocationRepository
     {
-        private readonly AppDbContext _context;
-        public BusinessLocationRepository(AppDbContext context) : base(context)
+        public BusinessLocationRepository(AppDbContext context) : base(context) { }
+
+        public Task<bool> IsNameTaken(string name)
         {
-            _context = context;
+            return ExistAnyAsync(x => x.Name == name);
         }
     }
 }

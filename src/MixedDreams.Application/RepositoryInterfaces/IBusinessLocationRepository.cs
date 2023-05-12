@@ -9,5 +9,6 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IBusinessLocationRepository : IBaseRepository<BusinessLocation>
     {
+        public Task<bool> IsNameTaken(string name);
     }
 }

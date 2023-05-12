@@ -1,4 +1,5 @@
-﻿using MixedDreams.Application.RepositoryInterfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Data;
 using System;
@@ -11,10 +12,11 @@ namespace MixedDreams.Infrastructure.Repositories
 {
     internal class CompanyRepository : BaseRepository<Company>, ICompanyRepository
     {
-        private readonly AppDbContext _context;
-        public CompanyRepository(AppDbContext context) : base(context)
+        public CompanyRepository(AppDbContext context) : base(context) { }
+
+        public async Task<Guid?> GetCompanyIdByUserIdAsync(string userId)
         {
-            _context = context;
+            return (await Table.FirstOrDefaultAsync(x => x.ApplicationUserId == userId))?.Id;
         }
     }
 }

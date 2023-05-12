@@ -12,7 +12,7 @@ namespace MixedDreams.Application.Features.Errors
     {
         [JsonPropertyName("errors")]
         public IEnumerable<string> Errors { get; set; }
-        public BadRequestResponse(int statusCode, string title, IEnumerable<string> errors) : base(statusCode, title)
+        public BadRequestResponse(string title, IEnumerable<string> errors) : base(400, title)
         {
             Errors = errors;
         }

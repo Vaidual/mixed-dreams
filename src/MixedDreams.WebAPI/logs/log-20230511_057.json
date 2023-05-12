@@ -1,8 +1,0 @@
-{"@t":"2023-05-11T18:50:37.6653820Z","@mt":"Client successfully authenticated to Backblaze B2 Cloud Storage.","SourceContext":"Bytewizer.Backblaze.Client.ApiRest"}
-{"@t":"2023-05-11T18:50:44.0383028Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["644.0424"],"RequestMethod":"GET","RequestPath":"/api/products","StatusCode":200,"Elapsed":644.0424,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQIA2FET9FO:00000001","ConnectionId":"0HMQIA2FET9FO"}
-{"@t":"2023-05-11T18:50:50.5063031Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["59.9476"],"RequestMethod":"GET","RequestPath":"/api/products","StatusCode":200,"Elapsed":59.9476,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQIA2FET9FO:00000002","ConnectionId":"0HMQIA2FET9FO"}
-{"@t":"2023-05-11T18:50:51.8470111Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["11.7705"],"RequestMethod":"GET","RequestPath":"/api/products","StatusCode":200,"Elapsed":11.7705,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware","RequestId":"0HMQIA2FET9FO:00000003","ConnectionId":"0HMQIA2FET9FO"}
-{"@t":"2023-05-11T19:26:23.5309844Z","@mt":"Starting web application"}
-{"@t":"2023-05-11T19:26:47.4320709Z","@mt":"Starting web application"}
-{"@t":"2023-05-11T19:27:17.7204516Z","@mt":"Starting web application"}
-{"@t":"2023-05-11T19:27:24.4606314Z","@mt":"Starting web application"}

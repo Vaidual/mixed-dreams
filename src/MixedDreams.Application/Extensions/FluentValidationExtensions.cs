@@ -1,4 +1,7 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using MixedDreams.Application.Constants;
+using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Common;
 using System;
@@ -19,6 +22,13 @@ namespace MixedDreams.Application.Extensions
                 .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
                 .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
                 .Matches(@"[\!\?\*\.\(\)\{\}\[\]\-\=\+\&\^\%\$\#\@\:\;\`\~\|\\\'\""\/\,\>\<_]+").WithMessage("Your password must contain at least one special character");
+        }
+
+        public static IRuleBuilderOptions<T, IFormFile> Image<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
+        {
+            return ruleBuilder
+                .Must(x => x.Length <= ImageRequierements.maxSizeInBytes).WithMessage($"Maximum image upload size is {(double)ImageRequierements.maxSizeInBytes / 1_000_000} megabytes.")
+                .Must(x => x.IsImageAsync()).WithMessage("Provided file is not a supported image file.");
         }
     }
 }

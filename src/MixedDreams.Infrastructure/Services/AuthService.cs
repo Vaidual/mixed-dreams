@@ -23,6 +23,8 @@ using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
 using MixedDreams.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
+using System.Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -81,15 +83,16 @@ namespace MixedDreams.Infrastructure.Services
         public async Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterRequest model)
         {
             var user = await CreateUserAsync(model);
+            Customer customer;
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
                     await RegisterUserAsync(model, user, Roles.Customer);
 
-                    Customer customer = _mapper.Map<Customer>(model);
+                    customer = _mapper.Map<Customer>(model);
                     customer.ApplicationUser = user;
-                    await _unitOfWork.CustomerRepository.CreateAsync(customer);
+                    _unitOfWork.CustomerRepository.Create(customer);
                     await _unitOfWork.SaveAsync(CancellationToken.None);
 
                     await transaction.CommitAsync();
@@ -100,7 +103,6 @@ namespace MixedDreams.Infrastructure.Services
                     throw;
                 }
             }
-
             var token = await CreateTokenAsync(user, false);
 
             return new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token));
@@ -118,7 +120,7 @@ namespace MixedDreams.Infrastructure.Services
 
                     company = _mapper.Map<Company>(model);
                     company.ApplicationUser = user;
-                    company = await _unitOfWork.CompanyRepository.CreateAsync(company);
+                    company = _unitOfWork.CompanyRepository.Create(company);
                     await _unitOfWork.SaveAsync(CancellationToken.None);
 
                     await transaction.CommitAsync();
@@ -130,9 +132,9 @@ namespace MixedDreams.Infrastructure.Services
                 }
             }
 
-            var claims = new List<Claim>()
+            var claims = new List<Claim>
             {
-                new Claim("TenantId", user.Id.ToString())
+                new Claim("TenantId", user.Id.ToString()),
             };
             var token = await CreateTokenAsync(user, false, claims);
 
@@ -171,6 +173,8 @@ namespace MixedDreams.Infrastructure.Services
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
+            claims.Add(new Claim("Name", user.FirstName));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
             var token = JwtHelper.GetJwtToken(
                 user.Id,
                 _jwtOptions.SigningKey,
