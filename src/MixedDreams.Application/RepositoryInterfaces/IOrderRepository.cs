@@ -9,5 +9,6 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IOrderRepository : IBaseRepository<Order>
     {
+        public Guid? GetLastProductHistoryId(Guid productId);
     }
 }

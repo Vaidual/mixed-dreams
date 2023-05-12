@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Features.OrderFeatures.GetOrder;
 using MixedDreams.Application.Features.OrderFeatures.PostOrder;
@@ -62,13 +63,13 @@ namespace MixedDreams.WebAPI.Controllers
             }
             Order orderToCreate = _mapper.Map<Order>(model);
             orderToCreate.OrderStatus = Domain.Enums.OrderStatus.Accepted;
-            orderToCreate.CustomerId = 1;
+            orderToCreate.CustomerId = User.Claims.First(x => x.Type == "").Value;
             orderToCreate.OrderProducts = model.Products.Select(x => new OrderProduct
             {
                 Amount = x.Amount,
                 Order = orderToCreate,
                 ProductId = x.ProductId,
-                ProductHistoryId = _unitOfWork
+                ProductHistoryId = _unitOfWork.OrderRepository.GetLastProductHistoryId(x.ProductId) ?? throw new InternalServerErrorException($"Product with id '{x.ProductId}' have no producthistory records")
             }).ToList();
             _unitOfWork.OrderRepository.Create(orderToCreate);
             await _unitOfWork.SaveAsync();

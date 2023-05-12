@@ -11,10 +11,11 @@ namespace MixedDreams.Infrastructure.Repositories
 {
     internal class OrderRepository : BaseRepository<Order>, IOrderRepository
     {
-        private readonly AppDbContext _context;
-        public OrderRepository(AppDbContext context) : base(context)
+        public OrderRepository(AppDbContext context) : base(context) { }
+
+        public Guid? GetLastProductHistoryId(Guid productId)
         {
-            _context = context;
+            return Context.ProductHistory.Where(x => x.ProductId == productId).MaxBy(x => x.Date)?.Id;
         }
     }
 }
