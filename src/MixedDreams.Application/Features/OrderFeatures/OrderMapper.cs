@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MixedDreams.Application.Features.OrderFeatures.GetOrder;
 using MixedDreams.Application.Features.OrderFeatures.PostOrder;
+using MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace MixedDreams.Application.Features.OrderFeatures
                     (opt) => opt.MapFrom(src => src.BusinessLocation.Address));
 
             CreateMap<PostOrderRequest, Order>();
+            CreateMap<UpdateOrderStatusRequest, Order>();
         }
     }
 }

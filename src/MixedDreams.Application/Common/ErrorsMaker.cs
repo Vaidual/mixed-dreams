@@ -2,7 +2,7 @@
 using MixedDreams.Application.Exceptions;
 using System.ComponentModel.DataAnnotations;
 
-namespace MixedDreams.WebAPI
+namespace MixedDreams.Application.Common
 {
     public class ErrorsMaker
     {

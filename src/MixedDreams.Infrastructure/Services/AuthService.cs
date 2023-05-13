@@ -25,6 +25,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 using System.Data;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using MixedDreams.Application.Constants;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -67,7 +68,7 @@ namespace MixedDreams.Infrastructure.Services
             List<Claim> claims = new List<Claim>();
             if ((await _userManager.GetRolesAsync(user)).Any(r => r == Roles.Company))
             {
-                claims.Add(new Claim("TenantId", user.Id.ToString()));
+                claims.Add(new Claim(AppClaimTypes.TenantId, user.Id.ToString()));
             }
 
             var token = await CreateTokenAsync(user, model.RememberMe, claims);
@@ -134,7 +135,7 @@ namespace MixedDreams.Infrastructure.Services
 
             var claims = new List<Claim>
             {
-                new Claim("TenantId", user.Id.ToString()),
+                new Claim(AppClaimTypes.TenantId, user.Id.ToString()),
             };
             var token = await CreateTokenAsync(user, false, claims);
 

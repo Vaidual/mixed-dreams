@@ -1,4 +1,5 @@
-﻿using MixedDreams.Application.RepositoryInterfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Data;
 using System;
@@ -15,6 +16,11 @@ namespace MixedDreams.Infrastructure.Repositories
         public CustomerRepository(AppDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<Guid?> GetCustomerIdByUserIdAsync(string userId)
+        {
+            return (await Table.FirstOrDefaultAsync(x => x.ApplicationUserId == userId))?.Id;
         }
     }
 }

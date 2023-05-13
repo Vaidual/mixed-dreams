@@ -10,12 +10,6 @@ namespace MixedDreams.Application.Exceptions
 {
     public class InternalServerErrorException : BaseException
     {
-        public InternalServerErrorException(string title) : base(title)
-        {
-            Title = title;
-        }
-
-        public override int StatusCode { get; } = 500;
-        public override string Title { get; init; }
+        public InternalServerErrorException(string title) : base(title, 500) { }
     }
 }

@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using MixedDreams.WebAPI;
 using Bytewizer.Backblaze.Client;
 using MixedDreams.Application.Exceptions;
+using System.Security.Claims;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -71,7 +72,6 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddAndConfigureSwagger();
-
     builder.Services.AddMemoryCache();
 
     var app = builder.Build();

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\MixedDreams.Domain\MixedDreams.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>

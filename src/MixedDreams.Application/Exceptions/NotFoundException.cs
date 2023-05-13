@@ -9,12 +9,6 @@ namespace MixedDreams.Application.Exceptions
 {
     public class NotFoundException : BaseException
     {
-        public NotFoundException(string title) : base(title)
-        {
-            Title = title;
-        }
-
-        public override int StatusCode { get; } = 404;
-        public override string Title { get; init; }
+        public NotFoundException(string title) : base(title, 404) { }
     }
 }

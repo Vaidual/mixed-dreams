@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MixedDreams.Application.Common;
 using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.Features.BusinessLocationFeatures.GetBusinessLocation;
 using MixedDreams.Application.Features.BusinessLocationFeatures.PostBusinessLocation;

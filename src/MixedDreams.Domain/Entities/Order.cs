@@ -10,7 +10,7 @@ namespace MixedDreams.Domain.Entities
 {
     public class Order : SoftDeletableTrackableEntity, IMustHaveTenant
     {
-        public OrderStatus OrderStatus { get; set; } = OrderStatus.Accepted;
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
         public Guid CustomerId { get; set; }
         public Customer Customer { get; set; }
