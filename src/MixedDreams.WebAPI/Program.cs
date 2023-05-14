@@ -26,6 +26,9 @@ using MixedDreams.WebAPI;
 using Bytewizer.Backblaze.Client;
 using MixedDreams.Application.Exceptions;
 using System.Security.Claims;
+using Microsoft.Extensions.Hosting;
+using MixedDreams.Application.ServicesInterfaces;
+using MixedDreams.Infrastructure.Services;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -89,13 +92,11 @@ try
 
     app.UseExceptionMiddleware();
 
-    var storageClient = app.Services.GetService<IStorageClient>();
-    if (storageClient == null) throw new InternalServerErrorException("Unable to find storageClient service.");
-    await storageClient.ConnectAsync();
+    await app.Services.GetRequiredService<IStorageClient>().ConnectAsync();
 
     app.UseHttpsRedirection();
 
-    app.UseCors(builder.Configuration["Cors:Policy:Name"]);
+    app.UseCors(builder.Configuration["Cors:Policy:Name"] ?? throw new MissingConfigurationOptionsException("Cors:Policy:Name"));
 
     app.UseAuthentication();
     app.UseAuthorization();

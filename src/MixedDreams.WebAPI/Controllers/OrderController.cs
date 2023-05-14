@@ -29,23 +29,20 @@ namespace MixedDreams.WebAPI.Controllers
         private readonly IValidator<PostOrderRequest> _postOrderValidator;
         private readonly IOrderService _orderService;
 
-        public OrderController(IUnitOfWork unitOfWork, IMapper mapper, IValidator<PostOrderRequest> postOrderValidator)
+        public OrderController(IUnitOfWork unitOfWork, IMapper mapper, IValidator<PostOrderRequest> postOrderValidator, IOrderService orderService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _postOrderValidator = postOrderValidator;
+            _orderService = orderService;
         }
 
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetOrder(Guid id, CancellationToken cancellationToken)
         {
-            Order? order = await _unitOfWork.OrderRepository.Get(id);
-            if (order == null)
-            {
-                throw new EntityNotFoundException(nameof(Order), id.ToString());
-            }
-
+            Order order = await _unitOfWork.OrderRepository.Get(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Order), id.ToString());
+            
             return Ok(_mapper.Map<GetOrderResponse>(order));
         }
 
@@ -75,12 +72,7 @@ namespace MixedDreams.WebAPI.Controllers
         [HttpPost("{id}/status")]
         public async Task<IActionResult> UpdateStatus([FromRoute] Guid id, [FromBody] UpdateOrderStatusRequest model)
         {
-            Order? order = await _unitOfWork.OrderRepository.Get(id);
-            if (order == null)
-            {
-                throw new EntityNotFoundException(nameof(Order), id.ToString());
-            }
-
+            Order order = await _unitOfWork.OrderRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Order), id.ToString());
             _unitOfWork.OrderRepository.Update(_mapper.Map(model, order));
             await _unitOfWork.SaveAsync();
             return Ok();

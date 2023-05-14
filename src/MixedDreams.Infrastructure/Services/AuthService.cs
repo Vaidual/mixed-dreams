@@ -65,7 +65,7 @@ namespace MixedDreams.Infrastructure.Services
 
             //await _userManager.UpdateAsync(user);
 
-            List<Claim> claims = new List<Claim>();
+            List<Claim> claims = new();
             if ((await _userManager.GetRolesAsync(user)).Any(r => r == Roles.Company))
             {
                 claims.Add(new Claim(AppClaimTypes.TenantId, user.Id.ToString()));
@@ -98,7 +98,7 @@ namespace MixedDreams.Infrastructure.Services
 
                     await transaction.CommitAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     await transaction.RollbackAsync();
                     throw;
@@ -126,7 +126,7 @@ namespace MixedDreams.Infrastructure.Services
 
                     await transaction.CommitAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     await transaction.RollbackAsync();
                     throw;

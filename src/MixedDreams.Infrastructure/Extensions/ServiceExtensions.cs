@@ -33,6 +33,8 @@ namespace MixedDreams.Infrastructure.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
 
+            services.AddHostedServices();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAndConfigureIdentity();
@@ -109,6 +111,14 @@ namespace MixedDreams.Infrastructure.Extensions
                 options.KeyId = config["Backblaze:WriteKey:KeyId"] ?? throw new InternalServerErrorException("Backblaze-WriteKey KeyId isn't specified or options path is incorrect");
                 options.ApplicationKey = config["Backblaze:WriteKey:ApplicationKey"] ?? throw new InternalServerErrorException("Backblaze-WriteKey ApplicationKey isn't specified or options path is incorrect");
             });
+
+            return services;
+        }
+
+        private static IServiceCollection AddHostedServices(
+            this IServiceCollection services)
+        {
+            services.AddHostedService<ReplicationService>();
 
             return services;
         }
