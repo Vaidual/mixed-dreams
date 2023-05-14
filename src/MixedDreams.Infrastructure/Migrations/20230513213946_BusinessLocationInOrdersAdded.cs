@@ -29,7 +29,7 @@ namespace MixedDreams.Infrastructure.Migrations
                 column: "BusinessLocationId",
                 principalTable: "BusinessLocations",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />

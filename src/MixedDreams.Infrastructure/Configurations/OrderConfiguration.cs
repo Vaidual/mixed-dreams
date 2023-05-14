@@ -17,6 +17,10 @@ namespace MixedDreams.Infrastructure.Configurations
         {
             builder.HasQueryFilter(o => !o.IsDeleted);
 
+            builder.HasOne(op => op.BusinessLocation)
+                .WithMany(p => p.Orders)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
