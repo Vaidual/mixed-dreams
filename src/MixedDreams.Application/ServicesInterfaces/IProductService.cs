@@ -14,7 +14,7 @@ namespace MixedDreams.Application.ServicesInterfaces
     public interface IProductService
     {
         public Task<Product> CreateProductAsync(PostProductRequest model, ClaimsPrincipal user);
-        public Task UpdateProductAsync(Product productToUpdate, PutProductRequest updateModel);
+        public Task UpdateProductAsync(Guid id, PutProductRequest updateModel);
         public Task DeleteProductAsync(Product product);
     }
 }

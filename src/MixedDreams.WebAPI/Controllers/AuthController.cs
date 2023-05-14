@@ -9,6 +9,7 @@ using System.Threading;
 using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
 using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
 using MixedDreams.Application.Features.AuthFeatures.Login;
+using MixedDreams.Application.Features.AuthFeatures;
 
 namespace MixedDreams.WebAPI.Controllers
 {
@@ -27,7 +28,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Route("register/customer")]
         public async Task<IActionResult> RegisterCustomer(CustomerRegisterRequest model)
         {
-            var response = await _authService.RegisterCustomerAsync(model);
+            TokenResponse response = await _authService.RegisterCustomerAsync(model);
 
             return Ok(response);
         }
@@ -36,22 +37,15 @@ namespace MixedDreams.WebAPI.Controllers
         [Route("register/company")]
         public async Task<IActionResult> RegisterCompany([FromBody] CompanyRegisterRequest model)
         {
-            var response = await _authService.RegisterCompanyAsync(model);
+            TokenResponse response = await _authService.RegisterCompanyAsync(model);
 
             return Ok(response);
         }
 
-        //[HttpPost("logout")]
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await _authService.LogoutUserAsync();
-        //    return Ok();
-        //}
-
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest model)
         {
-            var response = await _authService.LoginUserAsync(model);
+            TokenResponse response = await _authService.LoginUserAsync(model);
 
             return Ok(response);
         }

@@ -1,4 +1,6 @@
-﻿using MixedDreams.Application.Common;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using MixedDreams.Application.Common;
 using MixedDreams.Application.Features.Errors;
 using System;
 using System.Collections.Generic;
@@ -15,19 +17,16 @@ namespace MixedDreams.Application.Exceptions
         [JsonPropertyName("errors")]
         public IDictionary<string, IEnumerable<string>> Errors { get; set; }
 
-        public ModelValidationException(IDictionary<string, IEnumerable<string>> errors) : base("One or more validation failures have occurred.", 422)
+        public override LogLevel LogLevel { get; init; } = LogLevel.None;
+
+        public ModelValidationException(IDictionary<string, IEnumerable<string>> errors) : base("One or more validation failures have occurred.", StatusCodes.Status422UnprocessableEntity)
         {
             Errors = errors;
         }
 
-        public override ErrorResponse GetErrorResponse()
-        {
-            return new InvalidModelErrorResponse(StatusCode, Title, Errors);
-        }
-
         public override string GetResponse()
         {
-            return JsonSerializer.Serialize(new { Errors, StatusCode, Title });
+            return JsonSerializer.Serialize(new InvalidModelErrorResponse(Title, Errors));
         }
     }
 }

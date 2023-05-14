@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,6 @@ namespace MixedDreams.Application.Features.Errors
     public class InternalServerErrorResponse : ErrorResponse
     {
         public const string GeneralTitle = "An internal server error occured.";
-        public InternalServerErrorResponse() : base(500, GeneralTitle)
-        {
-        }
+        public InternalServerErrorResponse() : base(StatusCodes.Status500InternalServerError, GeneralTitle) { }
     }
 }

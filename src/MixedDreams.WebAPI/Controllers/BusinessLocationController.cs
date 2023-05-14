@@ -36,11 +36,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetBusinessLocation(Guid id, CancellationToken cancellationToken)
         {
-            BusinessLocation? businessLocation = await _unitOfWork.BusinessLocationRepository.Get(id);
-            if (businessLocation == null)
-            {
-                return NotFound(new EntityNotFoundResponse(nameof(businessLocation), id.ToString()));
-            }
+            BusinessLocation businessLocation = await _unitOfWork.BusinessLocationRepository.Get(id) ?? throw new EntityNotFoundException(nameof(BusinessLocation), id.ToString());
 
             return Ok(_mapper.Map<GetBusinessLocationResponse>(businessLocation));
         }
@@ -64,7 +60,7 @@ namespace MixedDreams.WebAPI.Controllers
             }
             if (await _unitOfWork.BusinessLocationRepository.IsNameTaken(model.Name))
             {
-                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name));
+                throw new PropertyIsTakenException(nameof(model.Name), model.Name);
             }
 
             BusinessLocation businessLocation = _mapper.Map<BusinessLocation>(model);
@@ -85,14 +81,10 @@ namespace MixedDreams.WebAPI.Controllers
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
 
-            BusinessLocation? businessLocation = await _unitOfWork.BusinessLocationRepository.Get(id);
-            if (businessLocation is null)
-            {
-                return BadRequest(new PutNotFoundResponse());
-            }
+            BusinessLocation businessLocation = await _unitOfWork.BusinessLocationRepository.Get(id) ?? throw new PutNotFoundException();
             if (businessLocation.Name != model.Name && await _unitOfWork.BusinessLocationRepository.IsNameTaken(model.Name))
             {
-                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name));
+                throw new PropertyIsTakenException(nameof(model.Name), model.Name);
             }
 
             _unitOfWork.BusinessLocationRepository.Update(_mapper.Map(model, businessLocation));
@@ -107,7 +99,7 @@ namespace MixedDreams.WebAPI.Controllers
             bool exist = await _unitOfWork.BusinessLocationRepository.EntityExistsAsync(id);
             if (!exist)
             {
-                return BadRequest(new EntityNotFoundResponse(nameof(BusinessLocation), id.ToString()));
+                throw new EntityNotFoundException(nameof(BusinessLocation), id.ToString());
             }
             await _unitOfWork.BusinessLocationRepository.ExecuteDeleteAsync(x => x.Id == id);
 

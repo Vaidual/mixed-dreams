@@ -3,6 +3,8 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Features.IngredientFeatures.GetIngredient;
 using MixedDreams.Application.Features.IngredientFeatures.PostIngredient;
@@ -35,11 +37,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetIngredient(Guid id, CancellationToken cancellationToken)
         {
-            Ingredient? ingredient = await _unitOfWork.IngredientRepository.Get(id);
-            if (ingredient == null)
-            {
-                return NotFound(new EntityNotFoundResponse(nameof(Ingredient), id.ToString()));
-            }
+            Ingredient ingredient = await _unitOfWork.IngredientRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Ingredient), id.ToString()); ;
 
             return Ok(_mapper.Map<GetIngredientResponse>(ingredient));
         }
@@ -63,7 +61,7 @@ namespace MixedDreams.WebAPI.Controllers
             }
             if (await _unitOfWork.IngredientRepository.IsNameTaken(model.Name))
             {
-                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name));
+                throw new PropertyIsTakenException(nameof(model.Name), model.Name);
             }
 
             Ingredient Ingredient = _unitOfWork.IngredientRepository.Create(_mapper.Map<Ingredient>(model));
@@ -81,14 +79,10 @@ namespace MixedDreams.WebAPI.Controllers
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
 
-            Ingredient? ingredient = await _unitOfWork.IngredientRepository.Get(id);
-            if (ingredient is null)
-            {
-                return BadRequest(new PutNotFoundResponse());
-            }
+            Ingredient ingredient = await _unitOfWork.IngredientRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Ingredient), id.ToString()); ;
             if (ingredient.Name != model.Name && await _unitOfWork.IngredientRepository.IsNameTaken(model.Name))
             {
-                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name));
+                throw new PropertyIsTakenException(nameof(model.Name), model.Name);
             }
 
             _unitOfWork.IngredientRepository.Update(_mapper.Map(model, ingredient));
@@ -103,7 +97,7 @@ namespace MixedDreams.WebAPI.Controllers
             bool exist = await _unitOfWork.IngredientRepository.EntityExistsAsync(id);
             if (!exist)
             {
-                return BadRequest(new EntityNotFoundResponse(nameof(Ingredient), id.ToString()));
+                throw new EntityNotFoundException(nameof(Ingredient), id.ToString());
             }
             await _unitOfWork.IngredientRepository.ExecuteDeleteAsync(x => x.Id == id);
 

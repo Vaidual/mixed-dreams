@@ -14,7 +14,7 @@ namespace MixedDreams.Application.Features.OrderFeatures.PostOrder
         public PostOrderValidator()
         {
             RuleFor(x => x.BusinessLocationId).NotNull();
-            RuleFor(x => x.Products).NotNull()
+            RuleFor(x => x.Products).Cascade(CascadeMode.Stop).NotNull()
                 .Must(x => x.Count > 0).WithMessage("Order must have at least one product.");
             RuleForEach(x => x.Products).SetValidator(new PostOrderProductDtoValidator());
         }

@@ -2,6 +2,7 @@
 using MixedDreams.Application.Common;
 using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.Features.Errors;
+using Serilog.Events;
 
 namespace MixedDreams.WebAPI.Middlewares
 {
@@ -30,19 +31,20 @@ namespace MixedDreams.WebAPI.Middlewares
         {
             //var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>()!;
             context.Response.ContentType = "application/json";
-            ErrorResponse response;
+            string response;
             if (exception is BaseException baseException)
             {
-                response = baseException.GetErrorResponse();
-                _logger.LogWarning("Something went wrong: {@exception}", baseException.Title);
+                context.Response.StatusCode = baseException.StatusCode;
+                response = baseException.GetResponse();
+                _logger.Log(baseException.LogLevel, baseException, exception.Message);
             }
             else
             {
-                response = new InternalServerErrorResponse();
-                _logger.LogError("Internal error happened: {@exception}", exception.Message);
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                response = new InternalServerErrorResponse().ToString();
+                _logger.LogError("An unexpected error happened: {@exception}", exception.Message);
             }
-            context.Response.StatusCode = response.StatusCode;
-            await context.Response.WriteAsync(response.ToString());
+            await context.Response.WriteAsync(response);
         }
     }
 }

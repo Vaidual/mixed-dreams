@@ -1,7 +1,10 @@
-﻿using MixedDreams.Application.Common;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
+using MixedDreams.Application.Common;
 using MixedDreams.Application.Features.Errors;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,21 +17,18 @@ namespace MixedDreams.Application.Exceptions
 {
     public class BadRequestException : BaseException
     {
-        [JsonPropertyName("errors")]
         public IEnumerable<string> Errors { get; set; }
-        public BadRequestException(string title, IEnumerable<string> errors) : base(title, 400) 
-        { 
-            Errors = errors;
-        }
 
-        public override ErrorResponse GetErrorResponse()
-        {
-            return new BadRequestResponse(Title, Errors);
+        public override LogLevel LogLevel { get; init; } = LogLevel.None;
+
+        public BadRequestException(string title, IEnumerable<string>? errors = null) : base(title, 400) 
+        { 
+            Errors = errors ?? Enumerable.Empty<string>();
         }
 
         public override string GetResponse()
         {
-            return JsonSerializer.Serialize(new { Errors, StatusCode, Title });
+            return JsonSerializer.Serialize(new BadRequestResponse(Title, Errors));
         }
     }
 }

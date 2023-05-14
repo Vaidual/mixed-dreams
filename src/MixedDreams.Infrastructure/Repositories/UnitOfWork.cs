@@ -18,6 +18,7 @@ namespace MixedDreams.Infrastructure.Repositories
         private IProductRepository _productRepository;
         private IBusinessLocationRepository _businessLocationRepository;
         private IProductCategoryRepository _productCategoryRepository;
+        private IProductHistoryRepository _productHistoryRepository;
 
         public UnitOfWork(AppDbContext context)
         {
@@ -31,6 +32,7 @@ namespace MixedDreams.Infrastructure.Repositories
         public ICustomerRepository CustomerRepository => _customerRepository ??= new CustomerRepository(_context);
         public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_context);
         public IBusinessLocationRepository BusinessLocationRepository => _businessLocationRepository ??= new BusinessLocationRepository(_context);
+        public IProductHistoryRepository ProductHistoryRepository => _productHistoryRepository ??= new ProductHistoryRepository(_context);
 
         public Task SaveAsync(CancellationToken cancellationToken = default)
         {

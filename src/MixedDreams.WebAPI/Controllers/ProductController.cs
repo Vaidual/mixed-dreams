@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MixedDreams.Application.Common;
 using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features;
@@ -57,11 +58,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            Product? product = await _unitOfWork.ProductRepository.Get(id, cancellationToken);
-            if (product == null)
-            {
-                return NotFound(new EntityNotFoundResponse(nameof(Product), id.ToString()));
-            }
+            Product product = await _unitOfWork.ProductRepository.Get(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
 
             return Ok(_mapper.Map<GetProductResponse>(product));
         }
@@ -103,11 +100,7 @@ namespace MixedDreams.WebAPI.Controllers
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetProductWithDetails([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            Product? product = await _unitOfWork.ProductRepository.Get(id, cancellationToken);
-            if (product == null)
-            {
-                return NotFound(new EntityNotFoundResponse(nameof(Product), id.ToString()));
-            }
+            Product product = await _unitOfWork.ProductRepository.Get(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
 
             return Ok(_mapper.Map<GetProductWithDetailsResponse>(product));
         }
@@ -120,13 +113,8 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-            if (await _unitOfWork.ProductRepository.IsNameTaken(model.Name!))
-            {
-                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name!));
-            }
 
             Product product = await _productService.CreateProductAsync(model, User);
-            await _unitOfWork.SaveAsync();
 
             return CreatedAtAction(nameof(GetProductWithDetails), new { id = product.Id}, _mapper.Map<GetProductWithDetailsResponse>(product));
         }
@@ -139,16 +127,8 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-            Product? product = await _unitOfWork.ProductRepository.Get(id);
-            if (product is null)
-            {
-                return BadRequest(new PutNotFoundResponse());
-            }
-            if (model.Name != product.Name && await _unitOfWork.ProductRepository.IsNameTaken(model.Name!))
-            {
-                return BadRequest(new PropertyIsTakenBadRequestResponse(nameof(model.Name), model.Name!));
-            }
-            await _productService.UpdateProductAsync(product, model);
+
+            await _productService.UpdateProductAsync(id, model);
 
             return NoContent();
         }
@@ -156,11 +136,7 @@ namespace MixedDreams.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
-            Product? product = await _unitOfWork.ProductRepository.Get(id);
-            if (product is null)
-            {
-                return BadRequest(new EntityNotFoundResponse(nameof(Product), id.ToString()));
-            }
+            Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
             await _productService.DeleteProductAsync(product);
 
             return NoContent();

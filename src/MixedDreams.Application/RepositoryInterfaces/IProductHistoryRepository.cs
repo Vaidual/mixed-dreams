@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Application.RepositoryInterfaces
 {
-    public interface IOrderRepository : IBaseRepository<Order>
+    public interface IProductHistoryRepository : IBaseRepository<ProductHistory>
     {
+        public Task<Guid?> GetLastProductHistoryId(Guid productId);
     }
 }

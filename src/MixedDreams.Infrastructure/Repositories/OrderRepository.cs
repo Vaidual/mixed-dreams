@@ -1,4 +1,5 @@
-﻿using MixedDreams.Application.RepositoryInterfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Data;
 using System;
@@ -13,9 +14,9 @@ namespace MixedDreams.Infrastructure.Repositories
     {
         public OrderRepository(AppDbContext context) : base(context) { }
 
-        public Guid? GetLastProductHistoryId(Guid productId)
+        public override Task<Order?> Get(Guid id, CancellationToken cancellationToken = default)
         {
-            return Context.ProductHistory.Where(x => x.ProductId == productId).MaxBy(x => x.Date)?.Id;
+            return Table.Include(x => x.BusinessLocation).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace MixedDreams.WebAPI.Controllers
         public async Task<IActionResult> CreateBackupAsync()
         {
             await _backupService.CreateBackupAsync();
+
             return Ok("Backup is successful");
         }
     }

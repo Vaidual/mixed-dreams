@@ -12,6 +12,7 @@ using MixedDreams.Application.Features.OrderFeatures.GetOrder;
 using MixedDreams.Application.Features.OrderFeatures.PostOrder;
 using MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus;
 using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Constants;
 using System.Security.Claims;
@@ -20,12 +21,13 @@ namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/orders")]
     [ApiController]
-    [Authorize(Roles = Roles.Customer + "," + Roles.Company)]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IValidator<PostOrderRequest> _postOrderValidator;
+        private readonly IOrderService _orderService;
 
         public OrderController(IUnitOfWork unitOfWork, IMapper mapper, IValidator<PostOrderRequest> postOrderValidator)
         {
@@ -41,7 +43,7 @@ namespace MixedDreams.WebAPI.Controllers
             Order? order = await _unitOfWork.OrderRepository.Get(id);
             if (order == null)
             {
-                return NotFound(new EntityNotFoundResponse(nameof(Order), id.ToString()));
+                throw new EntityNotFoundException(nameof(Order), id.ToString());
             }
 
             return Ok(_mapper.Map<GetOrderResponse>(order));
@@ -65,26 +67,9 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-            if (model.Products.Count > 50)
-            {
-                return BadRequest(new BadRequestResponse("Order is failed. Contact the seller for details", new List<string> { "You can't but more than 50 products. Contact the seller, If you wish to make a large order" }));
-            }
-            string userId = User.GetClaim(ClaimTypes.NameIdentifier) ?? throw new ClaimDoesntExistException(ClaimTypes.NameIdentifier);
-            Guid customerId = await _unitOfWork.CustomerRepository.GetCustomerIdByUserIdAsync(userId) ?? throw new RelationCannotBeFoundException(nameof(ApplicationUser), nameof(Customer), userId);
-            Order orderToCreate = _mapper.Map<Order>(model);
-            orderToCreate.OrderStatus = Domain.Enums.OrderStatus.Accepted;
-            orderToCreate.CustomerId = customerId;
-            orderToCreate.OrderProducts = model.Products.Select(x => new OrderProduct
-            {
-                Amount = x.Amount,
-                Order = orderToCreate,
-                ProductId = x.ProductId,
-                ProductHistoryId = _unitOfWork.OrderRepository.GetLastProductHistoryId(x.ProductId) ?? throw new InternalServerErrorException($"Product with id '{x.ProductId}' have no producthistory records")
-            }).ToList();
-            _unitOfWork.OrderRepository.Create(orderToCreate);
-            await _unitOfWork.SaveAsync();
+            Order order = await _orderService.PlaceOrderAsync(model, User);
 
-            return CreatedAtAction(nameof(GetOrder), new { id = orderToCreate.Id }, _mapper.Map<GetOrderResponse>(orderToCreate));
+            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, _mapper.Map<GetOrderResponse>(order));
         }
 
         [HttpPost("{id}/status")]
@@ -93,7 +78,7 @@ namespace MixedDreams.WebAPI.Controllers
             Order? order = await _unitOfWork.OrderRepository.Get(id);
             if (order == null)
             {
-                return NotFound(new EntityNotFoundResponse(nameof(Order), id.ToString()));
+                throw new EntityNotFoundException(nameof(Order), id.ToString());
             }
 
             _unitOfWork.OrderRepository.Update(_mapper.Map(model, order));

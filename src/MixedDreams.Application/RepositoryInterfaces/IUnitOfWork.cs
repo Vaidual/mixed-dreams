@@ -15,6 +15,7 @@ namespace MixedDreams.Application.RepositoryInterfaces
         public IProductRepository ProductRepository { get; }
         public IBusinessLocationRepository BusinessLocationRepository { get; }
         public IProductCategoryRepository ProductCategoryRepository { get; }
+        public IProductHistoryRepository ProductHistoryRepository { get; }
         Task SaveAsync(CancellationToken cancellationToken = default);
     }
 }
