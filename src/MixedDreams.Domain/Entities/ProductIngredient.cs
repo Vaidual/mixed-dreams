@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Domain.Entities
 {
-    public class ProductIngredient : BaseEntity
+    public class ProductIngredient : BaseEntity, IMustHaveTenant
     {
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
@@ -19,5 +19,7 @@ namespace MixedDreams.Domain.Entities
         public bool HasAmount { get; set; }
         public float? Amount { get; set; }
         public Unit? Unit { get; set; }
+
+        public Guid TenantId { get; set; }
     }
 }

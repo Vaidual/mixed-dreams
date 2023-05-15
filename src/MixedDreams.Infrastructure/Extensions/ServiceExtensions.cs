@@ -29,12 +29,15 @@ namespace MixedDreams.Infrastructure.Extensions
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBackupService, BackupService>();
-            services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<IBackblazeService, BackblazeService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
 
             services.AddHostedServices();
+
+            services.AddScoped<ITenantService, TenantService>();
+            services.AddScoped<ITenantGetter>(provider => provider.GetService<ITenantService>() ?? throw new ServiceNotRegisteredException(nameof(ITenantService)));
+            services.AddScoped<ITenantSetter>(provider => provider.GetService<ITenantService>() ?? throw new ServiceNotRegisteredException(nameof(ITenantService)));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

@@ -30,6 +30,7 @@ using Microsoft.Extensions.Hosting;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Infrastructure.Services;
 using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.WebAPI.Middlewares;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -51,6 +52,8 @@ try
     builder.Logging.AddSerilog(Log.Logger);
 
     builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
+    builder.Services.AddScoped<TenantMiddleware>();
 
     builder.Services.AddAndConfigureCors(builder.Configuration);
 
@@ -101,6 +104,8 @@ try
 
     app.UseAuthentication();
     app.UseAuthorization();
+
+    app.UseMiddleware<TenantMiddleware>();
 
     app.MapControllers();
 

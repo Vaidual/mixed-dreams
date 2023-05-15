@@ -31,7 +31,6 @@ namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/products")]
     [ApiController]
-    [Authorize(Roles = $"{Roles.Administrator}, {Roles.Company}")]
     public class ProductController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

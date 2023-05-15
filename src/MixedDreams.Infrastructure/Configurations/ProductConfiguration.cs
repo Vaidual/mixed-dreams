@@ -18,8 +18,8 @@ namespace MixedDreams.Infrastructure.Configurations
 
             builder.Property(x => x.Name)
                 .HasColumnType("nvarchar(50)");
-            builder.HasIndex(x => x.Name)
-                .IsUnique();
+            builder.HasIndex(x => x.Name);
+                //.IsUnique();
 
             builder.Property(x => x.Description)
                 .HasColumnType("nvarchar(4000)");
