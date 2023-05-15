@@ -16,8 +16,7 @@ namespace MixedDreams.WebAPI.Controllers
             _backupService = backupService;
         }
 
-        [HttpPost("create")]
-        //[Authorize(Roles = Roles.Administrator)]
+        [HttpPost]
         public async Task<IActionResult> CreateBackupAsync()
         {
             await _backupService.CreateBackupAsync();

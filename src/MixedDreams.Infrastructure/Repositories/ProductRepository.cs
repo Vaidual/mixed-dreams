@@ -80,7 +80,7 @@ namespace MixedDreams.Infrastructure.Repositories
                 }
             }
             query = query.Skip(page * size).Take(size);
-            return await query.AsNoTracking().ToListAsync(cancellationToken);
+            return await query.Include(x => x.Image).AsNoTracking().ToListAsync(cancellationToken);
         }
     }
 }

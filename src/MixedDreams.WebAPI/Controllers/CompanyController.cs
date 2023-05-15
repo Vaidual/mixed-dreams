@@ -6,5 +6,7 @@ namespace MixedDreams.WebAPI.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
+        
+
     }
 }

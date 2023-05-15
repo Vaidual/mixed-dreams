@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using MixedDreams.Application.Common;
 using MixedDreams.Application.Constants;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
 using MixedDreams.Application.Exceptions.NotFound;
 using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Features.OrderFeatures.GetOrder;
+using MixedDreams.Application.Features.OrderFeatures.GetOrdersStatistic;
 using MixedDreams.Application.Features.OrderFeatures.PostOrder;
 using MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus;
 using MixedDreams.Application.RepositoryInterfaces;
@@ -22,7 +24,6 @@ namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/orders")]
     [ApiController]
-    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -48,7 +49,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> GetOrders(CancellationToken cancellationToken)
         {
             IReadOnlyList<Order> Orders = await _unitOfWork.OrderRepository.GetAll(cancellationToken);
@@ -56,7 +57,16 @@ namespace MixedDreams.WebAPI.Controllers
             return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<GetOrderResponse>>(Orders));
         }
 
-        [HttpPost]
+        [HttpGet("~api/users/{userId}/orders")]
+        [Authorize(Roles = Roles.Customer)]
+        public async Task<IActionResult> GetUserOrders([FromQuery] Guid userId, CancellationToken cancellationToken)
+        {
+            IReadOnlyList<Order> Orders = await _unitOfWork.OrderRepository.GetAll(cancellationToken, expression: x => x.Id == userId);
+
+            return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<GetOrderResponse>>(Orders));
+        }
+
+        [HttpPost()]
         [Authorize(Roles = Roles.Customer)]
         public async Task<IActionResult> PostOrder([FromBody] PostOrderRequest model)
         {
@@ -71,12 +81,30 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPost("{id}/status")]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> UpdateStatus([FromRoute] Guid id, [FromBody] UpdateOrderStatusRequest model)
         {
             Order order = await _unitOfWork.OrderRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Order), id.ToString());
             _unitOfWork.OrderRepository.Update(_mapper.Map(model, order));
             await _unitOfWork.SaveAsync();
+
             return Ok();
+        }
+
+        [HttpGet("~/api/company/orders/statistic")]
+        [Authorize(Roles = Roles.Company)]
+        public async Task<IActionResult> GetOrdersStatistic([FromQuery]string period, CancellationToken cancellationToken)
+        {
+            TimeSpan periodTimeSpan;
+            if (!StatisticIntervals.IntervalTimespan.TryGetValue(period, out periodTimeSpan))
+            {
+                throw new PeriodDoesntExistException(period);
+            }
+            DateTimeOffset start =  DateTimeOffset.Now.Subtract(periodTimeSpan);
+            DateTimeOffset end = DateTimeOffset.Now;
+            List<GetOrdersStatisticResponse> statistic = await _unitOfWork.OrderRepository.GetStatistic(start, end, TimeSpan.FromHours(1), cancellationToken);
+
+            return Ok(statistic);
         }
     }
 }

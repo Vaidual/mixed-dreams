@@ -19,7 +19,6 @@ namespace MixedDreams.WebAPI.Controllers
 {
     [Route("api/ingredients")]
     [ApiController]
-    [Authorize(Roles = Roles.Company)]
     public class IngredientController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -36,7 +35,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetIngredient(Guid id, CancellationToken cancellationToken)
         {
             Ingredient ingredient = await _unitOfWork.IngredientRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Ingredient), id.ToString()); ;
@@ -45,7 +44,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetIngredients(CancellationToken cancellationToken)
         {
             IReadOnlyList<Ingredient> ingredients = await _unitOfWork.IngredientRepository.GetAll(cancellationToken);
@@ -54,6 +53,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> PostIngredient([FromBody] PostIngredientRequest model)
         {
             ValidationResult validationResult = await _postIngredientValidator.ValidateAsync(model);
@@ -73,6 +73,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> PutIngredient([FromRoute] Guid id, [FromBody] PutIngredientRequest model)
         {
             ValidationResult validationResult = await _putIngredientValidator.ValidateAsync(model);
@@ -94,6 +95,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> DeleteIngredient([FromRoute] Guid id)
         {
             bool exist = await _unitOfWork.IngredientRepository.EntityExistsAsync(id);

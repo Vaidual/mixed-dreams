@@ -14,6 +14,7 @@ using MixedDreams.Application.Features.BusinessLocationFeatures.PutBusinessLocat
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
+using MixedDreams.Infrastructure.Constants;
 using System.Security.Claims;
 
 namespace MixedDreams.WebAPI.Controllers
@@ -45,7 +46,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetBusinessLocations(CancellationToken cancellationToken)
         {
             IReadOnlyList<BusinessLocation> businessLocations = await _unitOfWork.BusinessLocationRepository.GetAll(cancellationToken);
@@ -54,6 +55,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> PostBusinessLocation([FromBody] PostBusinessLocationRequest model)
         {
             ValidationResult validationResult = await _postBusinessLocationValidator.ValidateAsync(model);
@@ -77,6 +79,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> PutBusinessLocation([FromRoute] Guid id, [FromBody] PutBusinessLocationRequest model)
         {
             ValidationResult validationResult = await _putBusinessLocationValidator.ValidateAsync(model);
@@ -98,6 +101,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> DeleteBusinessLocation([FromRoute] Guid id)
         {
             bool exist = await _unitOfWork.BusinessLocationRepository.EntityExistsAsync(id);

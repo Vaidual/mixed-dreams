@@ -14,9 +14,13 @@ namespace MixedDreams.Infrastructure.Repositories
     {
         public CompanyRepository(AppDbContext context) : base(context) { }
 
-        public async Task<Guid?> GetCompanyIdByUserIdAsync(string userId)
+        public async Task<Guid?> GetCompanyIdByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {
-            return (await Table.FirstOrDefaultAsync(x => x.ApplicationUserId == userId))?.Id;
+            return (await Table.FirstOrDefaultAsync(x => x.ApplicationUserId == userId, cancellationToken))?.Id;
+        }
+        public string? GettenantIdByBusinessLocationIdAsync(Guid locationId, CancellationToken cancellationToken = default)
+        {
+            return Context.BusinessLocations.Include(x => x.Company).FirstOrDefault(x => x.Id == locationId)?.Company.ApplicationUserId;
         }
     }
 }

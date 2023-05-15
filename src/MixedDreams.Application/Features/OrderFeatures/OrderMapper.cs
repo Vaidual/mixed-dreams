@@ -21,7 +21,10 @@ namespace MixedDreams.Application.Features.OrderFeatures
                     (opt) => opt.MapFrom(src => src.BusinessLocation.Address));
 
             CreateMap<PostOrderRequest, Order>();
-            CreateMap<UpdateOrderStatusRequest, Order>();
+            CreateMap<UpdateOrderStatusRequest, Order>()
+                .ForMember(
+                dest => dest.OrderStatus, 
+                opt => opt.MapFrom(src => src.Status));
         }
     }
 }

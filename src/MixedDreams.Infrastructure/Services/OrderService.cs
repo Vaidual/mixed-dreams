@@ -40,6 +40,11 @@ namespace MixedDreams.Infrastructure.Services
             Order orderToCreate = _mapper.Map<Order>(model);
             orderToCreate.OrderStatus = Domain.Enums.OrderStatus.Accepted;
             orderToCreate.CustomerId = customerId;
+            orderToCreate.TenantId = Guid.Parse(_unitOfWork.CompanyRepository
+                .GettenantIdByBusinessLocationIdAsync(model.BusinessLocationId) 
+                ?? throw new EntityNotFoundException(
+                    nameof(BusinessLocation), 
+                    model.BusinessLocationId.ToString()));
             var orderProducts = await Task.WhenAll(model.Products.Select(async x => new OrderProduct
             {
                 Amount = x.Amount,

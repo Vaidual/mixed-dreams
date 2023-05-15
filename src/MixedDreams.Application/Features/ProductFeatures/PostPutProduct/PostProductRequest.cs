@@ -26,7 +26,7 @@ namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
 
         public Visibility Visibility { get; init; } = Visibility.Unavaiable;
 
-        public IFormFile? PrimaryImage { get; init; }
+        public IFormFile PrimaryImage { get; init; }
 
         [BindRequired]
         public float RecommendedTemperature { get; init; }

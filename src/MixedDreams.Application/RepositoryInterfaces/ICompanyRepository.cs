@@ -9,6 +9,7 @@ namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface ICompanyRepository : IBaseRepository<Company>
     {
-        public Task<Guid?> GetCompanyIdByUserIdAsync(string userId);
+        public Task<Guid?> GetCompanyIdByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+        public string? GettenantIdByBusinessLocationIdAsync(Guid locationId, CancellationToken cancellationToken = default);
     }
 }

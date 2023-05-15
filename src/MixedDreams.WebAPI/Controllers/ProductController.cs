@@ -98,6 +98,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpGet("{id}/details")]
+        [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetProductWithDetails([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             Product product = await _unitOfWork.ProductRepository.Get(id, cancellationToken)
@@ -107,6 +108,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> PostProduct([FromForm] PostProductRequest model)
         {
             ValidationResult validationResult = await _postProductValidator.ValidateAsync(model);
@@ -121,6 +123,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> PutProduct([FromRoute] Guid id, [FromForm] PutProductRequest model)
         {
             ValidationResult validationResult = await _putProductValidator.ValidateAsync(model);
@@ -135,6 +138,7 @@ namespace MixedDreams.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
             Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());

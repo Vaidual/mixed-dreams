@@ -60,6 +60,8 @@ namespace MixedDreams.Infrastructure.Data
                     switch (entry.State)
                     {
                         case EntityState.Added:
+                            entry.Entity.TenantId = (Guid)_tenantId!;
+                            break;
                         case EntityState.Modified:
                             entry.Entity.TenantId = (Guid)_tenantId!;
                             break;
