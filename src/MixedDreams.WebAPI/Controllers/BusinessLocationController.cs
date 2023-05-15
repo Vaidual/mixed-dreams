@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MixedDreams.Application.Common;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Exceptions.NotFound;
 using MixedDreams.Application.Features.BusinessLocationFeatures.GetBusinessLocation;
 using MixedDreams.Application.Features.BusinessLocationFeatures.PostBusinessLocation;
 using MixedDreams.Application.Features.BusinessLocationFeatures.PutBusinessLocation;
@@ -65,7 +68,8 @@ namespace MixedDreams.WebAPI.Controllers
 
             BusinessLocation businessLocation = _mapper.Map<BusinessLocation>(model);
             string userId = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            businessLocation.CompanyId = await _unitOfWork.CompanyRepository.GetCompanyIdByUserIdAsync(userId) ?? throw new InternalServerErrorException($"User with id {userId} doesn't connected to company however has company role ");
+            businessLocation.CompanyId = await _unitOfWork.CompanyRepository.GetCompanyIdByUserIdAsync(userId)
+                ?? throw new InternalServerErrorException($"User with id {userId} doesn't connected to company however has company role ");
             businessLocation = _unitOfWork.BusinessLocationRepository.Create(businessLocation);
             await _unitOfWork.SaveAsync();
 

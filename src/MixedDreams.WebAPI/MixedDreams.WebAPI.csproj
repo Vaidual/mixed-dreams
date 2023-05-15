@@ -21,8 +21,4 @@
     <ProjectReference Include="..\MixedDreams.Infrastructure\MixedDreams.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="logs\" />
-  </ItemGroup>
-
 </Project>

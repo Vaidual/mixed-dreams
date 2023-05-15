@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Exceptions.NotFound;
 using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
 using MixedDreams.Application.Features.ProductFeatures.PutProduct;
 using MixedDreams.Application.RepositoryInterfaces;
@@ -38,7 +41,8 @@ namespace MixedDreams.Infrastructure.Services
             }
             Product productToCreate = _mapper.Map<Product>(model);
             string userId = user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            productToCreate.CompanyId = await _unitOfWork.CompanyRepository.GetCompanyIdByUserIdAsync(userId) ?? throw new InternalServerErrorException($"User with id {userId} doesn't connected to company however has company role ");
+            productToCreate.CompanyId = await _unitOfWork.CompanyRepository.GetCompanyIdByUserIdAsync(userId)
+                ?? throw new InternalServerErrorException($"User with id {userId} doesn't connected to company however has company role ");
             if (model.PrimaryImage is not null)
             {
                 var image = await _backblazeService.UploadImage(model.PrimaryImage);
@@ -63,7 +67,8 @@ namespace MixedDreams.Infrastructure.Services
         }
         public async Task UpdateProductAsync(Guid id, PutProductRequest updateModel)
         {
-            Product productToUpdate = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
+            Product productToUpdate = await _unitOfWork.ProductRepository.Get(id) 
+                ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
             if (updateModel.Name != productToUpdate.Name && await _unitOfWork.ProductRepository.IsNameTaken(updateModel.Name!))
             {
                 throw new PropertyIsTakenException(nameof(updateModel.Name), updateModel.Name);

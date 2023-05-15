@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MixedDreams.Application.Common;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.NotFound;
 using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features;
 using MixedDreams.Application.Features.Common;
@@ -100,7 +101,8 @@ namespace MixedDreams.WebAPI.Controllers
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetProductWithDetails([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            Product product = await _unitOfWork.ProductRepository.Get(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
+            Product product = await _unitOfWork.ProductRepository.Get(id, cancellationToken)
+                ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
 
             return Ok(_mapper.Map<GetProductWithDetailsResponse>(product));
         }

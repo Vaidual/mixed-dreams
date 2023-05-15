@@ -26,6 +26,7 @@ using Microsoft.VisualBasic;
 using System.Data;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using MixedDreams.Application.Constants;
+using MixedDreams.Application.Exceptions.BadRequest;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -37,6 +38,9 @@ namespace MixedDreams.Infrastructure.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _context;
+
+        public TimeSpan RememberMeAccessTokenDuration { get; private set; } = TimeSpan.FromDays(14);
+        public TimeSpan StandardAccessTokenDuration { get; private set; } = TimeSpan.FromHours(2);
 
         public AuthService(
             UserManager<ApplicationUser> userManager,
@@ -181,7 +185,7 @@ namespace MixedDreams.Infrastructure.Services
                 _jwtOptions.SigningKey,
                 _jwtOptions.Issuer,
                 _jwtOptions.Audience,
-                rememberMe ? TimeSpan.FromDays(14) : TimeSpan.FromHours(2),
+                rememberMe ? RememberMeAccessTokenDuration : StandardAccessTokenDuration,
                 claims);
 
             return token;

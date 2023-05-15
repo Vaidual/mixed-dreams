@@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace MixedDreams.Application.Exceptions
+namespace MixedDreams.Application.Exceptions.BadRequest
 {
     public class BadRequestException : BaseException
     {
@@ -21,8 +21,8 @@ namespace MixedDreams.Application.Exceptions
 
         public override LogLevel LogLevel { get; init; } = LogLevel.None;
 
-        public BadRequestException(string title, IEnumerable<string>? errors = null) : base(title, 400) 
-        { 
+        public BadRequestException(string title, IEnumerable<string>? errors = null) : base(title, 400)
+        {
             Errors = errors ?? Enumerable.Empty<string>();
         }
 

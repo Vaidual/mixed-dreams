@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.InternalServerError;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Infrastructure.Constants;
 using System;

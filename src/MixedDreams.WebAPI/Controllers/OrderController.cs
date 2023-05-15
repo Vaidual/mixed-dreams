@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MixedDreams.Application.Common;
 using MixedDreams.Application.Constants;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.NotFound;
 using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Features.OrderFeatures.GetOrder;

@@ -29,6 +29,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Hosting;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Infrastructure.Services;
+using MixedDreams.Application.Exceptions.InternalServerError;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())

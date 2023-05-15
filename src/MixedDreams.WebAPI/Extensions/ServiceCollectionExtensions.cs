@@ -8,6 +8,7 @@ using MixedDreams.WebAPI.Middlewares;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.InternalServerError;
 
 namespace MixedDreams.WebAPI.Extensions
 {

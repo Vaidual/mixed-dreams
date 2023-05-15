@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Exceptions
+namespace MixedDreams.Application.Exceptions.InternalServerError
 {
     public class MissingConfigurationOptionsException : InternalServerErrorException
     {

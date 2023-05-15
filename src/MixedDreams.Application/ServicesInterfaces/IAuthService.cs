@@ -12,6 +12,15 @@ namespace MixedDreams.Application.ServicesInterfaces
 {
     public interface IAuthService
     {
+        /// <summary>
+        /// Determines how long the access will be valid for remember me option.
+        /// </summary>
+        public TimeSpan RememberMeAccessTokenDuration { get; }
+
+        /// <summary>
+        /// Determines how long the access will be valid by default.
+        /// </summary>
+        public TimeSpan StandardAccessTokenDuration { get; }
         public Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterRequest model);
         public Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterRequest model);
         public Task<TokenResponse> LoginUserAsync(LoginRequest model);

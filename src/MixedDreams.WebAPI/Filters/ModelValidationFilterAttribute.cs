@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MixedDreams.Domain.Common;
 using MixedDreams.Infrastructure.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using MixedDreams.Application.Exceptions.BadRequest;
 
 namespace MixedDreams.WebAPI.Filters
 {

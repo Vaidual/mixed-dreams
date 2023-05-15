@@ -20,13 +20,13 @@ namespace MixedDreams.Infrastructure.Services
         }
 
         /// <summary>
-        /// Defines how often in minutes database backup must be executed
+        /// Defines how often database backup must be executed.
         /// </summary>
-        public int ReplicationFrequency { get; private set; } = 60 * 24;
+        public TimeSpan ReplicationFrequency { get; private set; } = TimeSpan.FromDays(1);
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+            using var timer = new PeriodicTimer(ReplicationFrequency);
 
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {

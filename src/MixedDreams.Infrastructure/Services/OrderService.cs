@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Exceptions.NotFound;
 using MixedDreams.Application.Extensions;
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.Features.OrderFeatures.PostOrder;
@@ -47,7 +50,8 @@ namespace MixedDreams.Infrastructure.Services
             orderToCreate.OrderProducts = orderProducts.ToList();
             _unitOfWork.OrderRepository.Create(orderToCreate);
             await _unitOfWork.SaveAsync();
-            Order createdOrder = await _unitOfWork.OrderRepository.Get(orderToCreate.Id) ?? throw new EntityNotFoundException(nameof(Order), orderToCreate.Id.ToString());
+            Order createdOrder = await _unitOfWork.OrderRepository.Get(orderToCreate.Id)
+                ?? throw new EntityNotFoundException(nameof(Order), orderToCreate.Id.ToString());
 
             return createdOrder;
         }
