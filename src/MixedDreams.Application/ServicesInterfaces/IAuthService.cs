@@ -21,9 +21,9 @@ namespace MixedDreams.Application.ServicesInterfaces
         /// Determines how long the access will be valid by default.
         /// </summary>
         public TimeSpan StandardAccessTokenDuration { get; }
-        public Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterRequest model);
-        public Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterRequest model);
-        public Task<TokenResponse> LoginUserAsync(LoginRequest model);
+        public Task<AuthResponse> RegisterCustomerAsync(CustomerRegisterRequest model);
+        public Task<AuthResponse> RegisterCompanyAsync(CompanyRegisterRequest model);
+        public Task<AuthResponse> LoginUserAsync(LoginRequest model);
         public Task LogoutUserAsync();
     }
 }

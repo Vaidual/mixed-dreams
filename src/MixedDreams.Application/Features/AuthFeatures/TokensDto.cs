@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Application.Features.AuthFeatures
 {
-    public sealed record TokenResponse
+    public sealed record TokensDto
     {
-        public TokenResponse(string token)
+        public TokensDto(string token)
         {
-            Token = token;
+            AccessToken = token;
         }
 
-        [JsonPropertyName("token")]
-        public string Token { get; set; }
+        [JsonPropertyName("accessToken")]
+        public string AccessToken { get; set; }
     }
 }

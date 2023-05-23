@@ -58,7 +58,7 @@ namespace MixedDreams.Infrastructure.Services
             _jwtOptions = jwtOptions.Value;
         }
 
-        public async Task<TokenResponse> LoginUserAsync(LoginRequest model)
+        public async Task<AuthResponse> LoginUserAsync(LoginRequest model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             //var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
@@ -77,7 +77,11 @@ namespace MixedDreams.Infrastructure.Services
 
             var token = await CreateTokenAsync(user, model.RememberMe, claims);
 
-            return new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token));
+            return new AuthResponse
+            {
+                Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
+                User = _mapper.Map<UserDto>(user)
+            };
         }
 
         public async Task LogoutUserAsync()
@@ -85,7 +89,7 @@ namespace MixedDreams.Infrastructure.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<TokenResponse> RegisterCustomerAsync(CustomerRegisterRequest model)
+        public async Task<AuthResponse> RegisterCustomerAsync(CustomerRegisterRequest model)
         {
             var user = await CreateUserAsync(model);
             Customer customer;
@@ -110,10 +114,14 @@ namespace MixedDreams.Infrastructure.Services
             }
             var token = await CreateTokenAsync(user, false);
 
-            return new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token));
+            return new AuthResponse
+            {
+                Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
+                User = _mapper.Map<UserDto>(user)
+            };
         }
 
-        public async Task<TokenResponse> RegisterCompanyAsync(CompanyRegisterRequest model)
+        public async Task<AuthResponse> RegisterCompanyAsync(CompanyRegisterRequest model)
         {
             var user = await CreateUserAsync(model);
             Company company;
@@ -143,7 +151,11 @@ namespace MixedDreams.Infrastructure.Services
             };
             var token = await CreateTokenAsync(user, false, claims);
 
-            return new TokenResponse(new JwtSecurityTokenHandler().WriteToken(token));
+            return new AuthResponse
+            {
+                Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
+                User = _mapper.Map<UserDto>(user)
+            };
         }
 
         private async Task<ApplicationUser> CreateUserAsync(RegisterDto registerModel)

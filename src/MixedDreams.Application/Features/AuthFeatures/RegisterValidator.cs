@@ -16,7 +16,6 @@ namespace MixedDreams.Application.Features.AuthFeatures
             RuleFor(x => x.FirstName).NotEmpty().MaximumLength(50);
             RuleFor(x => x.LastName).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Password).Password();
-            RuleFor(x => x.ConfirmPassword).Matches(x => x.Password);
         }
     }
 }

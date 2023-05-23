@@ -43,7 +43,7 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-            TokenResponse response = await _authService.RegisterCustomerAsync(model);
+            AuthResponse response = await _authService.RegisterCustomerAsync(model);
 
             return Ok(response);
         }
@@ -57,7 +57,7 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-            TokenResponse response = await _authService.RegisterCompanyAsync(model);
+            AuthResponse response = await _authService.RegisterCompanyAsync(model);
 
             return Ok(response);
         }
@@ -70,7 +70,7 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
-            TokenResponse response = await _authService.LoginUserAsync(model);
+            AuthResponse response = await _authService.LoginUserAsync(model);
 
             return Ok(response);
         }
