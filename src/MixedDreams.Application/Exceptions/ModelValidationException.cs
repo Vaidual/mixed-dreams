@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MixedDreams.Application.Common;
+using MixedDreams.Application.Enums;
 using MixedDreams.Application.Features.Errors;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace MixedDreams.Application.Exceptions
 
         public override LogLevel LogLevel { get; init; } = LogLevel.None;
 
-        public ModelValidationException(IDictionary<string, IEnumerable<string>> errors) : base("One or more validation failures have occurred.", StatusCodes.Status422UnprocessableEntity)
+        public ModelValidationException(IDictionary<string, IEnumerable<string>> errors) : base("One or more validation failures have occurred.", StatusCodes.Status422UnprocessableEntity, ErrorCodes.ModelValidationError)
         {
             Errors = errors;
         }

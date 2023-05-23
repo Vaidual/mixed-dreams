@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MixedDreams.Application.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,11 @@ namespace MixedDreams.Application.Features.Errors
     public class ErrorResponse
     {
 
-        public ErrorResponse(int statusCode, string title)
+        public ErrorResponse(int statusCode, string title, ErrorCodes errorCode)
         {
             StatusCode = statusCode;
             Title = title;
+            ErrorCode = errorCode;
         }
 
         [JsonPropertyName("statusCode")]
@@ -22,6 +24,9 @@ namespace MixedDreams.Application.Features.Errors
 
         [JsonPropertyName("title")]
         public string Title { get; set; }
+
+        [JsonPropertyName("errorCode")]
+        public ErrorCodes ErrorCode { get; set; }
 
         public override string ToString()
         {

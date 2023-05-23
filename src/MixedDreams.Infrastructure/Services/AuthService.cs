@@ -27,6 +27,7 @@ using System.Data;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using MixedDreams.Application.Constants;
 using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Enums;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -64,7 +65,7 @@ namespace MixedDreams.Infrastructure.Services
             //var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                throw new BadRequestException("Authentification failed.", new List<string> { "Invalid credentials" });
+                throw new BadRequestException("Authentification failed.", ErrorCodes.Invalidcredentials, new List<string> { "Invalid credentials" });
             }
 
             //await _userManager.UpdateAsync(user);
@@ -91,13 +92,13 @@ namespace MixedDreams.Infrastructure.Services
 
         public async Task<AuthResponse> RegisterCustomerAsync(CustomerRegisterRequest model)
         {
-            var user = await CreateUserAsync(model);
+            var user = await GetUserToCreateAsync(model);
             Customer customer;
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    await RegisterUserAsync(model, user, Roles.Customer);
+                    await CreateUserAsync(model, user, Roles.Customer);
 
                     customer = _mapper.Map<Customer>(model);
                     customer.ApplicationUser = user;
@@ -123,13 +124,13 @@ namespace MixedDreams.Infrastructure.Services
 
         public async Task<AuthResponse> RegisterCompanyAsync(CompanyRegisterRequest model)
         {
-            var user = await CreateUserAsync(model);
+            var user = await GetUserToCreateAsync(model);
             Company company;
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    await RegisterUserAsync(model, user, Roles.Company);
+                    await CreateUserAsync(model, user, Roles.Company);
 
                     company = _mapper.Map<Company>(model);
                     company.ApplicationUser = user;
@@ -158,12 +159,12 @@ namespace MixedDreams.Infrastructure.Services
             };
         }
 
-        private async Task<ApplicationUser> CreateUserAsync(RegisterDto registerModel)
+        private async Task<ApplicationUser> GetUserToCreateAsync(RegisterDto registerModel)
         {
             var userExists = await _userManager.FindByEmailAsync(registerModel.Email);
             if (userExists != null)
             {
-                throw new BadRequestException("Authentification failed.", new List<string> { "Email is already taken" });
+                throw new BadRequestException("Email is already taken.", ErrorCodes.EmailIsTaken, new List<string> { "Email is already taken" });
             }
 
             var user = _mapper.Map<ApplicationUser>(registerModel);
@@ -171,12 +172,12 @@ namespace MixedDreams.Infrastructure.Services
             return user;
         }
 
-        private async Task RegisterUserAsync(RegisterDto registerModel, ApplicationUser user, string role)
+        private async Task CreateUserAsync(RegisterDto registerModel, ApplicationUser user, string role)
         {
             var result = await _userManager.CreateAsync(user, registerModel.Password);
             if (!result.Succeeded)
             {
-                throw new BadRequestException("Authentification failed.", result.Errors.Select(e => e.Description));
+                throw new BadRequestException("Authentification failed.", ErrorCodes.InternalError, result.Errors.Select(e => e.Description));
             }
             await _unitOfWork.SaveAsync(CancellationToken.None);
             await _userManager.AddToRoleAsync(user, role);

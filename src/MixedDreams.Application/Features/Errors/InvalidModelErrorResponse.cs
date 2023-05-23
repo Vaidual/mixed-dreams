@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MixedDreams.Application.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MixedDreams.Application.Features.Errors
     {
         [JsonPropertyName("errors")]
         public IDictionary<string, IEnumerable<string>> Errors { get; set; }
-        public InvalidModelErrorResponse(string title, IDictionary<string, IEnumerable<string>> errors) : base(StatusCodes.Status422UnprocessableEntity, title)
+        public InvalidModelErrorResponse(string title, IDictionary<string, IEnumerable<string>> errors) : base(StatusCodes.Status422UnprocessableEntity, title, ErrorCodes.ModelValidationError)
         {
             Errors = errors;
         }

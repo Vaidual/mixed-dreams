@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using MixedDreams.Application.Enums;
 
 namespace MixedDreams.Application.Features.Errors
 {
@@ -13,7 +14,7 @@ namespace MixedDreams.Application.Features.Errors
     {
         [JsonPropertyName("errors")]
         public IEnumerable<string> Errors { get; set; }
-        public BadRequestResponse(string title, IEnumerable<string> errors) : base(StatusCodes.Status400BadRequest, title)
+        public BadRequestResponse(string title, IEnumerable<string> errors, ErrorCodes errorCode) : base(StatusCodes.Status400BadRequest, title, errorCode)
         {
             Errors = errors;
         }

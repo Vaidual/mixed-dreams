@@ -7,6 +7,7 @@ using MixedDreams.Domain.Common;
 using MixedDreams.Infrastructure.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Enums;
 
 namespace MixedDreams.WebAPI.Filters
 {
@@ -21,7 +22,7 @@ namespace MixedDreams.WebAPI.Filters
                     .SelectMany(x => x.Value.Errors)
                     .Select(e => e.ErrorMessage);
                 if (errors.Count() == 0) return;
-                throw new BadRequestException("Json parsing is failed.", errors);
+                throw new BadRequestException("Json parsing is failed.", ErrorCodes.ParsingError, errors);
             }
         }
         public void OnActionExecuted(ActionExecutedContext context) { }

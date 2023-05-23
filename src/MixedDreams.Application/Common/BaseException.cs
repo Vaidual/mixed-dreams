@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using MixedDreams.Application.Enums;
 using MixedDreams.Application.Features.Errors;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,18 @@ namespace MixedDreams.Application.Common
         public int StatusCode { get; private set; }
         public string Title { get; private set; }
         public abstract LogLevel LogLevel { get; init; }
+        public ErrorCodes ErrorCode { get; init; }
 
-        protected BaseException(string title, int statusCode) : base(title) 
+        protected BaseException(string title, int statusCode, ErrorCodes errorCode) : base(title) 
         { 
             Title = title;
             StatusCode = statusCode;
+            ErrorCode = errorCode;
         }
 
         public virtual string GetResponse()
         {
-            return JsonSerializer.Serialize(new ErrorResponse(StatusCode, Title));
+            return JsonSerializer.Serialize(new ErrorResponse(StatusCode, Title, ErrorCode));
         }
     }
 }
