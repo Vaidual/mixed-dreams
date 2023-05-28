@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Common;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Configurations;
+using MixedDreams.Application.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace MixedDreams.Infrastructure.Data
+namespace MixedDreams.Application.Data
 {
     internal class AppDbContext : IdentityDbContext<ApplicationUser>
     {

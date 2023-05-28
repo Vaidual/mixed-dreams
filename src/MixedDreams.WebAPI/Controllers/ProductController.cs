@@ -20,12 +20,13 @@ using MixedDreams.Application.Features.ProductFeatures.PutProduct;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 using Polly;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading;
 using ValidationResult = FluentValidation.Results.ValidationResult;
+using MixedDreams.Application.Features.ProductFeatures.GetCompanyProducts;
 
 namespace MixedDreams.WebAPI.Controllers
 {
@@ -101,10 +102,19 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetProductWithDetails([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            Product product = await _unitOfWork.ProductRepository.Get(id, cancellationToken)
+            GetProductWithDetailsResponse product = await _unitOfWork.ProductRepository.GetProductInformation(id, cancellationToken)
                 ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
 
-            return Ok(_mapper.Map<GetProductWithDetailsResponse>(product));
+            return Ok(product);
+        }
+
+        [HttpGet("~/api/company/products")]
+        [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
+        public async Task<IActionResult> GetProductsForCompany(CancellationToken cancellationToken)
+        {
+            var products = await _unitOfWork.ProductRepository.GetAll(cancellationToken);
+
+            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<CompanyProductDto>>(products));
         }
 
         [HttpPost]
@@ -141,6 +151,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
+            throw new Exception();
             Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
             await _productService.DeleteProductAsync(product);
 

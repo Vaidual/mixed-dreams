@@ -9,7 +9,7 @@ using MixedDreams.Application.Features.ProductFeatures.PutProduct;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Repositories;
+using MixedDreams.Application.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,7 +18,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     internal class ProductService : IProductService
     {

@@ -13,7 +13,7 @@ using MixedDreams.Application.Features.IngredientFeatures.PostIngredient;
 using MixedDreams.Application.Features.IngredientFeatures.PutIngredient;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 
 namespace MixedDreams.WebAPI.Controllers
 {

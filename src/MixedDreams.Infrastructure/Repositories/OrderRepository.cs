@@ -2,14 +2,14 @@
 using MixedDreams.Application.Features.OrderFeatures.GetOrdersStatistic;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal class OrderRepository : BaseRepository<Order>, IOrderRepository
     {
@@ -55,7 +55,7 @@ namespace MixedDreams.Infrastructure.Repositories
                 return new GetOrdersStatisticResponse
                 {
                     DateTime = i.IntervalStart,
-                    Income = enters.Sum(x => x.Income),
+                    Income = enters.Sum(x => x.Income) ?? 0,
                     OrdersAmount = enters.Count()
                 };
             }).ToList();

@@ -3,15 +3,16 @@ using MixedDreams.Application.Features.ProductFeatures.GetProduct;
 using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal class ProductRepository : BaseRepository<Product>, IProductRepository
     {
@@ -22,6 +23,36 @@ namespace MixedDreams.Infrastructure.Repositories
             return Table.Include(x => x.Image)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
+        public Task<GetProductWithDetailsResponse?> GetProductInformation(Guid id, CancellationToken cancellationToken = default)
+        {
+            var result = Table
+                .Include(x => x.ProductIngredients).ThenInclude(x => x.Product)
+                .Include(x => x.Image)
+                .Select(x => new GetProductWithDetailsResponse
+                {
+                    Id = x.Id,
+                    AmountInStock = x.AmountInStock,
+                    Description = x.Description,
+                    Name = x.Name,
+                    Price = x.Price,
+                    PrimaryImage = x.Image.Path,
+                    RecommendedHumidity = x.RecommendedHumidity,
+                    RecommendedTemperature = x.RecommendedTemperature,
+                    Visibility = x.Visibility,
+                    Ingredients = x.ProductIngredients.Select(pi => new GetProductIngredientsDto
+                    {
+                        Id = pi.IngredientId,
+                        Amount = pi.Amount,
+                        HasAmount = pi.HasAmount,
+                        Name = pi.Ingredient.Name,
+                        Unit = pi.Unit,
+                    })
+                })
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            return result;
+        }
+
 
         public override async Task<IReadOnlyList<Product>> GetAll(CancellationToken cancellationToken)
         {

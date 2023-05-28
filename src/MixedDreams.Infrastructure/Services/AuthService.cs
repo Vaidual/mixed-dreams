@@ -5,8 +5,8 @@ using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Helpers;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Helpers;
+using MixedDreams.Application.Constants;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,12 +15,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using UnitsNet;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using MixedDreams.Application.Features.AuthFeatures;
 using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
 using MixedDreams.Application.Features.AuthFeatures.Login;
 using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
-using MixedDreams.Infrastructure.Options;
+using MixedDreams.Application.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 using System.Data;
@@ -29,7 +29,7 @@ using MixedDreams.Application.Constants;
 using MixedDreams.Application.Exceptions.BadRequest;
 using MixedDreams.Application.Enums;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     internal class AuthService : IAuthService
     {
@@ -78,11 +78,13 @@ namespace MixedDreams.Infrastructure.Services
 
             var token = await CreateTokenAsync(user, model.RememberMe, claims);
 
-            return new AuthResponse
+            AuthResponse result = new()
             {
                 Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
                 User = _mapper.Map<UserDto>(user)
             };
+            result.User.Roles = await _userManager.GetRolesAsync(user);
+            return result;
         }
 
         public async Task LogoutUserAsync()
@@ -115,11 +117,13 @@ namespace MixedDreams.Infrastructure.Services
             }
             var token = await CreateTokenAsync(user, false);
 
-            return new AuthResponse
+            AuthResponse result = new ()
             {
                 Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
                 User = _mapper.Map<UserDto>(user)
             };
+            result.User.Roles = await _userManager.GetRolesAsync(user);
+            return result;
         }
 
         public async Task<AuthResponse> RegisterCompanyAsync(CompanyRegisterRequest model)
@@ -152,11 +156,13 @@ namespace MixedDreams.Infrastructure.Services
             };
             var token = await CreateTokenAsync(user, false, claims);
 
-            return new AuthResponse
+            AuthResponse result = new()
             {
                 Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
                 User = _mapper.Map<UserDto>(user)
             };
+            result.User.Roles = await _userManager.GetRolesAsync(user);
+            return result;
         }
 
         private async Task<ApplicationUser> GetUserToCreateAsync(RegisterDto registerModel)

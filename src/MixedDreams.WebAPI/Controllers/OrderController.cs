@@ -17,7 +17,7 @@ using MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 using System.Security.Claims;
 
 namespace MixedDreams.WebAPI.Controllers

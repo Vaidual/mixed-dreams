@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MixedDreams.Application.ServicesInterfaces;
-using MixedDreams.Infrastructure.Data;
-using MixedDreams.Infrastructure.Options;
+using MixedDreams.Application.Data;
+using MixedDreams.Application.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     internal class BackupService : IBackupService
     {

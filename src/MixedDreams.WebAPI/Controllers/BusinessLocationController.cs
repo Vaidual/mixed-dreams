@@ -14,7 +14,7 @@ using MixedDreams.Application.Features.BusinessLocationFeatures.PutBusinessLocat
 using MixedDreams.Application.Features.Errors;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 using System.Security.Claims;
 
 namespace MixedDreams.WebAPI.Controllers

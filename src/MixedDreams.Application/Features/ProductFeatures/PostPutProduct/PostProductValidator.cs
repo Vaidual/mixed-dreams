@@ -14,18 +14,18 @@ namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
     {
         public PostProductValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(x => x.AmountInStock).NotNull()
+            RuleFor(x => x.AmountInStock)
                 .GreaterThanOrEqualTo(0);
-            RuleFor(x => x.Description).NotNull()
+            RuleFor(x => x.Description)
                 .MaximumLength(4000);
             RuleFor(x => x.Name).NotEmpty()
                 .MaximumLength(50);
-            RuleFor(x => x.Price).NotNull()
+            RuleFor(x => x.Price)
                 .GreaterThanOrEqualTo(0);
             //RuleFor(x => x.PrimaryImage).;
-            RuleFor(x => x.RecommendedHumidity).NotNull()
+            RuleFor(x => x.RecommendedHumidity)
                 .InclusiveBetween(0, 100);
-            RuleFor(x => x.RecommendedTemperature).NotNull()
+            RuleFor(x => x.RecommendedTemperature)
                 .InclusiveBetween(-89.2f, 500);
             RuleFor(x => x.Visibility).NotEmpty()
                 .IsInEnum();
@@ -37,10 +37,12 @@ namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
             {
                 RuleFor(x => x.PrimaryImage).Image();
             });
-
-            RuleFor(x => x.ProductCategoryId).Cascade(CascadeMode.Stop)
-                .NotNull()
+            When(x => x.ProductCategoryId != null, () =>
+            {
+                RuleFor(x => x.ProductCategoryId).Cascade(CascadeMode.Stop)
                 .MustAsync((x, token) => unitOfWork.ProductCategoryRepository.EntityExistsAsync((Guid)x!)).WithMessage("Product category with id '{PropertyValue}' doen't exist.");
+            });
+            
         }
     }
 }

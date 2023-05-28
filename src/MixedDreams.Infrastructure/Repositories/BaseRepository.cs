@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Query;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Common;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {

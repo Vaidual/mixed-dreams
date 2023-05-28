@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Application.Features.ProductFeatures.ProductIngredient
 {
-    public class ProductIngredientDtoValidator : AbstractValidator<ProductIngredientDto>
+    public class ProductIngredientDtoValidator : AbstractValidator<PostProductIngredientDto>
     {
         public ProductIngredientDtoValidator()
         {

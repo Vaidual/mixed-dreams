@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails
 {
-    public class GetProductWithDetailsResponse
+    public class ProductDetailsDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

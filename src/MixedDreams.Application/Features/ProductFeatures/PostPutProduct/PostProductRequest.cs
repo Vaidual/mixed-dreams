@@ -18,25 +18,20 @@ namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
 
         public string Description { get; init; } = string.Empty;
 
-        [BindRequired]
-        public decimal Price { get; init; }
+        public decimal? Price { get; init; }
 
-        [BindRequired]
-        public int AmountInStock { get; init; }
+        public int? AmountInStock { get; init; }
 
         public Visibility Visibility { get; init; } = Visibility.Unavaiable;
 
         public IFormFile PrimaryImage { get; init; }
 
-        [BindRequired]
-        public float RecommendedTemperature { get; init; }
+        public float? RecommendedTemperature { get; init; }
 
-        [BindRequired]
-        public float RecommendedHumidity { get; init; }
+        public float? RecommendedHumidity { get; init; }
 
-        public IEnumerable<ProductIngredientDto>? Ingredients { get; init; }
+        public IEnumerable<PostProductIngredientDto> Ingredients { get; init; }
 
-        [BindRequired]
-        public Guid ProductCategoryId { get; init; }
+        public Guid? ProductCategoryId { get; init; }
     }
 }

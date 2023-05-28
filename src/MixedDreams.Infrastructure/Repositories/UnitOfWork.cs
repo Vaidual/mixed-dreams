@@ -1,12 +1,12 @@
 ﻿using MixedDreams.Application.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal class UnitOfWork : IUnitOfWork
     {

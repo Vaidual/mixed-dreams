@@ -7,7 +7,7 @@ using Microsoft.Identity.Client.Extensions.Msal;
 using MixedDreams.Application.Exceptions;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Options;
+using MixedDreams.Application.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     internal class BackblazeService : IBackblazeService
     {

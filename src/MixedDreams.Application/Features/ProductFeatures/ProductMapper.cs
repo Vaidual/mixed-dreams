@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MixedDreams.Application.Features.ProductFeatures.GetCategories;
+using MixedDreams.Application.Features.ProductFeatures.GetCompanyProducts;
 using MixedDreams.Application.Features.ProductFeatures.GetProduct;
 using MixedDreams.Application.Features.ProductFeatures.GetProductNames;
 using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
@@ -28,6 +29,7 @@ namespace MixedDreams.Application.Features.ProductFeatures
             CreateMap<PutProductRequest, Product>();
             CreateMap<ProductCategory, GetCategoryResponse>();
             CreateMap<Product, GetProductNamesResponse>();
+            CreateMap<Product, CompanyProductDto>();
         }
     }
 }

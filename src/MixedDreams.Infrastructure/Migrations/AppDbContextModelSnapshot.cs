@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 
 #nullable disable
 
-namespace MixedDreams.Infrastructure.Migrations
+namespace MixedDreams.Application.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -458,31 +458,30 @@ namespace MixedDreams.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AmountInStock")
+                    b.Property<int?>("AmountInStock")
                         .HasColumnType("int");
 
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(4000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProductCategoryId")
+                    b.Property<Guid?>("ProductCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("RecommendedHumidity")
+                    b.Property<float?>("RecommendedHumidity")
                         .HasColumnType("real");
 
-                    b.Property<float>("RecommendedTemperature")
+                    b.Property<float?>("RecommendedTemperature")
                         .HasColumnType("real");
 
                     b.Property<Guid>("TenantId")
@@ -592,7 +591,7 @@ namespace MixedDreams.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
@@ -871,9 +870,7 @@ namespace MixedDreams.Infrastructure.Migrations
 
                     b.HasOne("MixedDreams.Domain.Entities.ProductCategory", "ProductCategory")
                         .WithMany("Products")
-                        .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductCategoryId");
 
                     b.Navigation("Company");
 

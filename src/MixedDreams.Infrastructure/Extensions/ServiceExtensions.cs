@@ -7,11 +7,11 @@ using MixedDreams.Application.Exceptions.InternalServerError;
 using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Data;
-using MixedDreams.Infrastructure.IdentitySetup;
-using MixedDreams.Infrastructure.Options;
-using MixedDreams.Infrastructure.Repositories;
-using MixedDreams.Infrastructure.Services;
+using MixedDreams.Application.Data;
+using MixedDreams.Application.IdentitySetup;
+using MixedDreams.Application.Options;
+using MixedDreams.Application.Repositories;
+using MixedDreams.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Extensions
+namespace MixedDreams.Application.Extensions
 {
     public static class ServiceExtensions
     {

@@ -1,4 +1,4 @@
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ using Serilog.Formatting.Json;
 using Microsoft.AspNetCore.Mvc;
 using MixedDreams.WebAPI.Filters;
 using MixedDreams.WebAPI.Extensions;
-using MixedDreams.Infrastructure.Extensions;
+using MixedDreams.Application.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Reflection;
@@ -28,7 +28,7 @@ using MixedDreams.Application.Exceptions;
 using System.Security.Claims;
 using Microsoft.Extensions.Hosting;
 using MixedDreams.Application.ServicesInterfaces;
-using MixedDreams.Infrastructure.Services;
+using MixedDreams.Application.Services;
 using MixedDreams.Application.Exceptions.InternalServerError;
 using MixedDreams.WebAPI.Middlewares;
 

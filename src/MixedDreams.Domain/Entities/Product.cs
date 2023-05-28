@@ -12,18 +12,18 @@ namespace MixedDreams.Domain.Entities
     public class Product : BaseEntity, IMustHaveTenant
     {
         public string Name { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public decimal Price { get; set; }
-        public int AmountInStock { get; set; }
+        public string? Description { get; set; } = string.Empty;
+        public decimal? Price { get; set; }
+        public int? AmountInStock { get; set; }
         public Visibility Visibility { get; set; } = Visibility.Unavaiable;
 
 
         public BackblazeFile? Image { get; set; }
 
-        public float RecommendedTemperature { get; set; }
-        public float RecommendedHumidity { get; set; }
+        public float? RecommendedTemperature { get; set; }
+        public float? RecommendedHumidity { get; set; }
 
-        public Guid ProductCategoryId { get; set; }
+        public Guid? ProductCategoryId { get; set; }
         public ProductCategory ProductCategory { get; set;}
 
         public Guid CompanyId { get; set; }
