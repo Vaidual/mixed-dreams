@@ -24,7 +24,9 @@ namespace MixedDreams.Application.Features.ProductFeatures
                 .MapFrom(src => src.Image != null ? src.Image.Path : null));
             CreateMap<Product, GetProductWithDetailsResponse>()
                 .ForMember(dest => dest.PrimaryImage, opt => opt
-                .MapFrom(src => src.Image != null ? src.Image.Path : null));
+                .MapFrom(src => src.Image != null ? src.Image.Path : null))
+                .ForMember(dest => dest.ProductCategory, opt => opt
+                .MapFrom(src => src.ProductCategoryId));
             CreateMap<PostProductRequest, Product>();
             CreateMap<PutProductRequest, Product>();
             CreateMap<ProductCategory, GetCategoryResponse>();

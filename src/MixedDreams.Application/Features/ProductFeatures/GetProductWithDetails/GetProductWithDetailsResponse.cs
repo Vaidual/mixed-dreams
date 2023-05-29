@@ -19,5 +19,6 @@ namespace MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails
         public float? RecommendedTemperature { get; set; }
         public float? RecommendedHumidity { get; set; }
         public IEnumerable<GetProductIngredientsDto> Ingredients { get; set; }
+        public Guid? ProductCategory { get; set; }
     }
 }

@@ -46,7 +46,8 @@ namespace MixedDreams.Application.Repositories
                         HasAmount = pi.HasAmount,
                         Name = pi.Ingredient.Name,
                         Unit = pi.Unit,
-                    })
+                    }),
+                    ProductCategory = x.ProductCategoryId
                 })
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 

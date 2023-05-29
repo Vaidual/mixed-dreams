@@ -132,6 +132,19 @@ namespace MixedDreams.WebAPI.Controllers
             return CreatedAtAction(nameof(GetProductWithDetails), new { id = product.Id}, _mapper.Map<GetProductWithDetailsResponse>(product));
         }
 
+        [HttpPost("{id}/duplicate")]
+        [Authorize(Roles = Roles.Company)]
+        public async Task<IActionResult> DuplicateProduct([FromRoute] Guid id)
+        {
+            Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
+            product.Name += "_copy";
+            _unitOfWork.ProductRepository.Create(product);
+            await _unitOfWork.SaveAsync();
+
+            return CreatedAtAction(nameof(GetProductWithDetails), new { id = product.Id }, _mapper.Map<GetProductWithDetailsResponse>(product));
+        }
+
+
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> PutProduct([FromRoute] Guid id, [FromForm] PutProductRequest model)
@@ -151,7 +164,6 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
-            throw new Exception();
             Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
             await _productService.DeleteProductAsync(product);
 

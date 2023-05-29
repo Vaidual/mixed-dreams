@@ -17,11 +17,11 @@ namespace MixedDreams.Application.Features.ProductFeatures.PutProduct
         {
             RuleFor(x => x.AmountInStock)
                 .GreaterThanOrEqualTo(0);
-            RuleFor(x => x.Description).NotNull()
+            RuleFor(x => x.Description)
                 .MaximumLength(4000);
             RuleFor(x => x.Name).NotEmpty()
                 .MaximumLength(50);
-            RuleFor(x => x.Price).NotNull()
+            RuleFor(x => x.Price)
                 .GreaterThanOrEqualTo(0);
             When(x => x.PrimaryImage != null, () =>
             {
@@ -34,8 +34,6 @@ namespace MixedDreams.Application.Features.ProductFeatures.PutProduct
             RuleFor(x => x.Visibility).NotEmpty()
                 .IsInEnum();
 
-            RuleFor(x => x.Visibility).NotEmpty()
-                .IsInEnum();
             When(x => x.Ingredients != null, () =>
             {
                 RuleForEach(x => x.Ingredients).SetValidator(new ProductIngredientDtoValidator());
