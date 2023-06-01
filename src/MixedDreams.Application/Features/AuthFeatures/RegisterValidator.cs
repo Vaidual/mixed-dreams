@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using MixedDreams.Application.Extensions;
+using MixedDreams.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.AuthFeatures
+namespace MixedDreams.Infrastructure.Features.AuthFeatures
 {
     public class RegisterValidator : AbstractValidator<RegisterDto>
     {

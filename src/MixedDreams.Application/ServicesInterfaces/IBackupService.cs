@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.ServicesInterfaces
+namespace MixedDreams.Infrastructure.Hubs.Clients
 {
     public interface IBackupService
     {

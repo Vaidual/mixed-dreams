@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Helpers
+namespace MixedDreams.Infrastructure.Helpers
 {
     internal class JwtHelper
     {

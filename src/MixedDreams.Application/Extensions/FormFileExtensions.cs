@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace MixedDreams.Application.Extensions
+namespace MixedDreams.Infrastructure.Extensions
 {
     public static class FormFileExtensions
     {

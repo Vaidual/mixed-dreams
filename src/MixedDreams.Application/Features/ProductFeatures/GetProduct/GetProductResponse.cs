@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.ProductFeatures.GetProduct
+namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct
 {
     public sealed class GetProductResponse
     {

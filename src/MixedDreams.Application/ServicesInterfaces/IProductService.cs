@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
-using MixedDreams.Application.Features.ProductFeatures.PutProduct;
+using MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Infrastructure.Features.ProductFeatures.PutProduct;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.ServicesInterfaces
+namespace MixedDreams.Infrastructure.Hubs.Clients
 {
     public interface IProductService
     {

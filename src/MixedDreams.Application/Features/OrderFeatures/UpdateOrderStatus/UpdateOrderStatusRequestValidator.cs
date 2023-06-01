@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus
+namespace MixedDreams.Infrastructure.Features.OrderFeatures.UpdateOrderStatus
 {
     public class UpdateOrderStatusRequestValidator : AbstractValidator<UpdateOrderStatusRequest>
     {

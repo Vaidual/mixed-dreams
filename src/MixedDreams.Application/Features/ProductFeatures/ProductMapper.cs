@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using MixedDreams.Application.Features.ProductFeatures.GetCategories;
-using MixedDreams.Application.Features.ProductFeatures.GetCompanyProducts;
-using MixedDreams.Application.Features.ProductFeatures.GetProduct;
-using MixedDreams.Application.Features.ProductFeatures.GetProductNames;
-using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
-using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
-using MixedDreams.Application.Features.ProductFeatures.PutProduct;
+using MixedDreams.Infrastructure.Features.ProductFeatures.GetCategories;
+using MixedDreams.Infrastructure.Features.ProductFeatures.GetCompanyProducts;
+using MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct;
+using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductNames;
+using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDetails;
+using MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Infrastructure.Features.ProductFeatures.PutProduct;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.ProductFeatures
+namespace MixedDreams.Infrastructure.Features.ProductFeatures
 {
     public class ProductMapper : Profile
     {

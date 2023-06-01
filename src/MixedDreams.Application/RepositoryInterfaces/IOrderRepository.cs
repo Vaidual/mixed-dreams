@@ -1,4 +1,4 @@
-﻿using MixedDreams.Application.Features.OrderFeatures.GetOrdersStatistic;
+﻿using MixedDreams.Infrastructure.Features.OrderFeatures.GetOrdersStatistic;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.RepositoryInterfaces
+namespace MixedDreams.Infrastructure.RepositoryInterfaces
 {
     public interface IOrderRepository : IBaseRepository<Order>
     {

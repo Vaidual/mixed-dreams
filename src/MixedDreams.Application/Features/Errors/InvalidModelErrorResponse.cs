@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MixedDreams.Application.Enums;
+using MixedDreams.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.Errors
+namespace MixedDreams.Infrastructure.Features.Errors
 {
     public class InvalidModelErrorResponse : ErrorResponse
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.OrderFeatures.GetOrdersStatistic
+namespace MixedDreams.Infrastructure.Features.OrderFeatures.GetOrdersStatistic
 {
     public class GetOrdersStatisticResponse
     {

@@ -1,8 +1,8 @@
 ﻿using FluentValidation.Results;
-using MixedDreams.Application.Exceptions;
+using MixedDreams.Infrastructure.Exceptions;
 using System.ComponentModel.DataAnnotations;
 
-namespace MixedDreams.Application.Common
+namespace MixedDreams.Infrastructure.Common
 {
     public class ErrorsMaker
     {

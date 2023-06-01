@@ -1,11 +1,11 @@
-﻿using MixedDreams.Application.Common;
+﻿using MixedDreams.Infrastructure.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Exceptions.InternalServerError
+namespace MixedDreams.Infrastructure.Exceptions.InternalServerError
 {
     public class MissingConfigurationOptionsException : InternalServerErrorException
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MixedDreams.Application.ServicesInterfaces;
+using MixedDreams.Infrastructure.Hubs.Clients;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace MixedDreams.Application.Services
+namespace MixedDreams.Infrastructure.Services
 {
     public class ReplicationService : BackgroundService
     {

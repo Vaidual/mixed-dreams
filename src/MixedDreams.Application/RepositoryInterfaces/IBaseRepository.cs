@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.RepositoryInterfaces
+namespace MixedDreams.Infrastructure.RepositoryInterfaces
 {
     public interface IBaseRepository<T> where T : class
     {

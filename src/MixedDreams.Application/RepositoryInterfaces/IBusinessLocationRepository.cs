@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.RepositoryInterfaces
+namespace MixedDreams.Infrastructure.RepositoryInterfaces
 {
     public interface IBusinessLocationRepository : IBaseRepository<BusinessLocation>
     {

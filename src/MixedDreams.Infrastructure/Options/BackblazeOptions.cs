@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Options
+namespace MixedDreams.Infrastructure.Options
 {
     internal class BackblazeOptions
     {

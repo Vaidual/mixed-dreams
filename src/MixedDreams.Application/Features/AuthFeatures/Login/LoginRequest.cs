@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MixedDreams.Application.Features.AuthFeatures.Login
+namespace MixedDreams.Infrastructure.Features.AuthFeatures.Login
 {
     public sealed record LoginRequest(
         string Email, 

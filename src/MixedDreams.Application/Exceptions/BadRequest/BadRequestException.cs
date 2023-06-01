@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
-using MixedDreams.Application.Common;
-using MixedDreams.Application.Enums;
-using MixedDreams.Application.Features.Errors;
+using MixedDreams.Infrastructure.Common;
+using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Infrastructure.Features.Errors;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
@@ -14,9 +14,9 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace MixedDreams.Application.Exceptions.BadRequest
+namespace MixedDreams.Infrastructure.Exceptions.BadRequest
 {
-    public class BadRequestException : BaseException
+    public class BadRequestException : BaseHttpException
     {
         public IEnumerable<string> Errors { get; set; }
 

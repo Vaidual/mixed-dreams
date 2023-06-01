@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using MixedDreams.Application.Common;
-using MixedDreams.Application.Enums;
-using MixedDreams.Application.Features.Errors;
+using MixedDreams.Infrastructure.Common;
+using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Infrastructure.Features.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +11,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Exceptions
+namespace MixedDreams.Infrastructure.Exceptions
 {
-    public class ModelValidationException : BaseException
+    public class ModelValidationException : BaseHttpException
     {
         [JsonPropertyName("errors")]
         public IDictionary<string, IEnumerable<string>> Errors { get; set; }

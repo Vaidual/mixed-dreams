@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.OrderFeatures.OrderProduct
+namespace MixedDreams.Infrastructure.Features.OrderFeatures.OrderProduct
 {
     public class PostOrderProductDtoValidator : AbstractValidator<PostOrderProductDto>
     {

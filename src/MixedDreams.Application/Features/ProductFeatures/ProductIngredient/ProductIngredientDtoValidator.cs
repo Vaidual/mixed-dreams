@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.ProductFeatures.ProductIngredient
+namespace MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient
 {
     public class ProductIngredientDtoValidator : AbstractValidator<PostProductIngredientDto>
     {

@@ -1,4 +1,4 @@
-using MixedDreams.Application.Data;
+using MixedDreams.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,23 +14,25 @@ using Serilog.Formatting.Json;
 using Microsoft.AspNetCore.Mvc;
 using MixedDreams.WebAPI.Filters;
 using MixedDreams.WebAPI.Extensions;
-using MixedDreams.Application.Extensions;
+using MixedDreams.Infrastructure.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Reflection;
 using Microsoft.Extensions.Options;
-using MixedDreams.Application.Features.AuthFeatures.Login;
-using MixedDreams.Application.Extensions;
+using MixedDreams.Infrastructure.Features.AuthFeatures.Login;
+using MixedDreams.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using MixedDreams.WebAPI;
 using Bytewizer.Backblaze.Client;
-using MixedDreams.Application.Exceptions;
+using MixedDreams.Infrastructure.Exceptions;
 using System.Security.Claims;
 using Microsoft.Extensions.Hosting;
-using MixedDreams.Application.ServicesInterfaces;
-using MixedDreams.Application.Services;
-using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Infrastructure.Services;
+using MixedDreams.Infrastructure.Exceptions.InternalServerError;
 using MixedDreams.WebAPI.Middlewares;
+using System.Net;
+using MixedDreams.Infrastructure.Hubs;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -56,6 +58,8 @@ try
     builder.Services.AddScoped<TenantMiddleware>();
 
     builder.Services.AddAndConfigureCors(builder.Configuration);
+
+    builder.Services.AddSignalR();
 
     builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
     builder.Services.AddControllers(opt =>
@@ -97,6 +101,7 @@ try
     app.UseExceptionMiddleware();
 
     await app.Services.GetRequiredService<IStorageClient>().ConnectAsync();
+    await app.Services.GetRequiredService<IDeviceService>().ConnectAsync();
 
     app.UseHttpsRedirection();
 
@@ -108,12 +113,14 @@ try
     app.UseMiddleware<TenantMiddleware>();
 
     app.MapControllers();
+    app.MapHub<NotificationHub>("/notificationHub");
 
     app.Run();
 
 }
 catch (Exception ex)
 {
+    Console.WriteLine(ex.Message);
     Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally

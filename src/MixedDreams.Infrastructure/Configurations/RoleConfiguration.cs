@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MixedDreams.Application.Constants;
+using MixedDreams.Infrastructure.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Configurations
+namespace MixedDreams.Infrastructure.Configurations
 {
     internal class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
     {

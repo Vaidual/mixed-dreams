@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.AuthFeatures.RegisterCustomer
+namespace MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCustomer
 {
     public class CustomerRegisterValidator : AbstractValidator<CustomerRegisterRequest>
     {

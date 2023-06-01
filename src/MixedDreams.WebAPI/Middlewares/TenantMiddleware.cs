@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MixedDreams.Application.Exceptions.InternalServerError;
-using MixedDreams.Application.ServicesInterfaces;
-using MixedDreams.Application.Constants;
+using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Infrastructure.Constants;
 using System.Security.Claims;
 
 namespace MixedDreams.WebAPI.Middlewares

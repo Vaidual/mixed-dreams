@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MixedDreams.Application.Data;
+using MixedDreams.Infrastructure.Data;
 
 #nullable disable
 
-namespace MixedDreams.Application.Migrations
+namespace MixedDreams.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20230509183036_ExplicitTypesConfigiguration")]

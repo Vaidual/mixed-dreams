@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MixedDreams.Application.Common;
-using MixedDreams.Application.Exceptions;
-using MixedDreams.Application.Features.Errors;
+using MixedDreams.Infrastructure.Common;
+using MixedDreams.Infrastructure.Exceptions;
+using MixedDreams.Infrastructure.Features.Errors;
 using Serilog.Events;
 
 namespace MixedDreams.WebAPI.Middlewares
@@ -32,7 +32,7 @@ namespace MixedDreams.WebAPI.Middlewares
             //var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>()!;
             context.Response.ContentType = "application/json";
             string response;
-            if (exception is BaseException baseException)
+            if (exception is BaseHttpException baseException)
             {
                 context.Response.StatusCode = baseException.StatusCode;
                 response = baseException.GetResponse();

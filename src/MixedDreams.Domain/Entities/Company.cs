@@ -19,6 +19,7 @@ namespace MixedDreams.Domain.Entities
         public string ApplicationUserId { get; set; }
 
         public List<Product> Products { get; set; }
+        public List<Device> Devices { get; set; }
         public List<BusinessLocation> BusinessLocations { get; set; }
     }
 }

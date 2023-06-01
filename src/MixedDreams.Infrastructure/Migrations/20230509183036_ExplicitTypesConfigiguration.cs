@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MixedDreams.Application.Migrations
+namespace MixedDreams.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class ExplicitTypesConfigiguration : Migration

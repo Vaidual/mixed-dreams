@@ -16,8 +16,10 @@ namespace MixedDreams.Domain.Entities
         public Guid CompanyId { get; set; }
         public Company Company { get; set; }
 
-        public List<Order> Orders { get; set; }
+        public Device Device { get; set; }
+        public Guid? DeviceId { get; set; }
 
+        public List<Order> Orders { get; set; }
         public Guid TenantId { get; set; }
     }
 }

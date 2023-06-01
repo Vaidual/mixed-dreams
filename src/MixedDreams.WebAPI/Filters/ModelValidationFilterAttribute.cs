@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Application.Features.Errors;
-using MixedDreams.Application.Exceptions;
+using MixedDreams.Infrastructure.Features.Errors;
+using MixedDreams.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using MixedDreams.Domain.Common;
-using MixedDreams.Application.Data;
+using MixedDreams.Infrastructure.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using MixedDreams.Application.Exceptions.BadRequest;
-using MixedDreams.Application.Enums;
+using MixedDreams.Infrastructure.Exceptions.BadRequest;
+using MixedDreams.Infrastructure.Enums;
 
 namespace MixedDreams.WebAPI.Filters
 {

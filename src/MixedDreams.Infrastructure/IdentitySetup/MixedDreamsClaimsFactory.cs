@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using MixedDreams.Domain.Entities;
 using System.Security.Claims;
 
-namespace MixedDreams.Application.IdentitySetup
+namespace MixedDreams.Infrastructure.IdentitySetup
 {
     internal class MixedDreamsClaimsFactory : UserClaimsPrincipalFactory<ApplicationUser>
     {

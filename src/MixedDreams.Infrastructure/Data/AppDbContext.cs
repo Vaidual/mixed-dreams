@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MixedDreams.Application.ServicesInterfaces;
+using MixedDreams.Infrastructure.Hubs.Clients;
 using MixedDreams.Domain.Common;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Application.Configurations;
+using MixedDreams.Infrastructure.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace MixedDreams.Application.Data
+namespace MixedDreams.Infrastructure.Data
 {
     internal class AppDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -50,6 +50,7 @@ namespace MixedDreams.Application.Data
         public DbSet<ProductHistory> ProductHistory { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<BackblazeFile> BackblazeFiles { get; set; }
+        public DbSet<Device> Devices { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

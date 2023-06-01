@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.AuthFeatures
+namespace MixedDreams.Infrastructure.Features.AuthFeatures
 {
     public sealed record TokensDto
     {

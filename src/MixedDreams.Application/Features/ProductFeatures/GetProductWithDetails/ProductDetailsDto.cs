@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails
+namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDetails
 {
     public class ProductDetailsDto
     {

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MixedDreams.Application.Data;
+using MixedDreams.Infrastructure.Data;
 
 #nullable disable
 
-namespace MixedDreams.Application.Migrations
+namespace MixedDreams.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -281,6 +281,9 @@ namespace MixedDreams.Application.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DeviceId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
@@ -291,6 +294,10 @@ namespace MixedDreams.Application.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("DeviceId")
+                        .IsUnique()
+                        .HasFilter("[DeviceId] IS NOT NULL");
 
                     b.HasIndex("Name");
 
@@ -362,6 +369,35 @@ namespace MixedDreams.Application.Migrations
                         .IsUnique();
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("MixedDreams.Domain.Entities.Device", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("DateDeleted")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("Identifier")
+                        .IsUnique();
+
+                    b.ToTable("Devices");
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Ingredient", b =>
@@ -711,6 +747,10 @@ namespace MixedDreams.Application.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MixedDreams.Domain.Entities.Device", "Device")
+                        .WithOne("BusinessLocation")
+                        .HasForeignKey("MixedDreams.Domain.Entities.BusinessLocation", "DeviceId");
+
                     b.OwnsOne("MixedDreams.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("BusinessLocationId")
@@ -751,6 +791,8 @@ namespace MixedDreams.Application.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+
+                    b.Navigation("Device");
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Company", b =>
@@ -812,6 +854,15 @@ namespace MixedDreams.Application.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("MixedDreams.Domain.Entities.Device", b =>
+                {
+                    b.HasOne("MixedDreams.Domain.Entities.Company", "Company")
+                        .WithMany("Devices")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Order", b =>
@@ -923,12 +974,20 @@ namespace MixedDreams.Application.Migrations
                 {
                     b.Navigation("BusinessLocations");
 
+                    b.Navigation("Devices");
+
                     b.Navigation("Products");
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("MixedDreams.Domain.Entities.Device", b =>
+                {
+                    b.Navigation("BusinessLocation")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Ingredient", b =>

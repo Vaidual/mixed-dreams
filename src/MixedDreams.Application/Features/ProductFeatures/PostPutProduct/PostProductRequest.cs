@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using MixedDreams.Application.Features.IngredientFeatures.GetIngredient;
-using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
+using MixedDreams.Infrastructure.Features.IngredientFeatures.GetIngredient;
+using MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient;
 using MixedDreams.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
+namespace MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct
 {
     public sealed record PostProductRequest
     {

@@ -1,4 +1,4 @@
-﻿using MixedDreams.Application.Features.Common.Address;
+﻿using MixedDreams.Infrastructure.Features.Common.Address;
 using MixedDreams.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.AuthFeatures.RegisterCompany
+namespace MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCompany
 {
     public sealed record CompanyRegisterRequest(
         string CompanyName, 

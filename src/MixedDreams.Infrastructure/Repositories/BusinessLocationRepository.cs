@@ -1,13 +1,13 @@
-﻿using MixedDreams.Application.RepositoryInterfaces;
+﻿using MixedDreams.Infrastructure.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Application.Data;
+using MixedDreams.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Repositories
+namespace MixedDreams.Infrastructure.Repositories
 {
     internal class BusinessLocationRepository : BaseRepository<BusinessLocation>, IBusinessLocationRepository
     {

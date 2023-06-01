@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client.Extensions.Msal;
-using MixedDreams.Application.Exceptions;
-using MixedDreams.Application.ServicesInterfaces;
+using MixedDreams.Infrastructure.Exceptions;
+using MixedDreams.Infrastructure.Hubs.Clients;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Application.Options;
+using MixedDreams.Infrastructure.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
-namespace MixedDreams.Application.Services
+namespace MixedDreams.Infrastructure.Services
 {
     internal class BackblazeService : IBackblazeService
     {

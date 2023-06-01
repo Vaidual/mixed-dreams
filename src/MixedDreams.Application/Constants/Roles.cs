@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Constants
+namespace MixedDreams.Infrastructure.Constants
 {
     public class Roles
     {

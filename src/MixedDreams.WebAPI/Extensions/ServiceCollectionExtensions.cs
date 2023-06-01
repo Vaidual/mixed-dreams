@@ -7,8 +7,8 @@ using System.Text;
 using MixedDreams.WebAPI.Middlewares;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
-using MixedDreams.Application.Exceptions;
-using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Infrastructure.Exceptions;
+using MixedDreams.Infrastructure.Exceptions.InternalServerError;
 
 namespace MixedDreams.WebAPI.Extensions
 {
@@ -32,7 +32,8 @@ namespace MixedDreams.WebAPI.Extensions
                     {
                         policy.WithOrigins("http://localhost:3000")
                             .AllowAnyHeader()
-                            .AllowAnyMethod();
+                            .AllowAnyMethod()
+                            .AllowCredentials(); ;
                     });
             });
             return services;

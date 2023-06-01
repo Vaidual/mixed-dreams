@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using MixedDreams.Application.Exceptions;
-using MixedDreams.Application.Exceptions.BadRequest;
-using MixedDreams.Application.Exceptions.InternalServerError;
-using MixedDreams.Application.Exceptions.NotFound;
-using MixedDreams.Application.Extensions;
-using MixedDreams.Application.Features.Errors;
-using MixedDreams.Application.Features.OrderFeatures.PostOrder;
-using MixedDreams.Application.RepositoryInterfaces;
-using MixedDreams.Application.ServicesInterfaces;
+using MixedDreams.Infrastructure.Exceptions;
+using MixedDreams.Infrastructure.Exceptions.BadRequest;
+using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+using MixedDreams.Infrastructure.Exceptions.NotFound;
+using MixedDreams.Infrastructure.Extensions;
+using MixedDreams.Infrastructure.Features.Errors;
+using MixedDreams.Infrastructure.Features.OrderFeatures.PostOrder;
+using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Infrastructure.Hubs.Clients;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Services
+namespace MixedDreams.Infrastructure.Services
 {
     internal class OrderService : IOrderService
     {
@@ -59,6 +59,11 @@ namespace MixedDreams.Application.Services
                 ?? throw new EntityNotFoundException(nameof(Order), orderToCreate.Id.ToString());
 
             return createdOrder;
+        }
+
+        public async Task NotifyAboutLowWater(Guid deviceId)
+        {
+
         }
     }
 }

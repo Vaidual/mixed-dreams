@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MixedDreams.Application.Migrations
+namespace MixedDreams.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class UniqueNamesRemoved : Migration

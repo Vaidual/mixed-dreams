@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Configurations
+namespace MixedDreams.Infrastructure.Configurations
 {
     internal class CustomerConfiguration : IEntityTypeConfiguration<Customer>
     {

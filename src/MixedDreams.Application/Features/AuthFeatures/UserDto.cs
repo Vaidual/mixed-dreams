@@ -1,11 +1,11 @@
-﻿using MixedDreams.Application.Constants;
+﻿using MixedDreams.Infrastructure.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.AuthFeatures
+namespace MixedDreams.Infrastructure.Features.AuthFeatures
 {
     public class UserDto
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
+using MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient;
 using MixedDreams.Domain.Enums;
 using Newtonsoft.Json;
 using System;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.ProductFeatures.PutProduct
+namespace MixedDreams.Infrastructure.Features.ProductFeatures.PutProduct
 {
     public sealed record PutProductRequest
     {

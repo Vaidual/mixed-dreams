@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Enums
+namespace MixedDreams.Infrastructure.Enums
 {
     public enum ErrorCodes
     {

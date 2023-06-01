@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.ProductFeatures.GetCompanyProducts
+namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetCompanyProducts
 {
     public sealed class CompanyProductDto
     {

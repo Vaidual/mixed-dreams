@@ -1,18 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MixedDreams.Application.Features.ProductFeatures.GetProduct;
-using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
-using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct;
+using MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient;
+using MixedDreams.Infrastructure.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Application.Data;
+using MixedDreams.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
+using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDetails;
+using MixedDreams.Infrastructure.DeviceModels;
+using MixedDreams.Infrastructure.Exceptions.NotFound;
+using MixedDreams.Infrastructure.Exceptions.InternalServerError;
 
-namespace MixedDreams.Application.Repositories
+namespace MixedDreams.Infrastructure.Repositories
 {
     internal class ProductRepository : BaseRepository<Product>, IProductRepository
     {
@@ -113,6 +116,16 @@ namespace MixedDreams.Application.Repositories
             }
             query = query.Skip(page * size).Take(size);
             return await query.Include(x => x.Image).AsNoTracking().ToListAsync(cancellationToken);
+        }
+
+        public async Task<ProductConstraints> GetProductConstraints(Guid id, CancellationToken cancellationToken = default)
+        {
+            Product product = await Table.FindAsync(new object?[] { id }, cancellationToken: cancellationToken) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
+            if (product.RecommendedTemperature == null || product.RecommendedHumidity == null)
+            {
+                throw new MissingProductConstraintsException(id.ToString());
+            }
+            return new ProductConstraints((float)product.RecommendedTemperature, (float)product.RecommendedHumidity!);
         }
     }
 }

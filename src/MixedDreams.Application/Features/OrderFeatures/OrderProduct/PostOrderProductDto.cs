@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Application.Features.OrderFeatures.OrderProduct
+namespace MixedDreams.Infrastructure.Features.OrderFeatures.OrderProduct
 {
     public sealed record PostOrderProductDto
     {
