@@ -2,6 +2,7 @@
  ![GitHub last commit](https://img.shields.io/github/last-commit/Vaidual/mixed-dreams)
  
 Back-end of POS like system with some storage additions.
+Front-end can be found [here](https://github.com/Vaidual/mixed-dreams-front)
 
 ## Features:
 - Rest API.
