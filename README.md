@@ -16,4 +16,4 @@ Back-end of POS like system with some storage additions.
 
 1. Clone git repo.
 2. In appsetting.json set you database connection string, eg. `Data Source=your_connection_string;...`
-3. Install for better experience [front-end](https://github.com/Vaidual/awme-react).
+3. Install for better experience [front-end](https://github.com/Vaidual/mixed-dreams-front).
