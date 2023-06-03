@@ -117,15 +117,5 @@ namespace MixedDreams.Infrastructure.Repositories
             query = query.Skip(page * size).Take(size);
             return await query.Include(x => x.Image).AsNoTracking().ToListAsync(cancellationToken);
         }
-
-        public async Task<ProductConstraints> GetProductConstraints(Guid id, CancellationToken cancellationToken = default)
-        {
-            Product product = await Table.FindAsync(new object?[] { id }, cancellationToken: cancellationToken) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
-            if (product.RecommendedTemperature == null || product.RecommendedHumidity == null)
-            {
-                throw new MissingProductConstraintsException(id.ToString());
-            }
-            return new ProductConstraints((float)product.RecommendedTemperature, (float)product.RecommendedHumidity!);
-        }
     }
 }

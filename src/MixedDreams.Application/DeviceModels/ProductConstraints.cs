@@ -11,6 +11,10 @@ namespace MixedDreams.Infrastructure.DeviceModels
 {
     public class ProductConstraints
     {
+        public ProductConstraints()
+        {
+        }
+
         public ProductConstraints(float recommendedTemperature, float recommendedHumidity)
         {
             RecommendedTemperature = recommendedTemperature;

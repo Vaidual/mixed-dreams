@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MixedDreams.Infrastructure.DeviceModels;
+using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+using MixedDreams.Infrastructure.Exceptions.NotFound;
+using MixedDreams.Domain.Enums;
 
 namespace MixedDreams.Infrastructure.Repositories
 {
@@ -72,7 +76,35 @@ namespace MixedDreams.Infrastructure.Repositories
             //    })
             //    .OrderBy(x => x.DateTime)
             //    .ToList();
-            }
+        }
+
+        public async Task<ProductConstraints> GetOrderProductConstraints(Guid orderId, CancellationToken cancellationToken = default)
+        {
+            var orderProducts = await Context.OrderProducts.Include(x => x.Product).Where(x => x.OrderId == orderId).ToListAsync(cancellationToken);
+            ProductConstraints productConstraints = new()
+            {
+                RecommendedHumidity = orderProducts.Min(x => x.Product.RecommendedHumidity ?? throw new MissingProductConstraintsException(x.Id.ToString())),
+                RecommendedTemperature = orderProducts.Min(x => x.Product.RecommendedTemperature ?? throw new MissingProductConstraintsException(x.Id.ToString())),
+            };
+            return productConstraints;
+        }
+
+        public Task SetOrderReceived(Guid orderId)
+        {
+            return UpdateOrderStatus(orderId, OrderStatus.Completed);
+        }
+
+        public Task SetOrderPrepared(Guid orderId)
+        {
+            return UpdateOrderStatus(orderId, OrderStatus.Ready);
+        }
+
+        private async Task UpdateOrderStatus(Guid orderId, OrderStatus newStatus)
+        {
+            Order order = await Get(orderId) ?? throw new EntityNotFoundException(nameof(Product), orderId.ToString());
+            order.OrderStatus = newStatus;
+            Update(order);
+        }
 
     }
 }

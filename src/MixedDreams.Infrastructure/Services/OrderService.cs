@@ -15,6 +15,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Bytewizer.Backblaze.Extensions;
+using MixedDreams.Infrastructure.Features.OrderFeatures.OrderProduct;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -42,16 +44,22 @@ namespace MixedDreams.Infrastructure.Services
             orderToCreate.CustomerId = customerId;
             orderToCreate.TenantId = Guid.Parse(_unitOfWork.CompanyRepository
                 .GettenantIdByBusinessLocationIdAsync(model.BusinessLocationId) 
-                ?? throw new EntityNotFoundException(
-                    nameof(BusinessLocation), 
-                    model.BusinessLocationId.ToString()));
-            var orderProducts = await Task.WhenAll(model.Products.Select(async x => new OrderProduct
+                ?? throw new EntityNotFoundException(nameof(BusinessLocation), model.BusinessLocationId.ToString()));
+
+            OrderProduct[] orderProducts = new OrderProduct[model.Products.Count];
+            for (int i = 0; i < model.Products.Count; i++)
             {
-                Amount = x.Amount,
-                Order = orderToCreate,
-                ProductId = x.ProductId,
-                ProductHistoryId = await _unitOfWork.ProductHistoryRepository.GetLastProductHistoryId(x.ProductId) ?? throw new ProductHasNoProductHistoryException(x.ProductId.ToString())
-            }));
+                PostOrderProductDto orderProduct = model.Products[i];
+                orderProducts[i] = new OrderProduct()
+                {
+                    Amount = orderProduct.Amount,
+                    Order = orderToCreate,
+                    ProductId = orderProduct.ProductId,
+                    ProductHistoryId = await _unitOfWork.ProductHistoryRepository.GetLastProductHistoryId(orderProduct.ProductId) 
+                        ?? throw new ProductHasNoProductHistoryException(orderProduct.ProductId.ToString())
+                };
+            }
+            
             orderToCreate.OrderProducts = orderProducts.ToList();
             _unitOfWork.OrderRepository.Create(orderToCreate);
             await _unitOfWork.SaveAsync();

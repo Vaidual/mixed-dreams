@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MixedDreams.Application.DeviceModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Infrastructure.DeviceModels
 {
-    public class ConstraintsRequest
+    public class ConstraintsRequest : IDeviceMessage
     {
-        [JsonProperty("clientId")]
-        public string ClientId { get; set; }
+        [JsonProperty("orderId")]
+        public string OrderId { get; set; }
 
-        [JsonProperty("productId")]
-        public string ProductId { get; set; }
+        public string DeviceId { get; set; }
     }
 }

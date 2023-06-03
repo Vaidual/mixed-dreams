@@ -7,16 +7,14 @@ using MixedDreams.Infrastructure.Options;
 using MixedDreams.Infrastructure.RepositoryInterfaces;
 using MixedDreams.Infrastructure.Hubs.Clients;
 using MixedDreams.Infrastructure.Hubs;
-using MixedDreams.Infrastructure.Options;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Server;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using MixedDreams.Application.DeviceModels;
+using Microsoft.Extensions.Logging;
+using MixedDreams.Application.Common;
+using MQTTnet.Server;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -24,83 +22,105 @@ namespace MixedDreams.Infrastructure.Services
     {
         const string RequestProductConstraintsTopic = "mixedDreams/request_constraints";
         const string ResponseProductConstraintsTopic = "mixedDreams/response_constraints/";
-        const string ProductReceivedTopic = "mixedDreams/product_received";
+        const string OrderReceivedTopic = "mixedDreams/order_received";
         const string lowWaterTopic = "mixedDreams/low_water";
 
         private IMqttClient? _client;
         private readonly HiveMQOptions _hiveOptions;
         private readonly IHubContext<NotificationHub, INotifyClient> _hubContext;
         private readonly IServiceProvider _services;
+        private readonly ILogger _logger;
 
         public DeviceService(
             IOptions<HiveMQOptions> hiveOptions,
             IServiceProvider services,
-            IHubContext<NotificationHub, INotifyClient> hubContext)
+            IHubContext<NotificationHub, INotifyClient> hubContext,
+            ILoggerFactory loggerFactory)
         {
             _hiveOptions = hiveOptions.Value;
             _services = services;
             _hubContext = hubContext;
+            _logger = loggerFactory.CreateLogger<DeviceService>();
         }
 
         public async Task ConnectAsync()
         {
-            var mqttFactory = new MqttFactory();
-
-            _client = mqttFactory.CreateMqttClient();
-
-            MqttClientOptions mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithClientId(_hiveOptions.ClientId)
-                .WithTcpServer(_hiveOptions.Server)
-                .WithCredentials(_hiveOptions.Username, _hiveOptions.Password)
-                .WithTls()
-                .WithCleanSession()
-                .Build();
-
-            var response = await _client.ConnectAsync(mqttClientOptions, CancellationToken.None);
-
-
-            _client.ApplicationMessageReceivedAsync += async e =>
+            try
             {
-                switch (e.ApplicationMessage.Topic)
+                var mqttFactory = new MqttFactory();
+
+                _client = mqttFactory.CreateMqttClient();
+
+                MqttClientOptions mqttClientOptions = new MqttClientOptionsBuilder()
+                    .WithClientId(_hiveOptions.ClientId)
+                    .WithTcpServer(_hiveOptions.Server)
+                    .WithCredentials(_hiveOptions.Username, _hiveOptions.Password)
+                    .WithTls()
+                    .WithCleanSession()
+                    .Build();
+
+                var response = await _client.ConnectAsync(mqttClientOptions, CancellationToken.None);
+
+                _client.DisconnectedAsync += async e =>
                 {
-                    case RequestProductConstraintsTopic:
-                        await ProcessConstraintsRequest(e);
-                        break;
-                    case ProductReceivedTopic:
-                        Console.WriteLine("Product is received.");
-                        break;
-                    case lowWaterTopic:
-                        await NotifyAboutLowWater(e);
-                        break;
-                    default:
-                        break;
-                }
-            };
-
-            var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-                .WithTopicFilter(
-                    f =>
+                    if (e.ClientWasConnected)
                     {
-                        f.WithTopic(RequestProductConstraintsTopic).WithAtMostOnceQoS();
-                    })
-                .WithTopicFilter(
-                    f =>
-                    {
-                        f.WithTopic(ProductReceivedTopic).WithExactlyOnceQoS();
-                    })
-                .WithTopicFilter(
-                    f =>
-                    {
-                        f.WithTopic(lowWaterTopic);
-                    })
-                .Build();
+                        // Use the current options as the new options.
+                        await _client.ConnectAsync(mqttClientOptions);
+                    }
+                };
 
-            await _client.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+                _client.ApplicationMessageReceivedAsync += async e =>
+                {
+                    switch (e.ApplicationMessage.Topic)
+                    {
+                        case RequestProductConstraintsTopic:
+                            await ProcessConstraintsRequest(e);
+                            break;
+                        case OrderReceivedTopic:
+                            await SetOrderReceivedAsync(e);
+                            break;
+                        case lowWaterTopic:
+                            await NotifyAboutLowWater(e);
+                            break;
+                        default:
+                            break;
+                    }
+                };
 
-            Console.WriteLine("MQTT client subscribed to topic {0}", RequestProductConstraintsTopic);
+                var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+                    .WithTopicFilter(
+                        f =>
+                        {
+                            f.WithTopic(RequestProductConstraintsTopic).WithAtLeastOnceQoS();
+                        })
+                    .WithTopicFilter(
+                        f =>
+                        {
+                            f.WithTopic(OrderReceivedTopic).WithExactlyOnceQoS();
+                        })
+                    .WithTopicFilter(
+                        f =>
+                        {
+                            f.WithTopic(lowWaterTopic);
+                        })
+                    .Build();
+
+                await _client.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+
+                Console.WriteLine("MQTT client subscribed to topic {0}", RequestProductConstraintsTopic);
+            }
+            catch (BaseException ex)
+            {
+                _logger.Log(ex.LogLevel, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
 
-        public async Task ProcessConstraintsRequest(MqttApplicationMessageReceivedEventArgs e)
+        private async Task ProcessConstraintsRequest(MqttApplicationMessageReceivedEventArgs e)
         {
             Console.WriteLine("Requested for product constraints.");
             string payload = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
@@ -110,10 +130,14 @@ namespace MixedDreams.Infrastructure.Services
             using var scope = _services.CreateScope();
             IUnitOfWork unitOfWork =
                 scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-            ProductConstraints productConstraints = await unitOfWork.ProductRepository.GetProductConstraints(Guid.Parse(constraintsRequest.ProductId));
+
+            await unitOfWork.OrderRepository.SetOrderPrepared(Guid.Parse(constraintsRequest.OrderId));
+            await unitOfWork.SaveAsync();
+
+            ProductConstraints productConstraints = await unitOfWork.OrderRepository.GetOrderProductConstraints(Guid.Parse(constraintsRequest.OrderId));
 
             var applicationMessage = new MqttApplicationMessageBuilder()
-                .WithTopic(ResponseProductConstraintsTopic + constraintsRequest.ClientId)
+                .WithTopic(ResponseProductConstraintsTopic + constraintsRequest.DeviceId)
                 .WithPayload(JsonConvert.SerializeObject(productConstraints))
                 .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce)
                 .Build();
@@ -121,17 +145,35 @@ namespace MixedDreams.Infrastructure.Services
             await _client.PublishAsync(applicationMessage, CancellationToken.None);
         }
 
-        public async Task NotifyAboutLowWater(MqttApplicationMessageReceivedEventArgs e)
+        private async Task NotifyAboutLowWater(MqttApplicationMessageReceivedEventArgs e)
         {
             Console.WriteLine("Low water.");
-            string deviceId = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
+            string payload = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
+            LowWaterNotify lowWaterNotify = JsonConvert.DeserializeObject<LowWaterNotify>(payload)
+                ?? throw new WrongMqttMessageSignatureException(e.ApplicationMessage.Topic, payload, nameof(LowWaterNotify));
 
             using var scope = _services.CreateScope();
             IUnitOfWork unitOfWork =
                 scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-            string userId = await unitOfWork.DeviceRepository.GetUserId(deviceId) ?? throw new DeviceHaveNoCompanyException(deviceId);
-            await _hubContext.Clients.Group(userId).LowWaterNotification(3);
+            string userId = await unitOfWork.DeviceRepository.GetUserId(lowWaterNotify.DeviceId) ?? throw new DeviceHaveNoCompanyException(lowWaterNotify.DeviceId);
+            await _hubContext.Clients.Group(userId).LowWaterNotification(lowWaterNotify.WaterLevel);
+        }
+
+        private async Task SetOrderReceivedAsync(MqttApplicationMessageReceivedEventArgs e)
+        {
+            string payload = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
+            OrderReceived orderReceived = JsonConvert.DeserializeObject<OrderReceived>(payload) ??
+                throw new WrongMqttMessageSignatureException(e.ApplicationMessage.Topic, payload, nameof(OrderReceived));
+
+            Console.WriteLine($"Order ${orderReceived.OrderId} is received.");
+
+            using var scope = _services.CreateScope();
+            IUnitOfWork unitOfWork =
+                scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
+            await unitOfWork.OrderRepository.SetOrderReceived(Guid.Parse(orderReceived.OrderId));
+            await unitOfWork.SaveAsync();
         }
 
         public void Dispose()

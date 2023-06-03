@@ -13,8 +13,6 @@ namespace MixedDreams.Infrastructure.Hubs
     {
         public async Task SendLowWaterNotification(string groupName)
         {
-            // Broadcast the order notification to all connected chefs
-            //await Clients.Group(groupName).SendLowWaterNotification("LowWaterNotification");
             await Clients.All.LowWaterNotification(2);
         }
 

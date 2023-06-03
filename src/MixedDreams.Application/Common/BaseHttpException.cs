@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using MixedDreams.Application.Common;
 using MixedDreams.Infrastructure.Enums;
 using MixedDreams.Infrastructure.Features.Errors;
 using System;
@@ -11,11 +12,10 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Infrastructure.Common
 {
-    public abstract class BaseHttpException : Exception
+    public abstract class BaseHttpException : BaseException
     {
         public int StatusCode { get; private set; }
         public string Title { get; private set; }
-        public abstract LogLevel LogLevel { get; init; }
         public ErrorCodes ErrorCode { get; init; }
 
         protected BaseHttpException(string title, int statusCode, ErrorCodes errorCode) : base(title) 
