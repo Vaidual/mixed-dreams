@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Domain.Entities
 {
-    public class Product : BaseEntity, IMustHaveTenant
+    public class Product : BaseEntity, IMustHaveTenant, ITrackableEntity
     {
         public string Name { get; set; }
-        public string? Description { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public decimal? Price { get; set; }
         public int? AmountInStock { get; set; }
         public Visibility Visibility { get; set; } = Visibility.Unavaiable;
@@ -34,5 +34,16 @@ namespace MixedDreams.Domain.Entities
         public List<ProductHistory> ProductHistory { get; set; }
 
         public Guid TenantId { get; set; }
+        public DateTimeOffset DateCreated { get; set; }
+        public DateTimeOffset? DateUpdated { get; set; }
+
+        public bool IsSearchable()
+        {
+            return 
+                this.AmountInStock > 0 && 
+                this.Visibility == Visibility.Visible && 
+                this.RecommendedTemperature != null &&
+                this.RecommendedHumidity != null;
+        }
     }
 }

@@ -27,6 +27,9 @@ using System.Security.Claims;
 using System.Threading;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 using MixedDreams.Infrastructure.Features.ProductFeatures.GetCompanyProducts;
+using MixedDreams.Application.Features.ProductFeatures.Dto;
+using MixedDreams.Application.Features.ProductFeatures.GetProducts;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MixedDreams.WebAPI.Controllers
 {
@@ -85,17 +88,24 @@ namespace MixedDreams.WebAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetProducts(CancellationToken cancellationToken, [FromQuery][Range(1, 50)] int size = 20, [FromQuery][Range(0, 50)] int page = 0, [FromQuery] string key = "", [FromQuery] string category = "")
+        public async Task<IActionResult> GetProducts(
+            CancellationToken cancellationToken, 
+            [FromQuery][Range(1, 50)] int size = 20, 
+            [FromQuery, Range(0, 50)] int page = 0, 
+            [FromQuery] string? key = null, 
+            [FromQuery] string? category = null, 
+            [FromQuery] string? sort = null)
         {
-            IReadOnlyList<Product> products = 
+            ProductPages products = 
                 await _unitOfWork.ProductRepository.GetPages(
                     page: page, 
                     size: size, 
                     cancellationToken: cancellationToken, 
-                    key: key != string.Empty ? key : null, 
-                    category: category != string.Empty ? category : null);
+                    key: key, 
+                    category: category,
+                    sort: sort);
 
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<GetProductResponse>>(products));
+            return Ok(_mapper.Map<ProductPages, GetProductsResponse>(products));
         }
 
         [HttpGet("{id}/details")]
@@ -137,7 +147,8 @@ namespace MixedDreams.WebAPI.Controllers
         public async Task<IActionResult> DuplicateProduct([FromRoute] Guid id)
         {
             Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
-            product.Name += "_copy";
+            product.Id = Guid.Empty;
+            product.Name = await _unitOfWork.ProductRepository.GenerateUniqueCopyName(product.Name);
             _unitOfWork.ProductRepository.Create(product);
             await _unitOfWork.SaveAsync();
 

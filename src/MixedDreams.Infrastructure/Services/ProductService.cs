@@ -75,7 +75,7 @@ namespace MixedDreams.Infrastructure.Services
             }
 
             bool shouldCreateProductHistory = ShouldCreateProductHistory(productToUpdate, updateModel);
-            if (updateModel.ChangeImage && productToUpdate.Image != null)
+            if (updateModel.ChangeImage && productToUpdate.Image != null  && (await _unitOfWork.ProductRepository.CountImageOccurrencesAsync(productToUpdate.Image.Path)) <= 1)
             {
                 await _backblazeService.DeleteImage(productToUpdate.Image.Id, productToUpdate.Image.FileName);
                 productToUpdate.Image = null;
@@ -111,7 +111,7 @@ namespace MixedDreams.Infrastructure.Services
 
         public async Task DeleteProductAsync(Product product)
         {
-            if (product.Image != null)
+            if (product.Image != null && (await _unitOfWork.ProductRepository.CountImageOccurrencesAsync(product.Image.Path)) <= 1)
             {
                 await _backblazeService.DeleteImage(product.Image.Id, product.Image.FileName);
             }

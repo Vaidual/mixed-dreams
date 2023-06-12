@@ -33,6 +33,8 @@ using MixedDreams.Infrastructure.Exceptions.InternalServerError;
 using MixedDreams.WebAPI.Middlewares;
 using System.Net;
 using MixedDreams.Infrastructure.Hubs;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
+using System.Security.Cryptography.X509Certificates;
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -69,6 +71,11 @@ try
     //.AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling =
     //    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
     //builder.Services.AddTransient<LoggingInterceptor>();
+
+    builder.Services.AddHttpsRedirection(options =>
+    {
+        options.HttpsPort = 7239;
+    });
 
     //Custom services
     builder.Services.AddInternalServices(builder.Configuration);

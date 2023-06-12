@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MixedDreams.Application.Features.ProductFeatures.GetProducts;
+using MixedDreams.Application.Features.ProductFeatures.Dto;
 
 namespace MixedDreams.Infrastructure.Features.ProductFeatures
 {
@@ -32,6 +34,7 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures
             CreateMap<ProductCategory, GetCategoryResponse>();
             CreateMap<Product, GetProductNamesResponse>();
             CreateMap<Product, CompanyProductDto>();
+            CreateMap<ProductPages, GetProductsResponse>();
         }
     }
 }

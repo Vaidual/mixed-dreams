@@ -30,10 +30,12 @@ namespace MixedDreams.WebAPI.Extensions
                 options.AddPolicy(name: config["Cors:Policy:Name"] ?? throw new InternalServerErrorException("Cors policy name isn't specified or options path is incorrect"),
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:3000")
+                        policy
+                            //.WithOrigins("http://localhost:3000")
+                            .AllowAnyOrigin()
                             .AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .AllowCredentials(); ;
+                            .AllowAnyMethod();
+                            //.AllowCredentials(); ;
                     });
             });
             return services;

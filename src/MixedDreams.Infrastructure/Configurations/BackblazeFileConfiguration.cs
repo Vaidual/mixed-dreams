@@ -22,8 +22,6 @@ namespace MixedDreams.Infrastructure.Configurations
 
             builder.Property(x => x.Path)
                 .HasColumnType("varchar(200)");
-
-            builder.HasQueryFilter(x => !x.Product.Company.IsDeleted);
         }
     }
 }

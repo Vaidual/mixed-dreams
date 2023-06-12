@@ -14,6 +14,10 @@ using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDetails;
 using MixedDreams.Infrastructure.DeviceModels;
 using MixedDreams.Infrastructure.Exceptions.NotFound;
 using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+using MixedDreams.Application.Features.ProductFeatures.Dto;
+using Polly;
+using MixedDreams.Domain.Enums;
+using MixedDreams.Application.Constants;
 
 namespace MixedDreams.Infrastructure.Repositories
 {
@@ -98,9 +102,13 @@ namespace MixedDreams.Infrastructure.Repositories
             return Table.Where(x => x.Name.Contains(key)).Take(count).ToListAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<Product>> GetPages(CancellationToken cancellationToken, int page = 0, int size = 20, string? key = "", string? category = null)
+        public async Task<ProductPages> GetPages(CancellationToken cancellationToken, int page = 0, int size = 20, string? key = "", string? category = null, string? sort = null)
         {
-            IQueryable<Product> query = Table;
+            IQueryable<Product> query = Table
+                .Where(x => x.AmountInStock > 0 &&
+                       x.Visibility == Visibility.Visible &&
+                       x.RecommendedTemperature != null &&
+                       x.RecommendedHumidity != null);
             if (key != null)
             {
                 query = query.Where(x => x.Name.Contains(key));
@@ -114,8 +122,45 @@ namespace MixedDreams.Infrastructure.Repositories
                     query = query.Where(x => x.ProductCategoryId ==  categoryId);
                 }
             }
+
+            query = sort switch
+            {
+                ProductSort.Price => query.OrderBy(x => x.Price),
+                ProductSort.PriceDesc => query.OrderByDescending(x => x.Price),
+                _ => query.OrderByDescending(x => x.DateCreated),
+            };
+
+            int totalCount = await query.CountAsync();
             query = query.Skip(page * size).Take(size);
-            return await query.Include(x => x.Image).AsNoTracking().ToListAsync(cancellationToken);
+            return new ProductPages()
+            {
+                Products = await query.Include(x => x.Image).AsNoTracking().ToListAsync(cancellationToken),
+                TotalCount = totalCount
+            };
         }
+
+        public async Task<string> GenerateUniqueCopyName(string originalName)
+        {
+            var copyName = $"{originalName}_copy";
+            var existingCopyNames = await Table
+                .Where(p => EF.Functions.Like(p.Name, $"{copyName}%"))
+                .Select(p => p.Name)
+                .ToListAsync();
+
+            if (existingCopyNames.Count == 0)
+                return $"{copyName}1";
+
+            var maxCopyNumber = existingCopyNames
+                .Select(name => int.TryParse(name.Substring(copyName.Length), out var copyNumber) ? copyNumber : 0)
+                .Max();
+
+            return $"{copyName}{maxCopyNumber + 1}";
+        }
+
+        public async Task<int> CountImageOccurrencesAsync(string link)
+        {
+            return await Table.Include(x => x.Image).Where(x => x.Image != null && x.Image.Path == link).CountAsync();
+        }
+
     }
 }

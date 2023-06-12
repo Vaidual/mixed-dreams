@@ -22,7 +22,8 @@ namespace MixedDreams.Infrastructure.Configurations
                 //.IsUnique();
 
             builder.Property(x => x.Description)
-                .HasColumnType("nvarchar(4000)");
+                .HasColumnType("nvarchar(4000)")
+                .HasDefaultValue(string.Empty);
         }
     }
 }
