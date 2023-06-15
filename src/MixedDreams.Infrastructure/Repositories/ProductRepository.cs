@@ -18,6 +18,7 @@ using MixedDreams.Application.Features.ProductFeatures.Dto;
 using Polly;
 using MixedDreams.Domain.Enums;
 using MixedDreams.Application.Constants;
+using MixedDreams.Application.Exceptions.InternalServerError;
 
 namespace MixedDreams.Infrastructure.Repositories
 {
@@ -25,10 +26,46 @@ namespace MixedDreams.Infrastructure.Repositories
     {
         public ProductRepository(AppDbContext context) : base(context) { }
 
-        public override Task<Product?> Get(Guid id, CancellationToken cancellationToken = default)
+        public async Task<GetProductResponse?> GetProduct(Guid id, CancellationToken cancellationToken = default)
         {
-            return Table.Include(x => x.Image)
+            var product = await Table
+                .Include(x => x.Image)
+                .Include(x => x.ProductCategory)
+                .Include(x => x.Company)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            if (product == null) return null;
+
+            await Context.Entry(product)
+                .Collection(p => p.ProductIngredients)
+                .Query()
+                .Include(pi => pi.Ingredient)
+                .LoadAsync(cancellationToken);
+
+            product.ProductIngredients.OrderByDescending(x => x.HasAmount);
+
+            return new GetProductResponse
+            {
+                Id = product.Id,
+                Description = product.Description,
+                Name = product.Name,
+                Price = product.Price ?? throw new NullFieldExcetion(nameof(Product.Price), nameof(Product)),
+                PrimaryImage = product.Image?.Path,
+                Ingredients = product.ProductIngredients.Select(pi => new IngredientDto
+                {
+                    Amount = pi.Amount,
+                    HasAmount = pi.HasAmount,
+                    Name = pi.Ingredient.Name,
+                    Unit = pi.Unit,
+                }),
+                Category = product.ProductCategory.Name,
+                Company = new CompanyDto
+                {
+                    Id = product.Company.Id,
+                    Name = product.Company.CompanyName
+                }
+            };
+                
         }
         public Task<GetProductWithDetailsResponse?> GetProductInformation(Guid id, CancellationToken cancellationToken = default)
         {
@@ -111,7 +148,7 @@ namespace MixedDreams.Infrastructure.Repositories
                        x.RecommendedHumidity != null);
             if (key != null)
             {
-                query = query.Where(x => x.Name.Contains(key));
+                query = query.Where(x => x.Name.ToLower().Contains(key.ToLower()));
             }
             if (category != null)
             {

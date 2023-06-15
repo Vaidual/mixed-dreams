@@ -62,9 +62,9 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            Product product = await _unitOfWork.ProductRepository.Get(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
+            var product = await _unitOfWork.ProductRepository.GetProduct(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
 
-            return Ok(_mapper.Map<GetProductResponse>(product));
+            return Ok(product);
         }
 
         [HttpGet]

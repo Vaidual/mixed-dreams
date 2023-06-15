@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using MixedDreams.Application.ModelBinders;
 
 namespace MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct
 {
@@ -16,7 +18,8 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct
         [BindRequired]
         public string Name { get; init; }
 
-        public string Description { get; init; } = string.Empty;
+        [ModelBinder(typeof(EmptyStringToEmptyValueBinder))]
+        public string Description { get; init; }
 
         public decimal? Price { get; init; }
 

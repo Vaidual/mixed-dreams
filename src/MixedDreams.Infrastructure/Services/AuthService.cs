@@ -40,7 +40,7 @@ namespace MixedDreams.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _context;
 
-        public TimeSpan RememberMeAccessTokenDuration { get; private set; } = TimeSpan.FromMinutes(1);
+        public TimeSpan RememberMeAccessTokenDuration { get; private set; } = TimeSpan.FromDays(14);
         public TimeSpan StandardAccessTokenDuration { get; private set; } = TimeSpan.FromHours(2);
 
         public AuthService(

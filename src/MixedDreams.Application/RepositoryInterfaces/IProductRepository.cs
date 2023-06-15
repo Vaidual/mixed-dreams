@@ -13,6 +13,7 @@ namespace MixedDreams.Infrastructure.RepositoryInterfaces
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
+        public Task<GetProductResponse?> GetProduct(Guid id, CancellationToken cancellationToken = default);
         public void CreateProductHistory(Product product);
         public Task<bool> IsNameTaken(string name);
         public void ClearProductIngredients(Guid productId);

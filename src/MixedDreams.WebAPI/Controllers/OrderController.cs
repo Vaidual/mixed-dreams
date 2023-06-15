@@ -19,6 +19,8 @@ using MixedDreams.Infrastructure.Hubs.Clients;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Infrastructure.Constants;
 using System.Security.Claims;
+using MixedDreams.Application.Features.OrderFeatures.CreatePaymentIntent;
+using Stripe;
 
 namespace MixedDreams.WebAPI.Controllers
 {
@@ -30,6 +32,7 @@ namespace MixedDreams.WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IValidator<PostOrderRequest> _postOrderValidator;
         private readonly IOrderService _orderService;
+        private readonly IStripeClient _stripeClient;
 
         public OrderController(IUnitOfWork unitOfWork, IMapper mapper, IValidator<PostOrderRequest> postOrderValidator, IOrderService orderService)
         {
@@ -37,6 +40,7 @@ namespace MixedDreams.WebAPI.Controllers
             _mapper = mapper;
             _postOrderValidator = postOrderValidator;
             _orderService = orderService;
+            _stripeClient = new StripeClient();
         }
 
         [HttpGet("{id}")]
@@ -105,6 +109,40 @@ namespace MixedDreams.WebAPI.Controllers
             List<GetOrdersStatisticResponse> statistic = await _unitOfWork.OrderRepository.GetStatistic(start, end, TimeSpan.FromHours(1), cancellationToken);
 
             return Ok(statistic);
+        }
+
+        
+
+        [HttpPost("create-payment-intent")]
+        //[Authorize(Roles = Roles.Customer)]
+        public async Task<IActionResult> CreatePaymantIntent([FromBody] CreatePaymentIntentRequest model)
+        {
+            StripeConfiguration.ApiKey = "sk_test_51NIa7VLhXIP1K0UwEwrXnGjBsGYutAi1DrHRs0aPiP4xRuUwhwcyJLldUxOUsYleVvjNXXOQNHUP6c4J2eh9RnGr00BAs69zuW";
+            var options = new PaymentIntentCreateOptions
+            {
+                Amount = model.Amount,
+                Currency = "USD",
+                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                {
+                    Enabled = true,
+                },
+            };
+
+            var customer = await new CustomerService().CreateAsync(new CustomerCreateOptions());
+            var paymentIntent = await new PaymentIntentService().CreateAsync(options);
+            var eph = await new EphemeralKeyService().CreateAsync(new EphemeralKeyCreateOptions()
+            {
+                Customer = customer.Id,
+                StripeVersion = "2022-11-15"
+            });
+
+            return Ok(new CreatePaymentIntentResponse
+            {
+                ClientSecret = paymentIntent.ClientSecret,
+                PublishableKey = "pk_test_51NIa7VLhXIP1K0UwTDAP5Fnx5AxJNCnkLn1rM0sRURXnVWELPTD0oEnT8H0YFA7Od6pflZWj9v4f8oy7YiAvDPNl00tXOG1O36",
+                CustomerId = customer.Id,
+                EphemeralKey = eph.Secret,
+        });
         }
     }
 }
