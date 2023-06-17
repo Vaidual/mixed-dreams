@@ -12,5 +12,6 @@ namespace MixedDreams.Infrastructure.Constants
         public const string TenantId = "TenantId";
         public const string Name = "Name";
         public const string UserId = "UserId";
+        public const string EntityId = "EntityId";
     }
 }

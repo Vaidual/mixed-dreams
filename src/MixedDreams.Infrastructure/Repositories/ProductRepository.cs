@@ -145,7 +145,8 @@ namespace MixedDreams.Infrastructure.Repositories
                 .Where(x => x.AmountInStock > 0 &&
                        x.Visibility == Visibility.Visible &&
                        x.RecommendedTemperature != null &&
-                       x.RecommendedHumidity != null);
+                       x.RecommendedHumidity != null &&
+                       x.PreparationTime != null);
             if (key != null)
             {
                 query = query.Where(x => x.Name.ToLower().Contains(key.ToLower()));

@@ -10,5 +10,7 @@ namespace MixedDreams.Domain.Entities
 
         public Company? Company { get; set; }
         public Customer? Customer { get; set; }
+
+        public Guid EntityId { get; set; }
     }
 }

@@ -25,6 +25,9 @@ namespace MixedDreams.Infrastructure.Configurations
                 .HasColumnType("date");
             builder.Property(x => x.CompanyName)
                 .HasColumnType("nvarchar(50)");
+
+            builder.Property(x => x.CooksNumber)
+                .HasColumnType("smallint");
         }
     }
 }

@@ -63,7 +63,7 @@ namespace MixedDreams.Infrastructure.Services
             orderToCreate.OrderProducts = orderProducts.ToList();
             _unitOfWork.OrderRepository.Create(orderToCreate);
             await _unitOfWork.SaveAsync();
-            Order createdOrder = await _unitOfWork.OrderRepository.Get(orderToCreate.Id)
+            Order createdOrder = await _unitOfWork.OrderRepository.GetAsync(orderToCreate.Id)
                 ?? throw new EntityNotFoundException(nameof(Order), orderToCreate.Id.ToString());
 
             return createdOrder;

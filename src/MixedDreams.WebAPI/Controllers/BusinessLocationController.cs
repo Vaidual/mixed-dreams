@@ -40,7 +40,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetBusinessLocation(Guid id, CancellationToken cancellationToken)
         {
-            BusinessLocation businessLocation = await _unitOfWork.BusinessLocationRepository.Get(id) ?? throw new EntityNotFoundException(nameof(BusinessLocation), id.ToString());
+            BusinessLocation businessLocation = await _unitOfWork.BusinessLocationRepository.GetAsync(id) ?? throw new EntityNotFoundException(nameof(BusinessLocation), id.ToString());
 
             return Ok(_mapper.Map<GetBusinessLocationResponse>(businessLocation));
         }
@@ -88,7 +88,7 @@ namespace MixedDreams.WebAPI.Controllers
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
 
-            BusinessLocation businessLocation = await _unitOfWork.BusinessLocationRepository.Get(id) ?? throw new PutNotFoundException();
+            BusinessLocation businessLocation = await _unitOfWork.BusinessLocationRepository.GetAsync(id) ?? throw new PutNotFoundException();
             if (businessLocation.Name != model.Name && await _unitOfWork.BusinessLocationRepository.IsNameTaken(model.Name))
             {
                 throw new PropertyIsTakenException(nameof(model.Name), model.Name);

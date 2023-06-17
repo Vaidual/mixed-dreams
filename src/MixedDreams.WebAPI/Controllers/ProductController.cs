@@ -146,7 +146,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> DuplicateProduct([FromRoute] Guid id)
         {
-            Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
+            Product product = await _unitOfWork.ProductRepository.GetAsync(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
             product.Id = Guid.Empty;
             product.Name = await _unitOfWork.ProductRepository.GenerateUniqueCopyName(product.Name);
             _unitOfWork.ProductRepository.Create(product);
@@ -175,7 +175,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
-            Product product = await _unitOfWork.ProductRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
+            Product product = await _unitOfWork.ProductRepository.GetAsync(id) ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
             await _productService.DeleteProductAsync(product);
 
             return NoContent();

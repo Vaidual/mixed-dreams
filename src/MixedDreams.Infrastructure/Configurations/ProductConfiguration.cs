@@ -24,6 +24,9 @@ namespace MixedDreams.Infrastructure.Configurations
             builder.Property(x => x.Description)
                 .HasColumnType("nvarchar(4000)")
                 .HasDefaultValue(string.Empty);
+
+            builder.Property(x => x.PreparationTime)
+                .HasColumnType("smallint");
         }
     }
 }

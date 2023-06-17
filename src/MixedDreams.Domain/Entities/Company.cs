@@ -15,6 +15,8 @@ namespace MixedDreams.Domain.Entities
         public DateTime Birthday { get; set; }
         public Address Address { get; set; }
 
+        public short? CooksNumber { get; set; }
+
         public ApplicationUser ApplicationUser { get; set; }
         public string ApplicationUserId { get; set; }
 

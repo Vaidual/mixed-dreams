@@ -15,6 +15,7 @@ namespace MixedDreams.Domain.Entities
         public string Description { get; set; } = string.Empty;
         public decimal? Price { get; set; }
         public int? AmountInStock { get; set; }
+        public short? PreparationTime { get; set; }
         public Visibility Visibility { get; set; } = Visibility.Unavaiable;
 
 

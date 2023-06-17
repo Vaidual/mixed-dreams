@@ -31,6 +31,8 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct
 
         public float? RecommendedTemperature { get; init; }
 
+        public short? PreparationTime { get; set; }
+
         public float? RecommendedHumidity { get; init; }
 
         public IEnumerable<PostProductIngredientDto> Ingredients { get; init; }

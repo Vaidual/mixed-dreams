@@ -47,7 +47,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetOrder(Guid id, CancellationToken cancellationToken)
         {
-            Order order = await _unitOfWork.OrderRepository.Get(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Order), id.ToString());
+            Order order = await _unitOfWork.OrderRepository.GetAsync(id, cancellationToken) ?? throw new EntityNotFoundException(nameof(Order), id.ToString());
             
             return Ok(_mapper.Map<GetOrderResponse>(order));
         }
@@ -88,7 +88,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> UpdateStatus([FromRoute] Guid id, [FromBody] UpdateOrderStatusRequest model)
         {
-            Order order = await _unitOfWork.OrderRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Order), id.ToString());
+            Order order = await _unitOfWork.OrderRepository.GetAsync(id) ?? throw new EntityNotFoundException(nameof(Order), id.ToString());
             _unitOfWork.OrderRepository.Update(_mapper.Map(model, order));
             await _unitOfWork.SaveAsync();
 
@@ -122,10 +122,11 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 Amount = model.Amount,
                 Currency = "USD",
-                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
-                {
-                    Enabled = true,
-                },
+                //AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                //{
+                //    Enabled = true,
+                //},
+                PaymentMethodTypes = new List<string>() { "card" }
             };
 
             var customer = await new CustomerService().CreateAsync(new CustomerCreateOptions());

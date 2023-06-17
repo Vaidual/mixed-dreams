@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Infrastructure.Features.AuthFeatures
 {
-    public class AuthResponse
+    public sealed record AuthResponse
     {
-        public UserDto User { get; set; }
-        public TokensDto Tokens { get; set; }
+        public required UserDto User { get; set; }
+        public required Guid EntityId { get; set; }
+        public required TokensDto Tokens { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace MixedDreams.Infrastructure.Repositories
             }
         }
 
-        public virtual async Task<T?> Get(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task<T?> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await Table.FindAsync(new object?[] { id }, cancellationToken: cancellationToken);
         }

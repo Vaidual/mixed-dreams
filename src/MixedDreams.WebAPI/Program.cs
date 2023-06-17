@@ -72,10 +72,10 @@ try
     //    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
     //builder.Services.AddTransient<LoggingInterceptor>();
 
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.HttpsPort = 7239;
-    });
+    //builder.Services.AddHttpsRedirection(options =>
+    //{
+    //    options.HttpsPort = 7239;
+    //});
 
     //Custom services
     builder.Services.AddInternalServices(builder.Configuration);

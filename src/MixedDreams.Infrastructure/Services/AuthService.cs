@@ -28,6 +28,9 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using MixedDreams.Infrastructure.Constants;
 using MixedDreams.Infrastructure.Exceptions.BadRequest;
 using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+using Stripe;
+using Customer = MixedDreams.Domain.Entities.Customer;
 
 namespace MixedDreams.Infrastructure.Services
 {
@@ -62,13 +65,10 @@ namespace MixedDreams.Infrastructure.Services
         public async Task<AuthResponse> LoginUserAsync(LoginRequest model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            //var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 throw new BadRequestException("Authentification failed.", ErrorCodes.Invalidcredentials, new List<string> { "Invalid credentials" });
             }
-
-            //await _userManager.UpdateAsync(user);
 
             List<Claim> claims = new();
             if ((await _userManager.GetRolesAsync(user)).Any(r => r == Roles.Company))
@@ -80,6 +80,7 @@ namespace MixedDreams.Infrastructure.Services
 
             AuthResponse result = new()
             {
+                EntityId = user.EntityId,
                 Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
                 User = _mapper.Map<UserDto>(user)
             };
@@ -107,6 +108,8 @@ namespace MixedDreams.Infrastructure.Services
                     _unitOfWork.CustomerRepository.Create(customer);
                     await _unitOfWork.SaveAsync(CancellationToken.None);
 
+                    await SetUserEntityIdAsync(user, customer.Id);
+
                     await transaction.CommitAsync();
                 }
                 catch (Exception)
@@ -119,6 +122,7 @@ namespace MixedDreams.Infrastructure.Services
 
             AuthResponse result = new ()
             {
+                EntityId = customer.Id,
                 Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
                 User = _mapper.Map<UserDto>(user)
             };
@@ -141,6 +145,8 @@ namespace MixedDreams.Infrastructure.Services
                     company = _unitOfWork.CompanyRepository.Create(company);
                     await _unitOfWork.SaveAsync(CancellationToken.None);
 
+                    await SetUserEntityIdAsync(user, company.Id);
+
                     await transaction.CommitAsync();
                 }
                 catch (Exception)
@@ -158,6 +164,7 @@ namespace MixedDreams.Infrastructure.Services
 
             AuthResponse result = new()
             {
+                EntityId = company.Id,
                 Tokens = new TokensDto(new JwtSecurityTokenHandler().WriteToken(token)),
                 User = _mapper.Map<UserDto>(user)
             };
@@ -189,6 +196,17 @@ namespace MixedDreams.Infrastructure.Services
             await _userManager.AddToRoleAsync(user, role);
         }
 
+        private async Task SetUserEntityIdAsync(ApplicationUser user, Guid entityId)
+        {
+            user.EntityId = entityId;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new InternalServerErrorException("User entity update process failded.");
+            }
+            await _unitOfWork.SaveAsync();
+        }
+
         private async Task<JwtSecurityToken> CreateTokenAsync(ApplicationUser user, bool rememberMe, List<Claim>? additionalClaims = null)
         {
             List<Claim> claims = additionalClaims?? new List<Claim>();
@@ -199,6 +217,7 @@ namespace MixedDreams.Infrastructure.Services
             }
             claims.Add(new Claim(AppClaimTypes.Name, user.FirstName));
             claims.Add(new Claim(AppClaimTypes.UserId, user.Id));
+            claims.Add(new Claim(AppClaimTypes.EntityId, user.EntityId.ToString()));
             var token = JwtHelper.GetJwtToken(
                 user.Id,
                 _jwtOptions.SigningKey,

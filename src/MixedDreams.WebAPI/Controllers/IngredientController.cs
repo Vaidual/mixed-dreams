@@ -38,7 +38,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetIngredient(Guid id, CancellationToken cancellationToken)
         {
-            Ingredient ingredient = await _unitOfWork.IngredientRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Ingredient), id.ToString()); ;
+            Ingredient ingredient = await _unitOfWork.IngredientRepository.GetAsync(id) ?? throw new EntityNotFoundException(nameof(Ingredient), id.ToString()); ;
 
             return Ok(_mapper.Map<GetIngredientResponse>(ingredient));
         }
@@ -82,7 +82,7 @@ namespace MixedDreams.WebAPI.Controllers
                 ErrorsMaker.ProcessValidationErrors(validationResult.Errors);
             }
 
-            Ingredient ingredient = await _unitOfWork.IngredientRepository.Get(id) ?? throw new EntityNotFoundException(nameof(Ingredient), id.ToString()); ;
+            Ingredient ingredient = await _unitOfWork.IngredientRepository.GetAsync(id) ?? throw new EntityNotFoundException(nameof(Ingredient), id.ToString()); ;
             if (ingredient.Name != model.Name && await _unitOfWork.IngredientRepository.IsNameTaken(model.Name))
             {
                 throw new PropertyIsTakenException(nameof(model.Name), model.Name);

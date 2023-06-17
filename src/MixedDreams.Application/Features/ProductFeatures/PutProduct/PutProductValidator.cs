@@ -42,6 +42,11 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures.PutProduct
             {
                 RuleFor(x => x.ProductCategoryId).MustAsync((x, token) => unitOfWork.ProductCategoryRepository.EntityExistsAsync((Guid)x!)).WithMessage("Product category with id '{PropertyValue}' doen't exist.");
             });
+
+            When(x => x.PreparationTime != null, () => {
+                RuleFor(customer => (int)customer.PreparationTime!).GreaterThan(0);
+                RuleFor(customer => (int)customer.PreparationTime!).LessThanOrEqualTo(600);
+            });
         }
     }
 }

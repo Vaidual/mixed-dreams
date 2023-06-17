@@ -19,7 +19,7 @@ namespace MixedDreams.Infrastructure.Repositories
     {
         public OrderRepository(AppDbContext context) : base(context) { }
 
-        public override Task<Order?> Get(Guid id, CancellationToken cancellationToken = default)
+        public override Task<Order?> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return Table.Include(x => x.BusinessLocation).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
@@ -101,7 +101,7 @@ namespace MixedDreams.Infrastructure.Repositories
 
         private async Task UpdateOrderStatus(Guid orderId, OrderStatus newStatus)
         {
-            Order order = await Get(orderId) ?? throw new EntityNotFoundException(nameof(Product), orderId.ToString());
+            Order order = await GetAsync(orderId) ?? throw new EntityNotFoundException(nameof(Product), orderId.ToString());
             order.OrderStatus = newStatus;
             Update(order);
         }

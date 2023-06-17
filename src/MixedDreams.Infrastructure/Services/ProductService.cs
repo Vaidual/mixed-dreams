@@ -67,7 +67,7 @@ namespace MixedDreams.Infrastructure.Services
         }
         public async Task UpdateProductAsync(Guid id, PutProductRequest updateModel)
         {
-            Product productToUpdate = await _unitOfWork.ProductRepository.Get(id) 
+            Product productToUpdate = await _unitOfWork.ProductRepository.GetAsync(id) 
                 ?? throw new EntityNotFoundException(nameof(Product), id.ToString());
             if (updateModel.Name != productToUpdate.Name && await _unitOfWork.ProductRepository.IsNameTaken(updateModel.Name!))
             {

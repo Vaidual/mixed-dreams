@@ -31,6 +31,8 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures.PutProduct
 
         public IFormFile PrimaryImage { get; init; }
 
+        public short? PreparationTime { get; set; }
+
         public float? RecommendedTemperature { get; init; }
 
         public float? RecommendedHumidity { get; init; }
