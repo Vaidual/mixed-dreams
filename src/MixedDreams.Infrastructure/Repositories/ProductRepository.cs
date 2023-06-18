@@ -31,10 +31,11 @@ namespace MixedDreams.Infrastructure.Repositories
             var product = await Table
                 .Include(x => x.Image)
                 .Include(x => x.ProductCategory)
-                .Include(x => x.Company)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (product == null) return null;
+
+            //this.Context.Orders.Where(x => x.)
 
             await Context.Entry(product)
                 .Collection(p => p.ProductIngredients)
@@ -63,7 +64,8 @@ namespace MixedDreams.Infrastructure.Repositories
                 {
                     Id = product.Company.Id,
                     Name = product.Company.CompanyName
-                }
+                },
+                Preparationtime = product.PreparationTime ?? throw new NullFieldExcetion(nameof(Product.PreparationTime), nameof(Product)),
             };
                 
         }
@@ -91,7 +93,8 @@ namespace MixedDreams.Infrastructure.Repositories
                         Name = pi.Ingredient.Name,
                         Unit = pi.Unit,
                     }),
-                    ProductCategory = x.ProductCategoryId
+                    ProductCategory = x.ProductCategoryId,
+                    PreparationTime = x.PreparationTime
                 })
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 

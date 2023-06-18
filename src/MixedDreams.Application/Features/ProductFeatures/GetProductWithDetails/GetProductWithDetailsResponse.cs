@@ -17,6 +17,7 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDeta
         public int? AmountInStock { get; set; }
         public Visibility Visibility { get; set; }
         public float? RecommendedTemperature { get; set; }
+        public short? PreparationTime { get; set; }
         public float? RecommendedHumidity { get; set; }
         public IEnumerable<GetProductIngredientsDto> Ingredients { get; set; }
         public Guid? ProductCategory { get; set; }

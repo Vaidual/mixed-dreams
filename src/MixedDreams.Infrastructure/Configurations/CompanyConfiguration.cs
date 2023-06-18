@@ -28,6 +28,9 @@ namespace MixedDreams.Infrastructure.Configurations
 
             builder.Property(x => x.CooksNumber)
                 .HasColumnType("smallint");
+
+            builder.Property(x => x.MaxSimultaneousOrders)
+                .HasColumnType("smallint");
         }
     }
 }

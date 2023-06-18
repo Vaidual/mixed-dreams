@@ -17,6 +17,7 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct
         public string? PrimaryImage { get; set; }
         public string Category { get; set; }
         public CompanyDto Company { get; set; }
+        public short Preparationtime { get; set; }
         public IEnumerable<IngredientDto> Ingredients { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace MixedDreams.Application.Features.CompanyFeatures.GetSettings
 {
     public class GetCompanySettings
     {
-        public short? CooksNumber { get; set; }
+        public required short? CooksNumber { get; set; }
+        public required short? MaxSimultaneousOrders { get; set; }
     }
 }

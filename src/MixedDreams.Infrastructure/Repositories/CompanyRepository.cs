@@ -36,12 +36,14 @@ namespace MixedDreams.Infrastructure.Repositories
             return new GetCompanySettings()
             {
                 CooksNumber = company.CooksNumber,
+                MaxSimultaneousOrders = company.MaxSimultaneousOrders
             };
         }
         public async Task UpdateSettings(Guid companyId, PutCompanySettingsRequest newSettings)
         {
             var company = await this.GetAsync(companyId) ?? throw new EntityNotFoundException(nameof(Company), companyId.ToString());
             company.CooksNumber = newSettings.CooksNumber;
+            company.MaxSimultaneousOrders = newSettings.MaxSimultaneousOrders;
             this.Update(company);
         }
     }

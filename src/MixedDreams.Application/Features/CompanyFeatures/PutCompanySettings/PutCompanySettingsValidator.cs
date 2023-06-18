@@ -15,6 +15,11 @@ namespace MixedDreams.Application.Features.CompanyFeatures.PutCompanySettings
                 RuleFor(customer => (int)customer.CooksNumber!).GreaterThan(0);
                 RuleFor(customer => (int)customer.CooksNumber!).LessThanOrEqualTo(1000);
             });
+
+            When(x => x.MaxSimultaneousOrders != null, () => {
+                RuleFor(customer => (int)customer.CooksNumber!).GreaterThan(0);
+                RuleFor(customer => (int)customer.CooksNumber!).LessThanOrEqualTo(10000);
+            });
         }
     }
 }
