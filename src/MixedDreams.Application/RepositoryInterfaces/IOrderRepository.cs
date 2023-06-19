@@ -1,15 +1,15 @@
-﻿using MixedDreams.Infrastructure.Features.OrderFeatures.GetOrdersStatistic;
+﻿using MixedDreams.Application.Features.OrderFeatures.GetOrdersStatistic;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MixedDreams.Infrastructure.DeviceModels;
+using MixedDreams.Application.DeviceModels;
 using MixedDreams.Domain.Enums;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
+using MixedDreams.Application.Exceptions.NotFound;
 
-namespace MixedDreams.Infrastructure.RepositoryInterfaces
+namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IOrderRepository : IBaseRepository<Order>
     {

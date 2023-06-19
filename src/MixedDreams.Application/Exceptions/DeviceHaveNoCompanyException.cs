@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Exceptions
+namespace MixedDreams.Application.Exceptions
 {
     public class DeviceHaveNoCompanyException : BaseException
     {

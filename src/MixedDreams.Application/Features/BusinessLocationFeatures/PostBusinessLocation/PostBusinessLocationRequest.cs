@@ -1,4 +1,4 @@
-﻿using MixedDreams.Infrastructure.Features.Common.Address;
+﻿using MixedDreams.Application.Features.Common.Address;
 using MixedDreams.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.BusinessLocationFeatures.PostBusinessLocation
+namespace MixedDreams.Application.Features.BusinessLocationFeatures.PostBusinessLocation
 {
     public sealed record PostBusinessLocationRequest
     {

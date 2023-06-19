@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.Hubs.Clients;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Helpers;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Helpers;
+using MixedDreams.Application.Constants;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,24 +15,24 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using UnitsNet;
-using MixedDreams.Infrastructure.Data;
-using MixedDreams.Infrastructure.Features.AuthFeatures;
-using MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCustomer;
-using MixedDreams.Infrastructure.Features.AuthFeatures.Login;
-using MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCompany;
-using MixedDreams.Infrastructure.Options;
+using MixedDreams.Application.Data;
+using MixedDreams.Application.Features.AuthFeatures;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
+using MixedDreams.Application.Features.AuthFeatures.Login;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
+using MixedDreams.Application.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 using System.Data;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using MixedDreams.Infrastructure.Constants;
-using MixedDreams.Infrastructure.Exceptions.BadRequest;
-using MixedDreams.Infrastructure.Enums;
-using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+using MixedDreams.Application.Constants;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Enums;
+using MixedDreams.Application.Exceptions.InternalServerError;
 using Stripe;
 using Customer = MixedDreams.Domain.Entities.Customer;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     internal class AuthService : IAuthService
     {
@@ -73,7 +73,7 @@ namespace MixedDreams.Infrastructure.Services
             List<Claim> claims = new();
             if ((await _userManager.GetRolesAsync(user)).Any(r => r == Roles.Company))
             {
-                claims.Add(new Claim(AppClaimTypes.TenantId, user.Id.ToString()));
+                claims.Add(new Claim(AppClaimTypes.TenantId, user.EntityId.ToString()));
             }
 
             var token = await CreateTokenAsync(user, model.RememberMe, claims);
@@ -158,7 +158,7 @@ namespace MixedDreams.Infrastructure.Services
 
             var claims = new List<Claim>
             {
-                new Claim(AppClaimTypes.TenantId, user.Id.ToString()),
+                new Claim(AppClaimTypes.TenantId, user.EntityId.ToString()),
             };
             var token = await CreateTokenAsync(user, false, claims);
 

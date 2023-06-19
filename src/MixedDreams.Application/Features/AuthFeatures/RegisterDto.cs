@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.AuthFeatures
+namespace MixedDreams.Application.Features.AuthFeatures
 
 {
     public abstract record RegisterDto

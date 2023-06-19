@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using MixedDreams.Infrastructure.DeviceModels;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Options;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Hubs.Clients;
-using MixedDreams.Infrastructure.Hubs;
+using MixedDreams.Application.DeviceModels;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Options;
+using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.Hubs.Clients;
+using MixedDreams.Application.Hubs;
 using MQTTnet;
 using MQTTnet.Client;
 using Newtonsoft.Json;
@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 using MixedDreams.Application.Common;
 using MQTTnet.Server;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     internal class DeviceService : IDisposable, IDeviceService
     {

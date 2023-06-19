@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.DeviceModels
+namespace MixedDreams.Application.DeviceModels
 {
     public class ConstraintsRequest : IDeviceMessage
     {

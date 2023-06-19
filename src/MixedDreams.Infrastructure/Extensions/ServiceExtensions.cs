@@ -2,27 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Exceptions.InternalServerError;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.Hubs.Clients;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Data;
-using MixedDreams.Infrastructure.IdentitySetup;
-using MixedDreams.Infrastructure.Options;
-using MixedDreams.Infrastructure.Repositories;
-using MixedDreams.Infrastructure.Services;
+using MixedDreams.Application.Data;
+using MixedDreams.Application.IdentitySetup;
+using MixedDreams.Application.Options;
+using MixedDreams.Application.Repositories;
+using MixedDreams.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using MixedDreams.Infrastructure.Options;
+using MixedDreams.Application.Options;
+using MixedDreams.Application.Services;
+using MixedDreams.Application.Hubs;
+using MixedDreams.Application.ServicesInterfaces;
 using MixedDreams.Infrastructure.Services;
-using MixedDreams.Infrastructure.Hubs;
 
-namespace MixedDreams.Infrastructure.Extensions
+namespace MixedDreams.Application.Extensions
 {
     public static class ServiceExtensions
     {
@@ -35,6 +37,7 @@ namespace MixedDreams.Infrastructure.Extensions
             services.AddScoped<IBackblazeService, BackblazeService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICooksService, CooksService>();
 
             services.AddSingleton<IDeviceService, DeviceService>();
 

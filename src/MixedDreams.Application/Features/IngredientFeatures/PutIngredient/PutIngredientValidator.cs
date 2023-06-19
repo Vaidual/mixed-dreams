@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using MixedDreams.Infrastructure.Features.IngredientFeatures.PostIngredient;
+using MixedDreams.Application.Features.IngredientFeatures.PostIngredient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.IngredientFeatures.PutIngredient
+namespace MixedDreams.Application.Features.IngredientFeatures.PutIngredient
 {
     public class PutIngredientValidator : AbstractValidator<PutIngredientRequest>
     {

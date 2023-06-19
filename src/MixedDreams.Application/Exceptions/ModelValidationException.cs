@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Enums;
-using MixedDreams.Infrastructure.Features.Errors;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Enums;
+using MixedDreams.Application.Features.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Exceptions
+namespace MixedDreams.Application.Exceptions
 {
     public class ModelValidationException : BaseHttpException
     {

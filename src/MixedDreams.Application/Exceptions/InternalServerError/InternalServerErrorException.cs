@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Enums;
 using MixedDreams.Domain.Common;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Exceptions.InternalServerError
+namespace MixedDreams.Application.Exceptions.InternalServerError
 {
     public class InternalServerErrorException : BaseHttpException
     {

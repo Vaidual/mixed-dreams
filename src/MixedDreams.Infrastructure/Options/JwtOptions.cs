@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Options
+namespace MixedDreams.Application.Options
 {
     internal class JwtOptions
     {

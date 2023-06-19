@@ -1,5 +1,5 @@
 ﻿using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct;
+using MixedDreams.Application.Features.ProductFeatures.GetProduct;
 using System;
 using System.Collections.Generic;
 using System.Linq;

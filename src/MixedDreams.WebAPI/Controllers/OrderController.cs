@@ -3,21 +3,21 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Constants;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Exceptions.BadRequest;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Extensions;
-using MixedDreams.Infrastructure.Features.Errors;
-using MixedDreams.Infrastructure.Features.OrderFeatures.GetOrder;
-using MixedDreams.Infrastructure.Features.OrderFeatures.GetOrdersStatistic;
-using MixedDreams.Infrastructure.Features.OrderFeatures.PostOrder;
-using MixedDreams.Infrastructure.Features.OrderFeatures.UpdateOrderStatus;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Constants;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Extensions;
+using MixedDreams.Application.Features.Errors;
+using MixedDreams.Application.Features.OrderFeatures.GetOrder;
+using MixedDreams.Application.Features.OrderFeatures.GetOrdersStatistic;
+using MixedDreams.Application.Features.OrderFeatures.PostOrder;
+using MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus;
+using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.Hubs.Clients;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 using System.Security.Claims;
 using MixedDreams.Application.Features.OrderFeatures.CreatePaymentIntent;
 using Stripe;
@@ -56,7 +56,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = Roles.Company)]
         public async Task<IActionResult> GetOrders(CancellationToken cancellationToken)
         {
-            IReadOnlyList<Order> Orders = await _unitOfWork.OrderRepository.GetAll(cancellationToken);
+            IReadOnlyList<Order> Orders = await _unitOfWork.OrderRepository.GetAllNoTrackingAsync(cancellationToken);
 
             return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<GetOrderResponse>>(Orders));
         }
@@ -65,7 +65,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = Roles.Customer)]
         public async Task<IActionResult> GetUserOrders([FromQuery] Guid userId, CancellationToken cancellationToken)
         {
-            IReadOnlyList<Order> Orders = await _unitOfWork.OrderRepository.GetAll(cancellationToken, expression: x => x.Id == userId);
+            IReadOnlyList<Order> Orders = await _unitOfWork.OrderRepository.GetAllNoTrackingAsync(cancellationToken, expression: x => x.Id == userId);
 
             return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<GetOrderResponse>>(Orders));
         }
@@ -104,8 +104,8 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 throw new PeriodDoesntExistException(period);
             }
-            DateTimeOffset start =  DateTimeOffset.Now.Subtract(periodTimeSpan);
-            DateTimeOffset end = DateTimeOffset.Now;
+            DateTimeOffset start =  DateTimeOffset.UtcNow.Subtract(periodTimeSpan);
+            DateTimeOffset end = DateTimeOffset.UtcNow;
             List<GetOrdersStatisticResponse> statistic = await _unitOfWork.OrderRepository.GetStatistic(start, end, TimeSpan.FromHours(1), cancellationToken);
 
             return Ok(statistic);

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using MixedDreams.Infrastructure.Features.OrderFeatures.GetOrder;
-using MixedDreams.Infrastructure.Features.OrderFeatures.PostOrder;
-using MixedDreams.Infrastructure.Features.OrderFeatures.UpdateOrderStatus;
+using MixedDreams.Application.Features.OrderFeatures.GetOrder;
+using MixedDreams.Application.Features.OrderFeatures.PostOrder;
+using MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.OrderFeatures
+namespace MixedDreams.Application.Features.OrderFeatures
 {
     public class OrderMapper : Profile
     {

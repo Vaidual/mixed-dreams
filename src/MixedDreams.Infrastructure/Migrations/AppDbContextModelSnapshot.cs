@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 
 #nullable disable
 
-namespace MixedDreams.Infrastructure.Migrations
+namespace MixedDreams.Application.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -307,6 +307,11 @@ namespace MixedDreams.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("AcceptOrders")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -342,6 +347,38 @@ namespace MixedDreams.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("MixedDreams.Domain.Entities.Cook", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CurrentEndTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CurrentProductOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("LastEndTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("LastProductOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CurrentProductOrderId");
+
+                    b.HasIndex("LastProductOrderId");
+
+                    b.ToTable("Cooks");
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Customer", b =>
@@ -471,6 +508,9 @@ namespace MixedDreams.Infrastructure.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("NextProductInQueueId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
@@ -481,6 +521,8 @@ namespace MixedDreams.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NextProductInQueueId");
 
                     b.HasIndex("OrderId");
 
@@ -854,6 +896,29 @@ namespace MixedDreams.Infrastructure.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("MixedDreams.Domain.Entities.Cook", b =>
+                {
+                    b.HasOne("MixedDreams.Domain.Entities.Company", "Company")
+                        .WithMany("Cooks")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MixedDreams.Domain.Entities.OrderProduct", "CurrentProductOrder")
+                        .WithMany()
+                        .HasForeignKey("CurrentProductOrderId");
+
+                    b.HasOne("MixedDreams.Domain.Entities.OrderProduct", "LastProductOrder")
+                        .WithMany()
+                        .HasForeignKey("LastProductOrderId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("CurrentProductOrder");
+
+                    b.Navigation("LastProductOrder");
+                });
+
             modelBuilder.Entity("MixedDreams.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("MixedDreams.Domain.Entities.ApplicationUser", "ApplicationUser")
@@ -895,6 +960,10 @@ namespace MixedDreams.Infrastructure.Migrations
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.OrderProduct", b =>
                 {
+                    b.HasOne("MixedDreams.Domain.Entities.OrderProduct", "NextProductInQueue")
+                        .WithMany()
+                        .HasForeignKey("NextProductInQueueId");
+
                     b.HasOne("MixedDreams.Domain.Entities.Order", "Order")
                         .WithMany("OrderProducts")
                         .HasForeignKey("OrderId")
@@ -912,6 +981,8 @@ namespace MixedDreams.Infrastructure.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("NextProductInQueue");
 
                     b.Navigation("Order");
 
@@ -993,6 +1064,8 @@ namespace MixedDreams.Infrastructure.Migrations
             modelBuilder.Entity("MixedDreams.Domain.Entities.Company", b =>
                 {
                     b.Navigation("BusinessLocations");
+
+                    b.Navigation("Cooks");
 
                     b.Navigation("Devices");
 

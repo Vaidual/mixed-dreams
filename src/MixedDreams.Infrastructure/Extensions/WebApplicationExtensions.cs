@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 
-namespace MixedDreams.Infrastructure.Extensions
+namespace MixedDreams.Application.Extensions
 {
     public static class WebApplicationExtensions
     {

@@ -8,7 +8,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Configurations
+namespace MixedDreams.Application.Configurations
 {
     public class DeviceConfiguration : IEntityTypeConfiguration<Device>
     {

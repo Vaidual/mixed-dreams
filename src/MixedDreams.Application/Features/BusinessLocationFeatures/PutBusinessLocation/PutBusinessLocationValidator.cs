@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
-using MixedDreams.Infrastructure.Features.Common.Address;
-using MixedDreams.Infrastructure.Features.IngredientFeatures.PostIngredient;
+using MixedDreams.Application.Features.Common.Address;
+using MixedDreams.Application.Features.IngredientFeatures.PostIngredient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.BusinessLocationFeatures.PutBusinessLocation
+namespace MixedDreams.Application.Features.BusinessLocationFeatures.PutBusinessLocation
 {
     public class PutBusinessLocationValidator : AbstractValidator<PutBusinessLocationRequest>
     {

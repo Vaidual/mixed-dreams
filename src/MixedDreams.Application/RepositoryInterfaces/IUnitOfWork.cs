@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.RepositoryInterfaces
+namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IUnitOfWork
     {
@@ -17,6 +17,7 @@ namespace MixedDreams.Infrastructure.RepositoryInterfaces
         public IProductCategoryRepository ProductCategoryRepository { get; }
         public IProductHistoryRepository ProductHistoryRepository { get; }
         public IDeviceRepository DeviceRepository { get; }
+        public ICookRepository CookRepository { get; }
         Task SaveAsync(CancellationToken cancellationToken = default);
     }
 }

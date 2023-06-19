@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Exceptions.NotFound
+namespace MixedDreams.Application.Exceptions.NotFound
 {
     public class NotFoundException : BaseHttpException
     {

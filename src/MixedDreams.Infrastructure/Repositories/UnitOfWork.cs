@@ -1,13 +1,13 @@
-﻿using MixedDreams.Infrastructure.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Data;
+﻿using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MixedDreams.Infrastructure.Repositories;
+using MixedDreams.Application.Repositories;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal class UnitOfWork : IUnitOfWork
     {
@@ -21,6 +21,7 @@ namespace MixedDreams.Infrastructure.Repositories
         private IProductCategoryRepository _productCategoryRepository;
         private IProductHistoryRepository _productHistoryRepository;
         private IDeviceRepository _deviceRepository;
+        private ICookRepository _cookRepository;
 
         public UnitOfWork(AppDbContext context)
         {
@@ -36,6 +37,7 @@ namespace MixedDreams.Infrastructure.Repositories
         public IBusinessLocationRepository BusinessLocationRepository => _businessLocationRepository ??= new BusinessLocationRepository(_context);
         public IProductHistoryRepository ProductHistoryRepository => _productHistoryRepository ??= new ProductHistoryRepository(_context);
         public IDeviceRepository DeviceRepository => _deviceRepository ??= new DeviceRepository(_context);
+        public ICookRepository CookRepository => _cookRepository ??= new CookRepository(_context);
 
         public Task SaveAsync(CancellationToken cancellationToken = default)
         {

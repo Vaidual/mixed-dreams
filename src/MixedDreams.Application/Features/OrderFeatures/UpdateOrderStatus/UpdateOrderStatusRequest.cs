@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.OrderFeatures.UpdateOrderStatus
+namespace MixedDreams.Application.Features.OrderFeatures.UpdateOrderStatus
 {
     public class UpdateOrderStatusRequest
     {

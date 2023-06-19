@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.DeviceModels
+namespace MixedDreams.Application.DeviceModels
 {
     public class ProductConstraints
     {

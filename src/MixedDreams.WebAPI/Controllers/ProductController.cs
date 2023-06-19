@@ -4,29 +4,29 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Extensions;
-using MixedDreams.Infrastructure.Features;
-using MixedDreams.Infrastructure.Features.Common;
-using MixedDreams.Infrastructure.Features.Errors;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetCategories;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductNames;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDetails;
-using MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct;
-using MixedDreams.Infrastructure.Features.ProductFeatures.PutProduct;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Extensions;
+using MixedDreams.Application.Features;
+using MixedDreams.Application.Features.Common;
+using MixedDreams.Application.Features.Errors;
+using MixedDreams.Application.Features.ProductFeatures.GetCategories;
+using MixedDreams.Application.Features.ProductFeatures.GetProduct;
+using MixedDreams.Application.Features.ProductFeatures.GetProductNames;
+using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
+using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Application.Features.ProductFeatures.PutProduct;
+using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.Hubs.Clients;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 using Polly;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading;
 using ValidationResult = FluentValidation.Results.ValidationResult;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetCompanyProducts;
+using MixedDreams.Application.Features.ProductFeatures.GetCompanyProducts;
 using MixedDreams.Application.Features.ProductFeatures.Dto;
 using MixedDreams.Application.Features.ProductFeatures.GetProducts;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -81,7 +81,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
         {
-            IReadOnlyList<ProductCategory> categories = await _unitOfWork.ProductCategoryRepository.GetAll(cancellationToken);
+            IReadOnlyList<ProductCategory> categories = await _unitOfWork.ProductCategoryRepository.GetAllNoTrackingAsync(cancellationToken);
 
             return Ok(_mapper.Map<IReadOnlyList<ProductCategory>, IReadOnlyList<GetCategoryResponse>>(categories));
         }
@@ -122,7 +122,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetProductsForCompany(CancellationToken cancellationToken)
         {
-            var products = await _unitOfWork.ProductRepository.GetAll(cancellationToken);
+            var products = await _unitOfWork.ProductRepository.GetAllNoTrackingAsync(cancellationToken);
 
             return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<CompanyProductDto>>(products));
         }

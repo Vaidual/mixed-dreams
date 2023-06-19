@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
-using MixedDreams.Infrastructure.Features.AuthFeatures.Login;
-using MixedDreams.Infrastructure.Features.Common;
-using MixedDreams.Infrastructure.Features.Common.Address;
+using MixedDreams.Application.Features.AuthFeatures.Login;
+using MixedDreams.Application.Features.Common;
+using MixedDreams.Application.Features.Common.Address;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCompany
+namespace MixedDreams.Application.Features.AuthFeatures.RegisterCompany
 {
     public class CompanyRegisterValidator : AbstractValidator<CompanyRegisterRequest>
     {

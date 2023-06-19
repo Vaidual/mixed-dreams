@@ -1,4 +1,4 @@
-﻿using MixedDreams.Infrastructure.Features.Common.Address;
+﻿using MixedDreams.Application.Features.Common.Address;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Domain.Enums;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.OrderFeatures.GetOrder
+namespace MixedDreams.Application.Features.OrderFeatures.GetOrder
 {
     public class GetOrderResponse
     {

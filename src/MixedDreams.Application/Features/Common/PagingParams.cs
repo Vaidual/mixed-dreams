@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.Common
+namespace MixedDreams.Application.Features.Common
 {
     public class PagingParams
     {

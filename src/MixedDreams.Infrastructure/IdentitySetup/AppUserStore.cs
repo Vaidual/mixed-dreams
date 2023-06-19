@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 
-namespace MixedDreams.Infrastructure.IdentitySetup
+namespace MixedDreams.Application.IdentitySetup
 {
     internal class AppUserStore : UserStore<ApplicationUser>
     {

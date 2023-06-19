@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MixedDreams.Infrastructure.Features.OrderFeatures.GetOrdersStatistic;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Features.OrderFeatures.GetOrdersStatistic;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MixedDreams.Infrastructure.DeviceModels;
-using MixedDreams.Infrastructure.Exceptions.InternalServerError;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
+using MixedDreams.Application.DeviceModels;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Exceptions.NotFound;
 using MixedDreams.Domain.Enums;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal class OrderRepository : BaseRepository<Order>, IOrderRepository
     {

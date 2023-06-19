@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.Common.Address
+namespace MixedDreams.Application.Features.Common.Address
 {
     public class AddressDto
     {

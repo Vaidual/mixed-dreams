@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Exceptions.BadRequest;
-using MixedDreams.Infrastructure.Exceptions.InternalServerError;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Extensions;
-using MixedDreams.Infrastructure.Features.Errors;
-using MixedDreams.Infrastructure.Features.OrderFeatures.PostOrder;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
-using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Extensions;
+using MixedDreams.Application.Features.Errors;
+using MixedDreams.Application.Features.OrderFeatures.PostOrder;
+using MixedDreams.Application.RepositoryInterfaces;
+using MixedDreams.Application.Hubs.Clients;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,9 +16,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Bytewizer.Backblaze.Extensions;
-using MixedDreams.Infrastructure.Features.OrderFeatures.OrderProduct;
+using MixedDreams.Application.Features.OrderFeatures.OrderProduct;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     internal class OrderService : IOrderService
     {
@@ -42,25 +43,56 @@ namespace MixedDreams.Infrastructure.Services
             Order orderToCreate = _mapper.Map<Order>(model);
             orderToCreate.OrderStatus = Domain.Enums.OrderStatus.Accepted;
             orderToCreate.CustomerId = customerId;
-            orderToCreate.TenantId = Guid.Parse(_unitOfWork.CompanyRepository
-                .GettenantIdByBusinessLocationIdAsync(model.BusinessLocationId) 
-                ?? throw new EntityNotFoundException(nameof(BusinessLocation), model.BusinessLocationId.ToString()));
+            orderToCreate.TenantId = (await _unitOfWork.BusinessLocationRepository.GetAsync(model.BusinessLocationId))?.TenantId ?? throw new EntityNotFoundException(nameof(BusinessLocation), model.BusinessLocationId.ToString());
 
-            OrderProduct[] orderProducts = new OrderProduct[model.Products.Count];
-            for (int i = 0; i < model.Products.Count; i++)
+            List<OrderProductWithPreparationDto> orderProducts = await _unitOfWork.ProductRepository.AddPreparationTimeToOrderProducts(model.Products);
+            OrderProduct[] orderProductsToCreate = new OrderProduct[model.Products.Count];
+            IReadOnlyList<Cook> cooks = await _unitOfWork.CookRepository.GetAllAsync();
+            for (int i = 0; i < orderProducts.Count; i++)
             {
-                PostOrderProductDto orderProduct = model.Products[i];
-                orderProducts[i] = new OrderProduct()
+                OrderProductWithPreparationDto orderProduct = orderProducts[i];
+                var orderProductToAdd = new OrderProduct()
                 {
                     Amount = orderProduct.Amount,
                     Order = orderToCreate,
                     ProductId = orderProduct.ProductId,
-                    ProductHistoryId = await _unitOfWork.ProductHistoryRepository.GetLastProductHistoryId(orderProduct.ProductId) 
-                        ?? throw new ProductHasNoProductHistoryException(orderProduct.ProductId.ToString())
+                    ProductHistoryId = await _unitOfWork.ProductHistoryRepository.GetLastProductHistoryId(orderProduct.ProductId)
+                        ?? throw new ProductHasNoProductHistoryException(orderProduct.ProductId.ToString()),
+                    NextProductInQueue = null
                 };
+                orderProductsToCreate[i] = orderProductToAdd;
+
+                for (int j = 0; j < orderProduct.Amount; j++)
+                {
+                    Cook? cook = cooks.All(x => x.LastEndTime.HasValue) ? cooks.MinBy(x => x.LastEndTime) : cooks.First(x => x.LastEndTime == null);
+                    if (cook is not null)
+                    {
+                        if (cook.LastEndTime == null)
+                        {
+                            var currentDateTime = DateTimeOffset.Now;
+                            var endDateTime = currentDateTime.AddMinutes(orderProduct.PreparationTime);
+                            cook.CurrentEndTime = endDateTime;
+                            cook.LastEndTime = endDateTime;
+                            cook.CurrentProductOrder = orderProductToAdd;
+                            cook.LastProductOrder = orderProductToAdd;
+                        }
+                        else
+                        {
+                            var endDateTime = cook.LastEndTime?.AddMinutes(orderProduct.PreparationTime);
+                            cook.LastEndTime = endDateTime;
+                            cook.LastProductOrder.NextProductInQueue = orderProductToAdd;
+                            cook.LastProductOrder = orderProductToAdd;
+                        }
+                        _unitOfWork.CookRepository.Update(cook);
+                    }
+                    else
+                    {
+                        //TODO
+                    }
+                }
             }
             
-            orderToCreate.OrderProducts = orderProducts.ToList();
+            orderToCreate.OrderProducts = orderProductsToCreate.ToList();
             _unitOfWork.OrderRepository.Create(orderToCreate);
             await _unitOfWork.SaveAsync();
             Order createdOrder = await _unitOfWork.OrderRepository.GetAsync(orderToCreate.Id)
@@ -68,6 +100,8 @@ namespace MixedDreams.Infrastructure.Services
 
             return createdOrder;
         }
+
+
 
         public async Task NotifyAboutLowWater(Guid deviceId)
         {

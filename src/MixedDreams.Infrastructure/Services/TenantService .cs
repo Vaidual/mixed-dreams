@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Exceptions.InternalServerError;
-using MixedDreams.Infrastructure.Hubs.Clients;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Hubs.Clients;
+using MixedDreams.Application.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Services
+namespace MixedDreams.Application.Services
 {
     public class TenantService : ITenantService
     {

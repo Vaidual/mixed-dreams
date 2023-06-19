@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.AuthFeatures.Login
+namespace MixedDreams.Application.Features.AuthFeatures.Login
 {
     public class LoginValidator : AbstractValidator<LoginRequest>
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Infrastructure.Hubs.Clients;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Hubs.Clients;
+using MixedDreams.Application.Constants;
 
 namespace MixedDreams.WebAPI.Controllers
 {

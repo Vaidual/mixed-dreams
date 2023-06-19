@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using MixedDreams.Infrastructure.Hubs.Clients;
+using MixedDreams.Application.Hubs.Clients;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Hubs
+namespace MixedDreams.Application.Hubs
 {
     public class NotificationHub : Hub<INotifyClient>
     {

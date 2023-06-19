@@ -12,5 +12,6 @@ namespace MixedDreams.Domain.Enums
         Accepted = 1,
         Ready = 2,
         Completed  = 3,
+        Started = 4,
     }
 }

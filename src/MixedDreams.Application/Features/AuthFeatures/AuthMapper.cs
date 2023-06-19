@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using MixedDreams.Infrastructure.Features.AuthFeatures;
-using MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCompany;
-using MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCustomer;
-using MixedDreams.Infrastructure.Features.Common.Address;
+using MixedDreams.Application.Features.AuthFeatures;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
+using MixedDreams.Application.Features.Common.Address;
 using MixedDreams.Domain.Entities;
 using MixedDreams.Domain.ValueObjects;
 using System;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.AuthFeatures
+namespace MixedDreams.Application.Features.AuthFeatures
 {
     internal class AuthMapper : Profile
     {

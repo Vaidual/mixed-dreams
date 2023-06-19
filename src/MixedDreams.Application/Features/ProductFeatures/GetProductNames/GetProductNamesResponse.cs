@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetProductNames
+namespace MixedDreams.Application.Features.ProductFeatures.GetProductNames
 {
     public class GetProductNamesResponse
     {

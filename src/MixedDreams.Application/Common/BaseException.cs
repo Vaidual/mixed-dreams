@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using MixedDreams.Infrastructure.Enums;
-using MixedDreams.Infrastructure.Features.Errors;
+using MixedDreams.Application.Enums;
+using MixedDreams.Application.Features.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

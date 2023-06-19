@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.IngredientFeatures.PutIngredient
+namespace MixedDreams.Application.Features.IngredientFeatures.PutIngredient
 {
     public sealed record PutIngredientRequest
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.IngredientFeatures.GetIngredient
+namespace MixedDreams.Application.Features.IngredientFeatures.GetIngredient
 {
     public class GetIngredientResponse
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Features.Errors;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Features.Errors;
 using Serilog.Events;
 
 namespace MixedDreams.WebAPI.Middlewares

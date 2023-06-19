@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Constants
+namespace MixedDreams.Application.Constants
 {
     internal class ImageRequierements
     {

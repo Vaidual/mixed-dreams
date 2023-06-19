@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.RepositoryInterfaces
+namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IProductCategoryRepository : IBaseRepository<ProductCategory>
     {

@@ -1,26 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct;
-using MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Features.ProductFeatures.GetProduct;
+using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDetails;
-using MixedDreams.Infrastructure.DeviceModels;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
+using MixedDreams.Application.DeviceModels;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Exceptions.InternalServerError;
 using MixedDreams.Application.Features.ProductFeatures.Dto;
 using Polly;
 using MixedDreams.Domain.Enums;
 using MixedDreams.Application.Constants;
 using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Features.OrderFeatures.OrderProduct;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal class ProductRepository : BaseRepository<Product>, IProductRepository
     {
@@ -31,12 +32,29 @@ namespace MixedDreams.Infrastructure.Repositories
             var product = await Table
                 .Include(x => x.Image)
                 .Include(x => x.ProductCategory)
+                .Include(x => x.Company)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (product == null) return null;
 
-            //this.Context.Orders.Where(x => x.)
+            int additionalCompanyPreparationTime = 0;
+            if (product.Company.CooksNumber != null)
+            {
+                int canCookAfter = this.Context.Cooks
+                    .Where(x => x.CompanyId == product.CompanyId)
+                    .Select(x =>
+                        x.LastEndTime != null ? (int)Math.Round((x.LastEndTime - DateTimeOffset.UtcNow).Value.TotalMinutes, MidpointRounding.AwayFromZero) : 0)
+                    .AsEnumerable()
+                    .DefaultIfEmpty(0)
+                    .Min();
 
+                if (canCookAfter > 0)
+                {
+                    additionalCompanyPreparationTime += canCookAfter;
+                }
+                
+            }
+            
             await Context.Entry(product)
                 .Collection(p => p.ProductIngredients)
                 .Query()
@@ -65,7 +83,7 @@ namespace MixedDreams.Infrastructure.Repositories
                     Id = product.Company.Id,
                     Name = product.Company.CompanyName
                 },
-                Preparationtime = product.PreparationTime ?? throw new NullFieldExcetion(nameof(Product.PreparationTime), nameof(Product)),
+                PreparationTime = additionalCompanyPreparationTime + product.PreparationTime ?? throw new NullFieldExcetion(nameof(Product.PreparationTime), nameof(Product)),
             };
                 
         }
@@ -102,7 +120,7 @@ namespace MixedDreams.Infrastructure.Repositories
         }
 
 
-        public override async Task<IReadOnlyList<Product>> GetAll(CancellationToken cancellationToken)
+        public override async Task<IReadOnlyList<Product>> GetAllNoTrackingAsync(CancellationToken cancellationToken)
         {
             return await Table.AsNoTracking()
                 .Include(x => x.Image)
@@ -125,7 +143,7 @@ namespace MixedDreams.Infrastructure.Repositories
         {
             Context.ProductHistory.Add(new ProductHistory
             {
-                Date = DateTimeOffset.Now,
+                Date = DateTimeOffset.UtcNow,
                 Name = product.Name,
                 Price = product.Price,
                 ProductId = product.Id
@@ -144,12 +162,32 @@ namespace MixedDreams.Infrastructure.Repositories
 
         public async Task<ProductPages> GetPages(CancellationToken cancellationToken, int page = 0, int size = 20, string? key = "", string? category = null, string? sort = null)
         {
+            var availableCompanies = Context.Companies
+                .Where(x => x.AcceptOrders == true)
+                .Join(Context.Orders,
+                    c => c.Id,
+                    o => o.TenantId,
+                    (c, o) => new { CompanyId = c.Id, c.MaxSimultaneousOrders, c.AcceptOrders, o.OrderStatus })
+                .GroupBy(x => x.CompanyId)
+                .Select(g => new
+                {
+                    CompanyId = g.Key,
+                    CurrentOrders = g.Where(x => x.OrderStatus == OrderStatus.Started || x.OrderStatus == OrderStatus.Accepted).Count(),
+                    g.First().MaxSimultaneousOrders,
+                })
+                .Where(x => x.MaxSimultaneousOrders == null || x.CurrentOrders <= x.MaxSimultaneousOrders);
             IQueryable<Product> query = Table
+                .Join(availableCompanies,
+                    p => p.CompanyId,
+                    c => c.CompanyId,
+                    (p, c) => p)
                 .Where(x => x.AmountInStock > 0 &&
-                       x.Visibility == Visibility.Visible &&
-                       x.RecommendedTemperature != null &&
-                       x.RecommendedHumidity != null &&
-                       x.PreparationTime != null);
+                        x.Visibility == Visibility.Visible &&
+                        x.RecommendedTemperature != null &&
+                        x.RecommendedHumidity != null &&
+                        x.PreparationTime != null &&
+                        x.Price != null);
+
             if (key != null)
             {
                 query = query.Where(x => x.Name.ToLower().Contains(key.ToLower()));
@@ -201,6 +239,19 @@ namespace MixedDreams.Infrastructure.Repositories
         public async Task<int> CountImageOccurrencesAsync(string link)
         {
             return await Table.Include(x => x.Image).Where(x => x.Image != null && x.Image.Path == link).CountAsync();
+        }
+
+        public async Task<List<OrderProductWithPreparationDto>> AddPreparationTimeToOrderProducts(List<PostOrderProductDto> orderProducts)
+        {
+            return await Table
+                .Where(x => orderProducts.Any(y => y.ProductId == x.Id))
+                .Select(x => new OrderProductWithPreparationDto()
+                {
+                    ProductId = x.Id,
+                    Amount = orderProducts.Find(y => y.ProductId == x.Id).Amount,
+                    PreparationTime = (short)x.PreparationTime
+                })
+                .ToListAsync();
         }
 
     }

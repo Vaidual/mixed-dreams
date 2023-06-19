@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Constants
+namespace MixedDreams.Application.Constants
 {
     public static class AppClaimTypes
     {

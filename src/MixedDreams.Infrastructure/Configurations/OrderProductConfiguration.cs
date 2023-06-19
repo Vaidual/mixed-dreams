@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Configurations
+namespace MixedDreams.Application.Configurations
 {
     internal class OrderProductConfiguration : IEntityTypeConfiguration<OrderProduct>
     {

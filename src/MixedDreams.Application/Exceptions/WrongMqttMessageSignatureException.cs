@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using MixedDreams.Application.Common;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Exceptions
+namespace MixedDreams.Application.Exceptions
 {
     public class WrongMqttMessageSignatureException : BaseException
     {

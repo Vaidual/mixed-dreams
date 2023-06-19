@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MixedDreams.Infrastructure.Migrations
+namespace MixedDreams.Application.Migrations
 {
     /// <inheritdoc />
     public partial class DeviceEntityAdded : Migration

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Application.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.Errors
+namespace MixedDreams.Application.Features.Errors
 {
     public class InternalServerErrorResponse : ErrorResponse
     {

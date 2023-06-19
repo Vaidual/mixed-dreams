@@ -15,6 +15,9 @@ namespace MixedDreams.Domain.Entities
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
 
+        public OrderProduct? NextProductInQueue { get; set; }
+        public Guid? NextProductInQueueId { get; set; }
+
         public int Amount { get; set; }
 
         public Guid ProductHistoryId { get; set; }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient
+namespace MixedDreams.Application.Features.ProductFeatures.ProductIngredient
 {
     public sealed record PostProductIngredientDto
     {

@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Extensions
+namespace MixedDreams.Application.Extensions
 {
     public static class ClaimsPrincipalExtensions
     {

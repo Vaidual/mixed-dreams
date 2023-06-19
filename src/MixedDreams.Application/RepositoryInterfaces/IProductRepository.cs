@@ -1,6 +1,6 @@
-﻿using MixedDreams.Infrastructure.DeviceModels;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct;
-using MixedDreams.Infrastructure.Features.ProductFeatures.GetProductWithDetails;
+﻿using MixedDreams.Application.DeviceModels;
+using MixedDreams.Application.Features.ProductFeatures.GetProduct;
+using MixedDreams.Application.Features.ProductFeatures.GetProductWithDetails;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,8 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MixedDreams.Application.Features.ProductFeatures.Dto;
+using MixedDreams.Application.Features.OrderFeatures.OrderProduct;
 
-namespace MixedDreams.Infrastructure.RepositoryInterfaces
+namespace MixedDreams.Application.RepositoryInterfaces
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
@@ -22,5 +23,6 @@ namespace MixedDreams.Infrastructure.RepositoryInterfaces
         public Task<GetProductWithDetailsResponse?> GetProductInformation(Guid id, CancellationToken cancellationToken = default);
         public Task<string> GenerateUniqueCopyName(string originalName);
         public Task<int> CountImageOccurrencesAsync(string link);
+        public Task<List<OrderProductWithPreparationDto>> AddPreparationTimeToOrderProducts(List<PostOrderProductDto> orderProducts);
     }
 }

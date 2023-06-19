@@ -16,6 +16,7 @@ namespace MixedDreams.Domain.Entities
         public Address Address { get; set; }
 
         public short? CooksNumber { get; set; }
+        public bool AcceptOrders { get; set; } = true;
         public short? MaxSimultaneousOrders { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
@@ -24,5 +25,6 @@ namespace MixedDreams.Domain.Entities
         public List<Product> Products { get; set; }
         public List<Device> Devices { get; set; }
         public List<BusinessLocation> BusinessLocations { get; set; }
+        public List<Cook> Cooks { get; set; }
     }
 }

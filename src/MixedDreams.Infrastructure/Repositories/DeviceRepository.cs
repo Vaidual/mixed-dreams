@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MixedDreams.Infrastructure.Data;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Repositories;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Data;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Repositories;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal class DeviceRepository : BaseRepository<Device>, IDeviceRepository
     {

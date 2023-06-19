@@ -1,4 +1,4 @@
-﻿using MixedDreams.Infrastructure.Exceptions.InternalServerError;
+﻿using MixedDreams.Application.Exceptions.InternalServerError;
 using System;
 using System.Collections.Generic;
 using System.Linq;

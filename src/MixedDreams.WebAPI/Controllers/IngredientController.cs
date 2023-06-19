@@ -3,17 +3,17 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Exceptions.BadRequest;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Features.Errors;
-using MixedDreams.Infrastructure.Features.IngredientFeatures.GetIngredient;
-using MixedDreams.Infrastructure.Features.IngredientFeatures.PostIngredient;
-using MixedDreams.Infrastructure.Features.IngredientFeatures.PutIngredient;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Features.Errors;
+using MixedDreams.Application.Features.IngredientFeatures.GetIngredient;
+using MixedDreams.Application.Features.IngredientFeatures.PostIngredient;
+using MixedDreams.Application.Features.IngredientFeatures.PutIngredient;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 
 namespace MixedDreams.WebAPI.Controllers
 {
@@ -47,7 +47,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetIngredients(CancellationToken cancellationToken)
         {
-            IReadOnlyList<Ingredient> ingredients = await _unitOfWork.IngredientRepository.GetAll(cancellationToken);
+            IReadOnlyList<Ingredient> ingredients = await _unitOfWork.IngredientRepository.GetAllNoTrackingAsync(cancellationToken);
 
             return Ok(_mapper.Map<IReadOnlyList<Ingredient>, IReadOnlyList<GetIngredientResponse>>(ingredients));
         }

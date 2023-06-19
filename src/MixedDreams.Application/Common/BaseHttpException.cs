@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using MixedDreams.Application.Common;
-using MixedDreams.Infrastructure.Enums;
-using MixedDreams.Infrastructure.Features.Errors;
+using MixedDreams.Application.Enums;
+using MixedDreams.Application.Features.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Common
+namespace MixedDreams.Application.Common
 {
     public abstract class BaseHttpException : BaseException
     {

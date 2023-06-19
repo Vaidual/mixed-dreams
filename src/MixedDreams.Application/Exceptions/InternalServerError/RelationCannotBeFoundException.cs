@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Exceptions.InternalServerError
+namespace MixedDreams.Application.Exceptions.InternalServerError
 {
     public class RelationCannotBeFoundException : InternalServerErrorException
     {

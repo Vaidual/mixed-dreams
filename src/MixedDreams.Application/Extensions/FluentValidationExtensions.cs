@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
-using MixedDreams.Infrastructure.Constants;
-using MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Constants;
+using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Common;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Extensions
+namespace MixedDreams.Application.Extensions
 {
     public static class FluentValidationExtensions
     {

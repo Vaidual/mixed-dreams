@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MixedDreams.Infrastructure.Migrations
+namespace MixedDreams.Application.Migrations
 {
     /// <inheritdoc />
     public partial class NullableProductDescription : Migration

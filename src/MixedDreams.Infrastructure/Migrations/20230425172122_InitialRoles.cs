@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace MixedDreams.Infrastructure.Migrations
+namespace MixedDreams.Application.Migrations
 {
     /// <inheritdoc />
     public partial class InitialRoles : Migration

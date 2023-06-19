@@ -3,18 +3,18 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Exceptions;
-using MixedDreams.Infrastructure.Exceptions.BadRequest;
-using MixedDreams.Infrastructure.Exceptions.InternalServerError;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Features.BusinessLocationFeatures.GetBusinessLocation;
-using MixedDreams.Infrastructure.Features.BusinessLocationFeatures.PostBusinessLocation;
-using MixedDreams.Infrastructure.Features.BusinessLocationFeatures.PutBusinessLocation;
-using MixedDreams.Infrastructure.Features.Errors;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Exceptions;
+using MixedDreams.Application.Exceptions.BadRequest;
+using MixedDreams.Application.Exceptions.InternalServerError;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Features.BusinessLocationFeatures.GetBusinessLocation;
+using MixedDreams.Application.Features.BusinessLocationFeatures.PostBusinessLocation;
+using MixedDreams.Application.Features.BusinessLocationFeatures.PutBusinessLocation;
+using MixedDreams.Application.Features.Errors;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Constants;
+using MixedDreams.Application.Constants;
 using System.Security.Claims;
 
 namespace MixedDreams.WebAPI.Controllers
@@ -49,7 +49,7 @@ namespace MixedDreams.WebAPI.Controllers
         [Authorize(Roles = $"{Roles.Company}, {Roles.Administrator}")]
         public async Task<IActionResult> GetBusinessLocations(CancellationToken cancellationToken)
         {
-            IReadOnlyList<BusinessLocation> businessLocations = await _unitOfWork.BusinessLocationRepository.GetAll(cancellationToken);
+            IReadOnlyList<BusinessLocation> businessLocations = await _unitOfWork.BusinessLocationRepository.GetAllNoTrackingAsync(cancellationToken);
 
             return Ok(_mapper.Map<IReadOnlyList<BusinessLocation>, IReadOnlyList<GetBusinessLocationResponse>>(businessLocations));
         }

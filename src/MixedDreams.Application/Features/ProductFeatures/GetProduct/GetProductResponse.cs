@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct
+namespace MixedDreams.Application.Features.ProductFeatures.GetProduct
 {
     public sealed class GetProductResponse
     {
@@ -17,7 +17,7 @@ namespace MixedDreams.Infrastructure.Features.ProductFeatures.GetProduct
         public string? PrimaryImage { get; set; }
         public string Category { get; set; }
         public CompanyDto Company { get; set; }
-        public short Preparationtime { get; set; }
+        public int PreparationTime { get; set; }
         public IEnumerable<IngredientDto> Ingredients { get; set; }
     }
 }

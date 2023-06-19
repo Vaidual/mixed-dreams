@@ -6,14 +6,15 @@ using MixedDreams.Application.Exceptions.InternalServerError;
 using MixedDreams.Application.Features.CompanyFeatures.GetSettings;
 using MixedDreams.Application.Features.CompanyFeatures.PutCompanySettings;
 using MixedDreams.Domain.Entities;
-using MixedDreams.Infrastructure.Common;
-using MixedDreams.Infrastructure.Constants;
-using MixedDreams.Infrastructure.Exceptions.NotFound;
-using MixedDreams.Infrastructure.Features.IngredientFeatures.GetIngredient;
-using MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Common;
+using MixedDreams.Application.Constants;
+using MixedDreams.Application.Exceptions.NotFound;
+using MixedDreams.Application.Features.IngredientFeatures.GetIngredient;
+using MixedDreams.Application.Features.ProductFeatures.PostPutProduct;
+using MixedDreams.Application.RepositoryInterfaces;
 using System.Linq;
 using System.Security.Claims;
+using MixedDreams.Application.ServicesInterfaces;
 
 namespace MixedDreams.WebAPI.Controllers
 {
@@ -41,7 +42,7 @@ namespace MixedDreams.WebAPI.Controllers
 
         [HttpPut("~/api/company/settings")]
         [Authorize(Roles = $"{Roles.Company}")]
-        public async Task<IActionResult> PutSettings([FromBody] PutCompanySettingsRequest model, [FromServices] IValidator<PutCompanySettingsRequest> validator)
+        public async Task<IActionResult> PutSettings([FromBody] PutCompanySettingsRequest model, [FromServices] IValidator<PutCompanySettingsRequest> validator, [FromServices] ICooksService cooksService)
         {
             ValidationResult validationResult = await validator.ValidateAsync(model);
             if (!validationResult.IsValid)
@@ -51,6 +52,7 @@ namespace MixedDreams.WebAPI.Controllers
 
             Guid companyId = Guid.Parse((this.User.Claims.First(x => x.Type == AppClaimTypes.EntityId) ?? throw new MissingClaimException(AppClaimTypes.EntityId)).Value);
             await _unitOfWork.CompanyRepository.UpdateSettings(companyId, model);
+            await cooksService.UpdateCooksNumber(companyId, model.CooksNumber ?? 0);
             await _unitOfWork.SaveAsync();
             return Ok();
         }

@@ -6,9 +6,9 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using MixedDreams.Infrastructure.Enums;
+using MixedDreams.Application.Enums;
 
-namespace MixedDreams.Infrastructure.Features.Errors
+namespace MixedDreams.Application.Features.Errors
 {
     public class BadRequestResponse : ErrorResponse
     {

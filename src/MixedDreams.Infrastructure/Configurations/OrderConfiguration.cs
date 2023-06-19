@@ -9,7 +9,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Configurations
+namespace MixedDreams.Application.Configurations
 {
     internal class OrderConfiguration : IEntityTypeConfiguration<Order>
     {

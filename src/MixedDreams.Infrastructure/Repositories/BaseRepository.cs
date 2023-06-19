@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.RepositoryInterfaces;
 using MixedDreams.Domain.Common;
-using MixedDreams.Infrastructure.Data;
+using MixedDreams.Application.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Repositories
+namespace MixedDreams.Application.Repositories
 {
     internal abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
@@ -36,6 +36,18 @@ namespace MixedDreams.Infrastructure.Repositories
                 trackableEntity.DateCreated = DateTimeOffset.UtcNow;
             }
             return Context.Add(entity).Entity;
+        }
+
+        public void AddRange(List<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                if (entity is ITrackableEntity trackableEntity)
+                {
+                    trackableEntity.DateCreated = DateTimeOffset.UtcNow;
+                }
+            }
+            Context.AddRange(entities);
         }
 
         public virtual void Update(T entity)
@@ -66,12 +78,12 @@ namespace MixedDreams.Infrastructure.Repositories
             return await Table.FindAsync(new object?[] { id }, cancellationToken: cancellationToken);
         }
 
-        public virtual async Task<IReadOnlyList<T>> GetAll(CancellationToken cancellationToken)
+        public virtual async Task<IReadOnlyList<T>> GetAllNoTrackingAsync(CancellationToken cancellationToken)
         {
             return await Table.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<T>> GetAll(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null)
+        public async Task<IReadOnlyList<T>> GetAllNoTrackingAsync(CancellationToken cancellationToken, Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null)
         {
             IQueryable<T> query = Table;
 
@@ -96,12 +108,12 @@ namespace MixedDreams.Infrastructure.Repositories
             return await query.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<T?> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
+        public async Task<T?> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
         {
             return await Table.Where(expression).AsNoTracking().FirstAsync(cancellationToken);
         }
 
-        public Task<List<T>> GetPagedData(int page, int size, CancellationToken cancellationToken)
+        public Task<List<T>> GetPagedDataAsync(int page, int size, CancellationToken cancellationToken)
         {
             return Table.Skip(page * size).Take(size).AsNoTracking().ToListAsync(cancellationToken);
         }
@@ -119,6 +131,16 @@ namespace MixedDreams.Infrastructure.Repositories
         public Task<bool> ExistAnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return Table.AnyAsync(predicate, cancellationToken);
+        }
+
+        public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+        {
+            return await Table.CountAsync(cancellationToken);
+        }
+
+        public Task<List<T>> GetAsync(int count, CancellationToken cancellationToken = default)
+        {
+            return Table.Take(count).ToListAsync();
         }
     }
 }

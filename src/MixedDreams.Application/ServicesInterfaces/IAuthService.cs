@@ -1,14 +1,14 @@
-﻿using MixedDreams.Infrastructure.Features.AuthFeatures;
-using MixedDreams.Infrastructure.Features.AuthFeatures.Login;
-using MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCompany;
-using MixedDreams.Infrastructure.Features.AuthFeatures.RegisterCustomer;
+﻿using MixedDreams.Application.Features.AuthFeatures;
+using MixedDreams.Application.Features.AuthFeatures.Login;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCompany;
+using MixedDreams.Application.Features.AuthFeatures.RegisterCustomer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Hubs.Clients
+namespace MixedDreams.Application.Hubs.Clients
 {
     public interface IAuthService
     {

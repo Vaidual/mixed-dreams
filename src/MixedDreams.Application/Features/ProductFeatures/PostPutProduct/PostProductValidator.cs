@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
-using MixedDreams.Infrastructure.Extensions;
-using MixedDreams.Infrastructure.Features.ProductFeatures.ProductIngredient;
-using MixedDreams.Infrastructure.RepositoryInterfaces;
+using MixedDreams.Application.Extensions;
+using MixedDreams.Application.Features.ProductFeatures.ProductIngredient;
+using MixedDreams.Application.RepositoryInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MixedDreams.Infrastructure.Features.ProductFeatures.PostPutProduct
+namespace MixedDreams.Application.Features.ProductFeatures.PostPutProduct
 {
     public class PostProductValidator : AbstractValidator<PostProductRequest>
     {
