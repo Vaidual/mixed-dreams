@@ -243,7 +243,8 @@ namespace MixedDreams.Application.Repositories
 
         public async Task<List<OrderProductWithPreparationDto>> AddPreparationTimeToOrderProducts(List<PostOrderProductDto> orderProducts)
         {
-            return await Table
+            return Table
+                .AsEnumerable()
                 .Where(x => orderProducts.Any(y => y.ProductId == x.Id))
                 .Select(x => new OrderProductWithPreparationDto()
                 {
@@ -251,7 +252,7 @@ namespace MixedDreams.Application.Repositories
                     Amount = orderProducts.Find(y => y.ProductId == x.Id).Amount,
                     PreparationTime = (short)x.PreparationTime
                 })
-                .ToListAsync();
+                .ToList();
         }
 
     }

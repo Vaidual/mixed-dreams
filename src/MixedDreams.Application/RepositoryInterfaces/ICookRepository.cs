@@ -11,5 +11,6 @@ namespace MixedDreams.Application.RepositoryInterfaces
     {
         public Task<List<Cook>> GetAllAsync(CancellationToken cancellationToken = default);
         public void RemoveRange(IEnumerable<Cook> cooks);
+        public Task LoadCurrentPreparationsNext(List<Cook> cooks);
     }
 }

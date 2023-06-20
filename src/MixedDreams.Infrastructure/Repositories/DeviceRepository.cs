@@ -18,15 +18,11 @@ namespace MixedDreams.Application.Repositories
         {
         }
 
-        public async Task<string?> GetUserId(string deviceIdentifier, CancellationToken cancellationToken = default)
+        public async Task<string?> GetCompanyId(string deviceIdentifier, CancellationToken cancellationToken = default)
         {
             Device device = await Table.FirstOrDefaultAsync(x => x.Identifier == deviceIdentifier, cancellationToken: cancellationToken) ?? 
                 throw new EntityNotFoundException(nameof(Device), deviceIdentifier.ToString());
-            if (device.CompanyId == null)
-            {
-                return null;
-            }
-            return (await Context.Companies.FindAsync(new object[] { device.CompanyId }, cancellationToken))?.ApplicationUserId;
+            return device.CompanyId?.ToString();
         }
     }
 }

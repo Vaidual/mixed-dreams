@@ -15,6 +15,7 @@ using MixedDreams.Application.DeviceModels;
 using Microsoft.Extensions.Logging;
 using MixedDreams.Application.Common;
 using MQTTnet.Server;
+using MixedDreams.Domain.Entities;
 
 namespace MixedDreams.Application.Services
 {
@@ -156,8 +157,8 @@ namespace MixedDreams.Application.Services
             IUnitOfWork unitOfWork =
                 scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-            string userId = await unitOfWork.DeviceRepository.GetUserId(lowWaterNotify.DeviceId) ?? throw new DeviceHaveNoCompanyException(lowWaterNotify.DeviceId);
-            await _hubContext.Clients.Group(userId).LowWaterNotification(lowWaterNotify.WaterLevel);
+            string? companyId = await unitOfWork.DeviceRepository.GetCompanyId(lowWaterNotify.DeviceId) ?? throw new DeviceHaveNoCompanyException(lowWaterNotify.DeviceId);
+            await _hubContext.Clients.Group(companyId).LowWaterNotification(lowWaterNotify.WaterLevel);
         }
 
         private async Task SetOrderReceivedAsync(MqttApplicationMessageReceivedEventArgs e)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MixedDreams.Application.Data;
 
@@ -11,9 +12,11 @@ using MixedDreams.Application.Data;
 namespace MixedDreams.Application.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230619094328_ProductPreparationAdded")]
+    partial class ProductPreparationAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,10 +378,9 @@ namespace MixedDreams.Application.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CurrentProductPreparationId")
-                        .IsUnique();
-
-                    b.HasIndex("LastProductPreparationId");
+                    b.HasIndex("LastProductPreparationId")
+                        .IsUnique()
+                        .HasFilter("[LastProductPreparationId] IS NOT NULL");
 
                     b.ToTable("Cooks");
                 });
@@ -742,6 +744,9 @@ namespace MixedDreams.Application.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CookId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("NextProductInQueueId")
                         .HasColumnType("uniqueidentifier");
 
@@ -749,6 +754,10 @@ namespace MixedDreams.Application.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CookId")
+                        .IsUnique()
+                        .HasFilter("[CookId] IS NOT NULL");
 
                     b.HasIndex("NextProductInQueueId");
 
@@ -922,19 +931,11 @@ namespace MixedDreams.Application.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MixedDreams.Domain.Entities.ProductPreparation", "CurrentProductPreparation")
-                        .WithOne("Cook")
-                        .HasForeignKey("MixedDreams.Domain.Entities.Cook", "CurrentProductPreparationId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("MixedDreams.Domain.Entities.ProductPreparation", "LastProductPreparation")
-                        .WithMany()
-                        .HasForeignKey("LastProductPreparationId");
+                        .WithOne()
+                        .HasForeignKey("MixedDreams.Domain.Entities.Cook", "LastProductPreparationId");
 
                     b.Navigation("Company");
-
-                    b.Navigation("CurrentProductPreparation");
 
                     b.Navigation("LastProductPreparation");
                 });
@@ -1060,6 +1061,11 @@ namespace MixedDreams.Application.Migrations
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductPreparation", b =>
                 {
+                    b.HasOne("MixedDreams.Domain.Entities.Cook", "Cook")
+                        .WithOne("CurrentProductPreparation")
+                        .HasForeignKey("MixedDreams.Domain.Entities.ProductPreparation", "CookId")
+                        .HasPrincipalKey("MixedDreams.Domain.Entities.Cook", "CurrentProductPreparationId");
+
                     b.HasOne("MixedDreams.Domain.Entities.ProductPreparation", "NextProductInQueue")
                         .WithMany()
                         .HasForeignKey("NextProductInQueueId");
@@ -1069,6 +1075,8 @@ namespace MixedDreams.Application.Migrations
                         .HasForeignKey("OrderProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Cook");
 
                     b.Navigation("NextProductInQueue");
 
@@ -1101,6 +1109,12 @@ namespace MixedDreams.Application.Migrations
                     b.Navigation("Devices");
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("MixedDreams.Domain.Entities.Cook", b =>
+                {
+                    b.Navigation("CurrentProductPreparation")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MixedDreams.Domain.Entities.Customer", b =>
@@ -1146,11 +1160,6 @@ namespace MixedDreams.Application.Migrations
             modelBuilder.Entity("MixedDreams.Domain.Entities.ProductHistory", b =>
                 {
                     b.Navigation("OrderProducts");
-                });
-
-            modelBuilder.Entity("MixedDreams.Domain.Entities.ProductPreparation", b =>
-                {
-                    b.Navigation("Cook");
                 });
 #pragma warning restore 612, 618
         }

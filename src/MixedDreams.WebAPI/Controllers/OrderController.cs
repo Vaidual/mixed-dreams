@@ -104,7 +104,7 @@ namespace MixedDreams.WebAPI.Controllers
             {
                 throw new PeriodDoesntExistException(period);
             }
-            DateTimeOffset start =  DateTimeOffset.UtcNow.Subtract(periodTimeSpan);
+            DateTimeOffset start = DateTimeOffset.UtcNow.Subtract(periodTimeSpan);
             DateTimeOffset end = DateTimeOffset.UtcNow;
             List<GetOrdersStatisticResponse> statistic = await _unitOfWork.OrderRepository.GetStatistic(start, end, TimeSpan.FromHours(1), cancellationToken);
 

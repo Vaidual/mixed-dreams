@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace MixedDreams.Application.RepositoryInterfaces
 {
-    public interface IDeviceRepository : IBaseRepository<Device>
+    public interface IProductPreparationRepository : IBaseRepository<ProductPreparation>
     {
-        public Task<string?> GetCompanyId(string deviceIdentifier, CancellationToken cancellationToken = default);
+        public Task<int> GetCountByCompanyAsync(Guid companyId);
     }
 }

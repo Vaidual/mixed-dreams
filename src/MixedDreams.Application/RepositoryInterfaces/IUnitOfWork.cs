@@ -18,6 +18,7 @@ namespace MixedDreams.Application.RepositoryInterfaces
         public IProductHistoryRepository ProductHistoryRepository { get; }
         public IDeviceRepository DeviceRepository { get; }
         public ICookRepository CookRepository { get; }
+        public IProductPreparationRepository ProductPreparationRepository { get; }
         Task SaveAsync(CancellationToken cancellationToken = default);
     }
 }

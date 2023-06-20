@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MixedDreams.Application.Repositories;
+using MixedDreams.Infrastructure.Repositories;
 
 namespace MixedDreams.Application.Repositories
 {
@@ -22,6 +23,7 @@ namespace MixedDreams.Application.Repositories
         private IProductHistoryRepository _productHistoryRepository;
         private IDeviceRepository _deviceRepository;
         private ICookRepository _cookRepository;
+        private IProductPreparationRepository _productPreparationRepository;
 
         public UnitOfWork(AppDbContext context)
         {
@@ -38,6 +40,7 @@ namespace MixedDreams.Application.Repositories
         public IProductHistoryRepository ProductHistoryRepository => _productHistoryRepository ??= new ProductHistoryRepository(_context);
         public IDeviceRepository DeviceRepository => _deviceRepository ??= new DeviceRepository(_context);
         public ICookRepository CookRepository => _cookRepository ??= new CookRepository(_context);
+        public IProductPreparationRepository ProductPreparationRepository => _productPreparationRepository ??= new ProductPreparationRepository(_context);
 
         public Task SaveAsync(CancellationToken cancellationToken = default)
         {

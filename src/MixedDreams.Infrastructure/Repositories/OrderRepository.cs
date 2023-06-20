@@ -105,6 +105,5 @@ namespace MixedDreams.Application.Repositories
             order.OrderStatus = newStatus;
             Update(order);
         }
-
     }
 }

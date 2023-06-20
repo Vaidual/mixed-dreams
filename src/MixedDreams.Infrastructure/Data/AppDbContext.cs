@@ -52,6 +52,7 @@ namespace MixedDreams.Application.Data
         public DbSet<BackblazeFile> BackblazeFiles { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Cook> Cooks { get; set; }
+        public DbSet<ProductPreparation> ProductPreparations { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

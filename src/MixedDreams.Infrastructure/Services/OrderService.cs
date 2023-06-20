@@ -58,12 +58,15 @@ namespace MixedDreams.Application.Services
                     ProductId = orderProduct.ProductId,
                     ProductHistoryId = await _unitOfWork.ProductHistoryRepository.GetLastProductHistoryId(orderProduct.ProductId)
                         ?? throw new ProductHasNoProductHistoryException(orderProduct.ProductId.ToString()),
-                    NextProductInQueue = null
                 };
                 orderProductsToCreate[i] = orderProductToAdd;
 
                 for (int j = 0; j < orderProduct.Amount; j++)
                 {
+                    ProductPreparation newProductPreparation = new ProductPreparation()
+                    {
+                        OrderProduct = orderProductToAdd,
+                    };
                     Cook? cook = cooks.All(x => x.LastEndTime.HasValue) ? cooks.MinBy(x => x.LastEndTime) : cooks.First(x => x.LastEndTime == null);
                     if (cook is not null)
                     {
@@ -72,23 +75,16 @@ namespace MixedDreams.Application.Services
                             var currentDateTime = DateTimeOffset.Now;
                             var endDateTime = currentDateTime.AddMinutes(orderProduct.PreparationTime);
                             cook.CurrentEndTime = endDateTime;
-                            cook.LastEndTime = endDateTime;
-                            cook.CurrentProductOrder = orderProductToAdd;
-                            cook.LastProductOrder = orderProductToAdd;
+                            cook.CurrentProductPreparation = newProductPreparation;
                         }
                         else
                         {
                             var endDateTime = cook.LastEndTime?.AddMinutes(orderProduct.PreparationTime);
                             cook.LastEndTime = endDateTime;
-                            cook.LastProductOrder.NextProductInQueue = orderProductToAdd;
-                            cook.LastProductOrder = orderProductToAdd;
                         }
                         _unitOfWork.CookRepository.Update(cook);
                     }
-                    else
-                    {
-                        //TODO
-                    }
+                    _unitOfWork.ProductPreparationRepository.Create(newProductPreparation);
                 }
             }
             

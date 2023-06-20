@@ -18,12 +18,25 @@ namespace MixedDreams.Application.Repositories
 
         public Task<List<Cook>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return Table.Include(x => x.LastProductOrder).ToListAsync(cancellationToken);
+            return Table.Include(x => x.CurrentProductPreparation).ToListAsync(cancellationToken);
         }
 
         public void RemoveRange(IEnumerable<Cook> cooks)
         {
             Table.RemoveRange(cooks);
+        }
+
+        public async Task LoadCurrentPreparationsNext(List<Cook> cooks)
+        {
+            foreach (var cook in cooks)
+            {
+                if (cook.CurrentProductPreparation != null)
+                {
+                    await Context.Entry(cook.CurrentProductPreparation)
+                        .Reference(p => p.NextProductInQueue)
+                        .LoadAsync();
+                }
+            }
         }
     }
 }

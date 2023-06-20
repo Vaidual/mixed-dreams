@@ -31,11 +31,11 @@ namespace MixedDreams.WebAPI.Extensions
                     policy =>
                     {
                         policy
-                            //.WithOrigins("http://localhost:3000")
-                            .AllowAnyOrigin()
+                            .WithOrigins("http://localhost:3000")
+                            //.AllowAnyOrigin()
                             .AllowAnyHeader()
-                            .AllowAnyMethod();
-                            //.AllowCredentials(); ;
+                            .AllowAnyMethod()
+                            .AllowCredentials();
                     });
             });
             return services;
