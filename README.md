@@ -58,4 +58,4 @@ services.AddOptions<HiveMQOptions>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 ```
-4. Install for better experience [front-end](https://github.com/Vaidual/mixed-dreams-front).
+4. For full pledge expirience install [front-end](https://github.com/Vaidual/mixed-dreams-front) and [mobile](https://github.com/Vaidual/mixed-dreams-android).
